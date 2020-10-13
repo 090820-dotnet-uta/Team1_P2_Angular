@@ -1,0 +1,13 @@
+<h4>User</h4>
+<p>{{ user?.userId }}</p>
+<p>{{ user?.name }}</p>
+<p>{{ user?.screenName }}</p>
+<p>{{ user?.username }}</p>
+<br />
+<h3>User List</h3>
+<ul *ngFor="let u of users">
+  <li>{{ u?.userId }}</li>
+  <li>{{ u?.name }}</li>
+  <li>{{ u?.screenName }}</li>
+  <li>{{ u?.username }}</li>
+</ul>
