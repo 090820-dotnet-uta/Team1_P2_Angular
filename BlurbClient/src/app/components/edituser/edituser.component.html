@@ -1,1 +1,41 @@
 <p>edituser works!</p>
+<div>
+  <form [formGroup]="EditUser" novalidate>
+    <div>
+      <label for="name">@{{ user.name }}</label>
+      <input
+        formControlName="name"
+        type="text"
+        placeholder="name"
+        name="name"
+        id="name"
+        required
+      />
+    </div>
+    <div>
+      <label for="screenName">{{ user.screenName }}</label>
+      <input
+        formControlName="screenName"
+        type="text"
+        placeholder="screenName"
+        name="screenName"
+        id="screenName"
+        required
+      />
+    </div>
+    <div>
+      <label for="passWord">Password</label>
+      <input
+        formControlName="passWord"
+        type="password"
+        placeholder="passWord"
+        name="passWord"
+        id="passWord"
+        required
+      />
+    </div>
+    <div>
+      <button type="submit" (click)="onSubmit()">Confirm Changes</button>
+    </div>
+  </form>
+</div>
