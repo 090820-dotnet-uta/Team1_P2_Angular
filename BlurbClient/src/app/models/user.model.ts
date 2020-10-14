@@ -1,7 +1,7 @@
 export class User {
     constructor() {}
     userId?:number;
-    username?:string;
+    userName?:string;
     password?:string;
     name?:string;
     screenName?:string;
