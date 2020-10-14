@@ -21,6 +21,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { EdituserComponent } from './components/edituser/edituser.component';
 import { SeeblurbsComponent } from './components/seeblurbs/seeblurbs.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SeeblurbsComponent } from './components/seeblurbs/seeblurbs.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
     UserService, UserRepository, 
