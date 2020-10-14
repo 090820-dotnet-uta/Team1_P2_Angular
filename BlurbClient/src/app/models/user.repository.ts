@@ -1,13 +1,13 @@
 import { Injectable, OnInit } from "@angular/core";
 import { User } from "./user.model";
-import { RestService } from "../services/rest.service";
+import { UserService } from "../services/user.service";
 
 @Injectable()
 export class UserRepository implements OnInit {
   private users: User[] = [];
   private user: User;
 
-  constructor(private rest: RestService){
+  constructor(private rest: UserService){
     this.rest.getUsers().subscribe((data: any) => {
       this.users = data;
     });

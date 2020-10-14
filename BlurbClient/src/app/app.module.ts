@@ -3,9 +3,11 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http";
-import { RestService } from './services/rest.service';
+import { UserService } from './services/user.service';
 import { UserRepository } from './models/user.repository';
 import { UserComponent } from './components/user/user.component';
+import { BlurbService } from './services/blurb.service';
+import { BlurbRepository } from './models/blurb.repository';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,7 @@ import { UserComponent } from './components/user/user.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [RestService, UserRepository],
+  providers: [UserService, UserRepository, BlurbService, BlurbRepository],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
