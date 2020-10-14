@@ -16,11 +16,21 @@ import { TagService } from './services/tag.service';
 import { TagRepository } from './models/tag.repository';
 import { NoteService } from './services/note.service';
 import { NoteRepository } from './models/note.repository';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { LoginComponent } from './components/login/login.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { EdituserComponent } from './components/edituser/edituser.component';
+import { SeeblurbsComponent } from './components/seeblurbs/seeblurbs.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserComponent
+    UserComponent,
+    NavbarComponent,
+    LoginComponent,
+    SignupComponent,
+    EdituserComponent,
+    SeeblurbsComponent
   ],
   imports: [
     BrowserModule,
