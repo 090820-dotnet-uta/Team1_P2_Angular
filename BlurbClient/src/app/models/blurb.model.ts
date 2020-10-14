@@ -1,5 +1,5 @@
 import { User } from './user.model';
-import { Enum } from './privacy.model';
+import { Privacy } from './privacy.model';
 import { Moment } from 'moment';
 import { Media } from "./media.model";
 
@@ -9,7 +9,7 @@ export class Blurb {
     message?:string;
     user?:User;
     score?:number;
-    privacy?:Enum;
+    privacy?:Privacy;
     name?:string;
     media?:Media;
     timeStamp?:Moment;

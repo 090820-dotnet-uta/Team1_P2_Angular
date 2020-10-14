@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { BlurbService } from './blurb.service';
+import { MediaService } from './media.service';
 
-describe('BlurbService', () => {
-  let service: BlurbService;
+describe('MediaService', () => {
+  let service: MediaService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BlurbService);
+    service = TestBed.inject(MediaService);
   });
 
   it('should be created', () => {

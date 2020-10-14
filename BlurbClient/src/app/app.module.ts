@@ -8,6 +8,14 @@ import { UserRepository } from './models/user.repository';
 import { UserComponent } from './components/user/user.component';
 import { BlurbService } from './services/blurb.service';
 import { BlurbRepository } from './models/blurb.repository';
+import { MediaService } from './services/media.service';
+import { MediaRepository } from './models/media.repository';
+import { MediaTagService } from './services/mediatag.service';
+import { MediaTagRepository } from './models/mediatag.repository';
+import { TagService } from './services/tag.service';
+import { TagRepository } from './models/tag.repository';
+import { NoteService } from './services/note.service';
+import { NoteRepository } from './models/note.repository';
 
 @NgModule({
   declarations: [
@@ -19,7 +27,14 @@ import { BlurbRepository } from './models/blurb.repository';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [UserService, UserRepository, BlurbService, BlurbRepository],
+  providers: [
+    UserService, UserRepository, 
+    BlurbService, BlurbRepository, 
+    MediaService, MediaRepository,
+    MediaTagService, MediaTagRepository,
+    TagService, TagRepository,
+    NoteService, NoteRepository
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
