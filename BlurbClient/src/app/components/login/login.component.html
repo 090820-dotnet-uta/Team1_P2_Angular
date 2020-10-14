@@ -1,1 +1,29 @@
-<p>login works!</p>
+<div>
+  <form [formGroup]="loginForm" novalidate>
+    <div>
+      <label for="userName">Please log in</label>
+      <br />
+      <input
+        formControlName="userName"
+        type="text"
+        placeholder="Name"
+        name="userName"
+        id="userName"
+        required
+      />
+      <br />
+      <input
+        formControlName="passWord"
+        type="password"
+        placeholder="Password"
+        name="passWord"
+        id="passWord"
+        required
+      />
+      <br />
+    </div>
+    <div>
+      <button type="submit" (click)="onSubmit()">Login</button>
+    </div>
+  </form>
+</div>
