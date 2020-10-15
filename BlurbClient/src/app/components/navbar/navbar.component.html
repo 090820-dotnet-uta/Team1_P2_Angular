@@ -1,7 +1,17 @@
-<div>
-  <button (click)="RedirectProfile()">MyName</button>
-  <button (click)="RedirectBlurbs()">Blurbs</button>
-  <button (click)="RedirectLogin()">Logout</button>
-  <input type="text" placeholder="Search" name="name" />
-  <button (click)="SearchBlurb()">Search</button>
-</div>
+<ul class="list-group text-center">
+  <li class="list-group-item">
+    <a routerLink="/user"> Profile</a>
+  </li>
+  <li class="list-group-item">
+    <a routerLink="/home"> Home</a>
+  </li>
+  <li class="list-group-item">
+    <a routerLink="/home"> Followers</a>
+  </li>
+  <li class="list-group-item">
+    <a routerLink="/home"> Create Blurb</a>
+  </li>
+  <li class="list-group-item">
+    <a routerLink="/login" (click)="Logout()">Logout</a>
+  </li>
+</ul>

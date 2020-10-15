@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
 import { UserRepository } from './models/user.repository';
 import { UserComponent } from './components/user/user.component';
@@ -20,8 +20,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { EdituserComponent } from './components/edituser/edituser.component';
-import { SeeblurbsComponent } from './components/seeblurbs/seeblurbs.component';
+import { HomeComponent } from './components/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LandingComponent } from './components/landing/landing.component';
 
 @NgModule({
   declarations: [
@@ -31,22 +32,29 @@ import { ReactiveFormsModule } from '@angular/forms';
     LoginComponent,
     SignupComponent,
     EdituserComponent,
-    SeeblurbsComponent
+    HomeComponent,
+    LandingComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
-    UserService, UserRepository, 
-    BlurbService, BlurbRepository, 
-    MediaService, MediaRepository,
-    MediaTagService, MediaTagRepository,
-    TagService, TagRepository,
-    NoteService, NoteRepository
+    UserService,
+    UserRepository,
+    BlurbService,
+    BlurbRepository,
+    MediaService,
+    MediaRepository,
+    MediaTagService,
+    MediaTagRepository,
+    TagService,
+    TagRepository,
+    NoteService,
+    NoteRepository,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
