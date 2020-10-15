@@ -3,14 +3,14 @@ import { Blurb } from 'src/app/models/blurb.model';
 import { BlurbRepository } from 'src/app/models/blurb.repository';
 
 @Component({
-  selector: 'app-seeblurbs',
-  templateUrl: './seeblurbs.component.html',
-  styleUrls: ['./seeblurbs.component.css'],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
 })
 
-// Seeblurbs should let the user see all the blurbs from people they follow
+// home should let the user see all the blurbs from people they follow
 // will contain infinite scrolling
-export class SeeblurbsComponent implements OnInit {
+export class HomeComponent implements OnInit {
   constructor(private blurbRepo: BlurbRepository) {}
 
   ngOnInit(): void {}
