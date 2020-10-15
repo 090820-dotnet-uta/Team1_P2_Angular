@@ -1,7 +1,9 @@
-<p>edituser works!</p>
 <div>
   <form [formGroup]="EditUser" novalidate>
     <div>
+      <br />
+      <label>Blurb Name</label>
+      <br />
       <label for="name">@{{ user.name }}</label>
       <input
         formControlName="name"
@@ -13,22 +15,27 @@
       />
     </div>
     <div>
+      <br />
+      <label>Screen Name</label>
+      <br />
       <label for="screenName">{{ user.screenName }}</label>
       <input
         formControlName="screenName"
         type="text"
-        placeholder="screenName"
+        placeholder="screenname"
         name="screenName"
         id="screenName"
         required
       />
     </div>
     <div>
+      <br />
       <label for="passWord">Password</label>
+      <br />
       <input
         formControlName="passWord"
         type="password"
-        placeholder="passWord"
+        placeholder="password"
         name="passWord"
         id="passWord"
         required
