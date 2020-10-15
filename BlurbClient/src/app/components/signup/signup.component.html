@@ -1,2 +1,48 @@
-<p>signup works!</p>
-<div></div>
+<div>
+  <form [formGroup]="user" novalidate>
+    <div>
+      <br />
+      <input
+        formControlName="name"
+        type="text"
+        placeholder="name"
+        name="name"
+        id="name"
+        required
+      />
+    </div>
+    <div>
+      <input
+        formControlName="screenName"
+        type="text"
+        placeholder="screenname"
+        name="screenName"
+        id="screenName"
+        required
+      />
+    </div>
+    <div>
+      <input
+        formControlName="username"
+        type="text"
+        placeholder="username"
+        name="username"
+        id="username"
+        required
+      />
+    </div>
+    <div>
+      <input
+        formControlName="password"
+        type="password"
+        placeholder="password"
+        name="password"
+        id="password"
+        required
+      />
+    </div>
+    <div>
+      <button type="submit" (click)="onSubmit()">Confirm Changes</button>
+    </div>
+  </form>
+</div>
