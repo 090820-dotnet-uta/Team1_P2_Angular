@@ -23,6 +23,47 @@ import { EdituserComponent } from './components/edituser/edituser.component';
 import { HomeComponent } from './components/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LandingComponent } from './components/landing/landing.component';
+import { ProtectedComponent } from './components/protected/protected.component';
+import {
+  OKTA_CONFIG,
+  OktaAuthModule,
+  OktaCallbackComponent,
+  OktaAuthGuard
+} from '@okta/okta-angular';
+import { Router, RouterModule, Routes } from '@angular/router';
+
+const config = {
+  issuer: 'https://revaturerichard.okta.com/oauth2/default',
+  redirectUri: window.location.origin + '/login/callback',
+  clientId: '0oa9ujuqLddR4tXjT5d5',
+  pkce: true
+}
+
+export function onAuthRequired(oktaAuth, injector) {
+  const router = injector.get(Router);
+
+  // Redirect the user to your custom login page
+  router.navigate(['/login']);
+}
+
+const appRoutes: Routes = [
+  {
+    path: 'login/callback',
+    component: OktaCallbackComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'protected',
+    component: ProtectedComponent,
+    canActivate: [ OktaAuthGuard ],
+    data: {
+      onAuthRequired
+    }
+  }
+]
 
 @NgModule({
   declarations: [
@@ -34,12 +75,15 @@ import { LandingComponent } from './components/landing/landing.component';
     EdituserComponent,
     HomeComponent,
     LandingComponent,
+    ProtectedComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    RouterModule.forRoot(appRoutes),
+    OktaAuthModule
   ],
   providers: [
     UserService,
@@ -54,6 +98,7 @@ import { LandingComponent } from './components/landing/landing.component';
     TagRepository,
     NoteService,
     NoteRepository,
+    { provide: OKTA_CONFIG, useValue: config },
   ],
   bootstrap: [AppComponent],
 })
