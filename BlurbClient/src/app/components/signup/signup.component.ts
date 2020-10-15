@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
+import { UserRepository } from "../../models/user.repository";
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +17,9 @@ export class SignupComponent implements OnInit {
   userName: string;
   passWord: string;
 
-  constructor() { }
+  constructor(private userrepo : UserRepository) {
+    
+   }
 
   ngOnInit(): void {
     //Creates the form
@@ -33,11 +36,12 @@ export class SignupComponent implements OnInit {
   onSubmit(){
     let user = new User();
     user.userName = this.userName;
-    user.name = "@" + this.userName;
+    user.name = this.userName;
     user.password = this.passWord;
     user.screenName = this.userName;
 
     //Use method for posting the user to the service
+    this.userrepo.setUser(user);
   }
 
 }

@@ -27,4 +27,8 @@ export class UserRepository implements OnInit {
     return this.users;
   }
 
+  setUser(user: User): void {
+    this.rest.setUser(user).subscribe(u => console.log(u));
+  }
+
 }
