@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -27,9 +28,14 @@ export class LoginComponent implements OnInit {
 
 
   // Event listener for submitting the login form
-  // Takes in a username and password
+  // Takes in a username and password and grabs
+  // 
   onSubmit() {
-    console.log(this.loginForm.get('userName').value);
-    console.log(this.loginForm.get('passWord').value);
+    let user = new User();
+    user.userName = this.userName;
+    user.password = this.passWord;
+
+    // Place method to get a user with the same
+    // username and password
   }
 }
