@@ -26,6 +26,7 @@ export class UserRepository implements OnInit {
     return this.users;
   }
 
+
   addUser(user: User): void {
     this.rest.addUser(user).subscribe((p) => console.log(p));
   }
@@ -51,3 +52,4 @@ export class UserRepository implements OnInit {
     this.rest.editPassword(user).subscribe((p) => console.log(p));
   }
 }
+

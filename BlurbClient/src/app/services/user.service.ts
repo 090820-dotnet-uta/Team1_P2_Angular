@@ -43,4 +43,12 @@ export class UserService {
   editPassword(user: User): Observable<User> {
     return this.httpClient.post<User>(this.BASE_URL + 'edit/password', user);
   }
+
+  setUser(user: User): Observable<User> {
+    return this.httpClient.post<User>(
+      this.BASE_URL + "add",
+      user
+    );
+  }
+  
 }

@@ -10,6 +10,7 @@ import { UserRepository } from 'src/app/models/user.repository';
 
 // Signup should add a new user and sign them in
 export class SignupComponent implements OnInit {
+
   user: FormGroup;
 
   constructor(private userRepo: UserRepository) {}
