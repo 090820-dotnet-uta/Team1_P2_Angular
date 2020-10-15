@@ -19,7 +19,15 @@ export class UserService {
 
   getUsers(): Observable<User[]> {
     return this.httpClient.get<User[]>(
-      this.BASE_URL + "findAll"
+      this.BASE_URL + "find/all"
     );
   }
+
+  setUser(user: User): Observable<User> {
+    return this.httpClient.post<User>(
+      this.BASE_URL + "add",
+      user
+    );
+  }
+  
 }

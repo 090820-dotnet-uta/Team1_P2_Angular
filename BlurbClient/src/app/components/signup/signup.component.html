@@ -1,25 +1,26 @@
 <div>
-  <form [formGroup]="signinForm"></form>
-  <label>Create an account</label>
-  <br />
-  <input
-    formControlName="userName"
-    type="text"
-    placeholder="Name"
-    name="userName"
-    id="userName"
-    required
-  />
-  <br />
-  <input
-    formControlName="passWord"
-    type="password"
-    placeholder="Password"
-    name="passWord"
-    id="passWord"
-    required
-  />
-  <br />
+  <form [formGroup]="signinForm">
+    <label>Create an account</label>
+    <br />
+    <input
+      formControlName="userName"
+      type="text"
+      placeholder="Name"
+      name="userName"
+      id="userName"
+      required
+    />
+    <br />
+    <input
+      formControlName="passWord"
+      type="password"
+      placeholder="Password"
+      name="passWord"
+      id="passWord"
+      required
+    />
+    <br />
+  </form>
 </div>
 <div>
   <button type="submit" (click)="onSubmit()">Create Account</button>
