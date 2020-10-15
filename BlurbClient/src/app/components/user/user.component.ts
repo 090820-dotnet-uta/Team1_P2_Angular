@@ -5,22 +5,18 @@ import { UserRepository } from 'src/app/models/user.repository';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  styleUrls: ['./user.component.css'],
 })
 export class UserComponent implements OnInit {
+  constructor(private repo: UserRepository) {}
 
-  constructor(private repo: UserRepository){}
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-  }
-
-  get user(): User {
-    return this.repo.getUser();
-  }
+  // get user(): User {
+  //   return this.repo.getUser();
+  // }
 
   get users(): User[] {
-    return this.repo
-      .getUsers();
+    return this.repo.getUsers();
   }
-
 }
