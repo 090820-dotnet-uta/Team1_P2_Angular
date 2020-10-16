@@ -12,12 +12,9 @@ steps:
   inputs:
     versionSpec: '12.x'
 
-- script: |
-    cd BlurbClient
-    npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
+- script: npx ng build --prod
+  workingDirectory: $(appDir)
+  displayName: npx ng build
 
 - task: AzureRmWebAppDeployment@4
   inputs:
