@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Blurb } from 'src/app/models/blurb.model';
-import { BlurbRepository } from 'src/app/models/blurb.repository';
+import { Blurb } from '../../models/blurb.model';
+import { BlurbRepository } from '../../models/blurb.repository';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,8 @@ import { BlurbRepository } from 'src/app/models/blurb.repository';
 // will contain infinite scrolling
 export class HomeComponent implements OnInit {
   constructor(private blurbRepo: BlurbRepository) {}
+
+  moment = moment;
 
   ngOnInit(): void {}
 

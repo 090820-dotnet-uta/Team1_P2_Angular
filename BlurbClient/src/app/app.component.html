@@ -5,6 +5,18 @@
         <app-navbar></app-navbar>
       </div>
       <div class="col d-flex justify-content-center w-100">
+        <!-- src/app/app.component.html -->
+
+        <!-- Latest CDN production CSS -->
+        <link
+          href="https://global.oktacdn.com/okta-signin-widget/4.3.2/css/okta-sign-in.min.css"
+          type="text/css"
+          rel="stylesheet"
+        />
+
+        <button *ngIf="!isAuthenticated" routerLink="/login">Login</button>
+        <button *ngIf="isAuthenticated" (click)="logout()">Logout</button>
+
         <router-outlet></router-outlet>
       </div>
     </div>
