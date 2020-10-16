@@ -12,6 +12,12 @@ steps:
   inputs:
     versionSpec: '12.x'
 
+- task: Npm@1
+  inputs:
+    command: 'ci'
+    workingDir: '$(appDir)'
+  displayName: npm ci
+
 - script: npx ng build --prod
   workingDirectory: $(appDir)
   displayName: npx ng build
