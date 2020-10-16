@@ -28,16 +28,16 @@ import {
   OKTA_CONFIG,
   OktaAuthModule,
   OktaCallbackComponent,
-  OktaAuthGuard
+  OktaAuthGuard,
 } from '@okta/okta-angular';
 import { Router, RouterModule, Routes } from '@angular/router';
 
 const config = {
-  issuer: 'https://revaturerichard.okta.com/oauth2/default',
+  issuer: 'https://dev-5859084.okta.com/oauth2/default',
   redirectUri: window.location.origin + '/login/callback',
-  clientId: '0oa9ujuqLddR4tXjT5d5',
-  pkce: true
-}
+  clientId: '0oaatkg49eXgLauJt5d5',
+  pkce: true,
+};
 
 export function onAuthRequired(oktaAuth, injector) {
   const router = injector.get(Router);
@@ -49,21 +49,21 @@ export function onAuthRequired(oktaAuth, injector) {
 const appRoutes: Routes = [
   {
     path: 'login/callback',
-    component: OktaCallbackComponent
+    component: OktaCallbackComponent,
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'protected',
     component: ProtectedComponent,
-    canActivate: [ OktaAuthGuard ],
+    canActivate: [OktaAuthGuard],
     data: {
-      onAuthRequired
-    }
-  }
-]
+      onAuthRequired,
+    },
+  },
+];
 
 @NgModule({
   declarations: [
@@ -83,7 +83,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
-    OktaAuthModule
+    OktaAuthModule,
   ],
   providers: [
     UserService,
