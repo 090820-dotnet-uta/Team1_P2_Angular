@@ -49,6 +49,9 @@ export class NavbarComponent implements OnInit {
   async ngOnInit() {
     // Get the authentication state for immediate use
     this.isAuthenticated = await this.oktaAuth.isAuthenticated();
+    let user: User = JSON.parse(localStorage.loggedInUser);
+
+    this.blurb.get('message').setValue(user.name);
   }
 
   onSubmit() {
@@ -59,14 +62,16 @@ export class NavbarComponent implements OnInit {
     };
     let b: Blurb = {
       message: this.blurb.get('message').value,
-      score: this.blurb.get('score').value,
+      score: +this.blurb.get('score').value,
       privacy: this.blurbPrivacy[this.blurb.get('privacyBlurb').value],
       name: m.name,
       userId: loggedInUser.userId,
       media: m,
+      notes: [],
     };
 
     console.log(b, this.blurbPrivacy.Public);
+    
     this.blurbRepo.addBlurb(b);
   }
 

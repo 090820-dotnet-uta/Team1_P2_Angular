@@ -14,4 +14,5 @@ export class Blurb {
   name?: string;
   media?: Media;
   timestamp?: Moment;
+  notes?: any[];
 }
