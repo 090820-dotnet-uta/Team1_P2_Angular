@@ -2,41 +2,58 @@
   <div class="row flex-column">
     <div class="col text-center">
       <h3 class="m-0 text-white">User Profile</h3>
-      <div class="row flex-column border-dark-grey py-2 mt-2">
-        <p class="m-0 text-white">{{ user.name }}</p>
-        <form [formGroup]="userEditForm">
-          <input
-            formControlName="name"
-            [(ngModel)]="user.name"
-            type="text"
-            name="Name"
-            id="Name"
-            placeholder="{{ user.name }}"
-          />
-          <input
-            formControlName="screenName"
-            [(ngModel)]="user.screenName"
-            type="text"
-            name="screenName"
-            id="screenName"
-            placeholder="{{ user.screenName }}"
-          />
-          <input
-            formControlName="password"
-            [(ngModel)]="user.password"
-            type="password"
-            name="password"
-            id="password"
-            placeholder="{{ user.password }}"
-          />
-          <div>
-            <button type="submit" (click)="onSubmit()">Confirm Edit</button>
-          </div>
-        </form>
-      </div>
-      <div class="row flex-column border-dark-grey py-2 mt-2">
-        <button class="block;" (click)="logout()">Logout</button>
+      <div
+        class="row flex-column border-dark-grey py-2 mt-2 align-content-center"
+      >
+        <div class="col-4">
+          <form [formGroup]="userEditForm">
+            <br />
+            <p class="m-0 text-white">Username</p>
+            <input
+              formControlName="name"
+              [(ngModel)]="user.name"
+              class="form-control text-center"
+              type="text"
+              name="Name"
+              id="Name"
+              placeholder="{{ user.name }}"
+            />
+            <br />
+            <br />
+            <p class="m-0 text-white">Screen name</p>
+            <input
+              formControlName="screenName"
+              [(ngModel)]="user.screenName"
+              class="form-control text-center"
+              type="text"
+              name="screenName"
+              id="screenName"
+              placeholder="{{ user.screenName }}"
+            />
+            <br />
+            <br />
+            <p class="m-0 text-white">Password</p>
+            <input
+              formControlName="password"
+              [(ngModel)]="user.password"
+              class="form-control text-center"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="{{ user.password }}"
+            />
+            <div>
+              <br />
+              <button type="submit" class="btn btn-info" (click)="onSubmit()">
+                Confirm Edit
+              </button>
+            </div>
+            <br />
+            <br />
+          </form>
+        </div>
       </div>
     </div>
+    <button class="btn btn-info" (click)="logout()">Logout</button>
   </div>
 </div>
