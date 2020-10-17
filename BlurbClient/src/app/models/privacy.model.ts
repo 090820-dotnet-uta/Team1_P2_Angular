@@ -1,6 +1,6 @@
 export class Privacy {
-    constructor() {}
-    type1?: 0;
-    type2?: 0;
-    type3?: 1;
-  }
+  constructor() {}
+  Public?: number = 0;
+  Private?: number = 1;
+  FollowersOnly?: number = 2;
+}
