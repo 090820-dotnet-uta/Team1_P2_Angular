@@ -5,4 +5,5 @@ export class User {
   password?: string;
   name?: string;
   screenName?: string;
+  isFollowed?: boolean;
 }
