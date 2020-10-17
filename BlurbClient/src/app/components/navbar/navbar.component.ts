@@ -88,15 +88,6 @@ export class NavbarComponent implements OnInit {
     console.log('Not Implemented!');
   }
 
-  // This should remove the user from the session
-  // And bring them back to the login screen
-  async Logout() {
-    // Terminates the session with Okta and removes current tokens.
-    // await this.oktaAuth.logout();
-    localStorage.clear();
-    this.router.navigateByUrl('/login');
-  }
-
   // This should take in the user's input and search
   // the movie names for the blurbs or the users
   // Maybe split this into search users vs search
