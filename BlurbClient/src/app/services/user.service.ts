@@ -53,6 +53,6 @@ export class UserService {
   }
 
   editUser(user: User): Observable<User>{
-    return this.httpClient.post<User>(this.BASE_URL + 'edit/user', user);
+    return this.httpClient.put<User>(this.BASE_URL + 'edit/user', user);
   }
 }
