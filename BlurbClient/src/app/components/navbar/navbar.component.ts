@@ -71,7 +71,7 @@ export class NavbarComponent implements OnInit {
     };
 
     console.log(b, this.blurbPrivacy.Public);
-
+    
     this.blurbRepo.addBlurb(b);
   }
 

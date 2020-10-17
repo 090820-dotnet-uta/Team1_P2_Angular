@@ -56,4 +56,8 @@ export class UserRepository implements OnInit {
   editPassword(user: User): void {
     this.rest.editPassword(user).subscribe((p) => console.log(p));
   }
+
+  editUser(user: User): void {
+    this.rest.editUser(user).subscribe((p) => console.log(p));
+  }
 }
