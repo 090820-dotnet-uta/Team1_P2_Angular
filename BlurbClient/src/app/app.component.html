@@ -1,14 +1,14 @@
-<div class="row justify-content-center">
+<div class="row justify-content-center w-100">
   <div class="col-8">
     <div class="row">
-      <div *ngIf="isAuthenticated" class="col-3">
+      <div class="col-3">
         <app-navbar></app-navbar>
       </div>
       <div class="col d-flex justify-content-center w-100">
         <!-- src/app/app.component.html -->
 
         <!-- Latest CDN production CSS -->
-        <button *ngIf="!isAuthenticated" routerLink="/login">Login</button>
+        <!-- <button *ngIf="!isAuthenticated" routerLink="/login">Login</button> -->
         <!-- <button *ngIf="isAuthenticated" (click)="logout()">Logout</button>  -->
         <router-outlet></router-outlet>
       </div>

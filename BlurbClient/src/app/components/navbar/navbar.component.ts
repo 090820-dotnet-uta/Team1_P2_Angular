@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OktaAuthService } from '@okta/okta-angular';
 
@@ -12,17 +13,29 @@ import { OktaAuthService } from '@okta/okta-angular';
 // useredit page, logout, search, and see blurbs
 export class NavbarComponent implements OnInit {
   isAuthenticated: boolean;
+  blurb: FormGroup;
 
   constructor(public oktaAuth: OktaAuthService, public router: Router) {
     // Subscribe to authentication state changes
     this.oktaAuth.$authenticationState.subscribe(
       (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
     );
+    this.blurb = new FormGroup({
+      type: new FormControl(),
+      name: new FormControl(),
+      score: new FormControl(),
+      message: new FormControl(),
+      note: new FormControl(),
+    });
   }
 
   async ngOnInit() {
     // Get the authentication state for immediate use
     this.isAuthenticated = await this.oktaAuth.isAuthenticated();
+  }
+
+  onSubmit() {
+    console.log(this.blurb.value);
   }
 
   // This should take in the user's id (Maybe in cookies?)
@@ -42,8 +55,8 @@ export class NavbarComponent implements OnInit {
   // And bring them back to the login screen
   async Logout() {
     // Terminates the session with Okta and removes current tokens.
-    await this.oktaAuth.logout();
-    this.router.navigateByUrl('/');
+    // await this.oktaAuth.logout();
+    this.router.navigateByUrl('/login');
   }
 
   // This should take in the user's input and search

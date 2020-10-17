@@ -31,6 +31,7 @@ import {
   OktaAuthGuard,
 } from '@okta/okta-angular';
 import { Router, RouterModule, Routes } from '@angular/router';
+import { FollowersComponent } from './components/followers/followers.component';
 
 const config = {
   issuer: 'https://dev-5859084.okta.com/oauth2/default',
@@ -76,6 +77,7 @@ const appRoutes: Routes = [
     HomeComponent,
     LandingComponent,
     ProtectedComponent,
+    FollowersComponent,
   ],
   imports: [
     BrowserModule,

@@ -26,6 +26,12 @@ export class UserRepository implements OnInit {
     return this.users;
   }
 
+  loginUser(user: User): void {
+    this.rest.loginUser(user).subscribe((u) => {
+      console.log(u);
+      localStorage.loggedInUser = JSON.stringify(u);
+    });
+  }
 
   addUser(user: User): void {
     this.rest.addUser(user).subscribe((p) => console.log(p));
@@ -52,4 +58,3 @@ export class UserRepository implements OnInit {
     this.rest.editPassword(user).subscribe((p) => console.log(p));
   }
 }
-
