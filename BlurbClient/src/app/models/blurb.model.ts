@@ -5,6 +5,7 @@ import { Media } from './media.model';
 
 export class Blurb {
   constructor() {}
+  userId?: number;
   blurbId?: number;
   message?: string;
   user?: User;

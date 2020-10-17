@@ -76,16 +76,24 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  afterSubmit(u: any) {
+    if (localStorage.loggedInUser) {
+      console.log(localStorage.loggedInUser);
+      this.router.navigateByUrl('/home');
+    } else console.log('failed to log in');
+  }
+
   // Event listener for submitting the login form
   // Takes in a username and password and grabs
   //
-  async onSubmit() {
-    // let user = new User();
-    // user.username = this.username;
-    // user.password = this.password;
-
+  onSubmit() {
     // Place method to get a user with the same
     // username and password
-    this.userRepo.loginUser(this.loginForm.value);
+    this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
+      if ('userId' in u) {
+        localStorage.loggedInUser = JSON.stringify(u);
+      }
+      this.afterSubmit(u);
+    });
   }
 }

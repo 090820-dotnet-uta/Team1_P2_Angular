@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OktaAuthService } from '@okta/okta-angular';
+import { Blurb } from 'src/app/models/blurb.model';
+import { BlurbRepository } from 'src/app/models/blurb.repository';
+import { Media } from 'src/app/models/media.model';
+import { MediaType } from 'src/app/models/mediatype.model';
+import { Privacy } from 'src/app/models/privacy.model';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-navbar',
@@ -14,8 +20,14 @@ import { OktaAuthService } from '@okta/okta-angular';
 export class NavbarComponent implements OnInit {
   isAuthenticated: boolean;
   blurb: FormGroup;
+  mediaType: MediaType = new MediaType();
+  blurbPrivacy: Privacy = new Privacy();
 
-  constructor(public oktaAuth: OktaAuthService, public router: Router) {
+  constructor(
+    public oktaAuth: OktaAuthService,
+    public router: Router,
+    private blurbRepo: BlurbRepository
+  ) {
     // Subscribe to authentication state changes
     this.oktaAuth.$authenticationState.subscribe(
       (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
@@ -23,9 +35,14 @@ export class NavbarComponent implements OnInit {
     this.blurb = new FormGroup({
       type: new FormControl(),
       name: new FormControl(),
-      score: new FormControl(),
+      score: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+        Validators.minLength(2),
+      ]),
       message: new FormControl(),
       note: new FormControl(),
+      privacyBlurb: new FormControl(),
     });
   }
 
@@ -35,7 +52,22 @@ export class NavbarComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.blurb.value);
+    let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
+    let m: Media = {
+      name: this.blurb.get('name').value,
+      type: this.mediaType[this.blurb.get('type').value],
+    };
+    let b: Blurb = {
+      message: this.blurb.get('message').value,
+      score: this.blurb.get('score').value,
+      privacy: this.blurbPrivacy[this.blurb.get('privacyBlurb').value],
+      name: m.name,
+      userId: loggedInUser.userId,
+      media: m,
+    };
+
+    console.log(b, this.blurbPrivacy.Public);
+    //this.blurbRepo.addBlurb(b);
   }
 
   // This should take in the user's id (Maybe in cookies?)
@@ -56,6 +88,7 @@ export class NavbarComponent implements OnInit {
   async Logout() {
     // Terminates the session with Okta and removes current tokens.
     // await this.oktaAuth.logout();
+    localStorage.clear();
     this.router.navigateByUrl('/login');
   }
 
