@@ -67,7 +67,7 @@ export class NavbarComponent implements OnInit {
     };
 
     console.log(b, this.blurbPrivacy.Public);
-    //this.blurbRepo.addBlurb(b);
+    this.blurbRepo.addBlurb(b);
   }
 
   // This should take in the user's id (Maybe in cookies?)

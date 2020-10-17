@@ -51,4 +51,8 @@ export class UserService {
   setUser(user: User): Observable<User> {
     return this.httpClient.post<User>(this.BASE_URL + 'add', user);
   }
+
+  editUser(user: User): Observable<User>{
+    return this.httpClient.post<User>(this.BASE_URL + 'edit/user', user);
+  }
 }
