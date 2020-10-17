@@ -11,8 +11,9 @@ import { UserRepository } from 'src/app/models/user.repository';
 })
 
 export class UserComponent implements OnInit {
-  user: User;
+  user: User; // user obj to hold the logged in user
   userEditForm: FormGroup;
+
   constructor(private repo: UserRepository, public router: Router) {
     this.userEditForm = new FormGroup({
       name: new FormControl(),
@@ -22,14 +23,16 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.loggedInUser);
-    this.user.screenName
+    this.user = JSON.parse(localStorage.loggedInUser); //Store the loggedin user into the user obj
   }
 
   get users(): User[] {
     return this.repo.getUsers();
   }
 
+  //Checks if the useredit form has any values inside of them and
+  //if they have no values, leave the default values the same
+  //if they have new values then change the editeduser's values to those values
   onSubmit(){ 
     let editedUser: User = this.user;
     if(this.userEditForm.get('name').value){
@@ -49,6 +52,7 @@ export class UserComponent implements OnInit {
     this.repo.editUser(editedUser);
   }
 
+  //Removes the loggedin user from cache and redirects them to the login page
   async logout(){
     localStorage.clear();
     this.router.navigateByUrl('/login');
