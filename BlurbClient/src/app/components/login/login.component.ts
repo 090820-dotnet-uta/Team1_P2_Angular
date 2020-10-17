@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
-import { Router, NavigationStart} from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { OktaAuthService } from '@okta/okta-angular';
 import * as OktaSignIn from '@okta/okta-signin-widget';
 
@@ -15,10 +15,14 @@ import * as OktaSignIn from '@okta/okta-signin-widget';
 export class LoginComponent implements OnInit {
   signIn;
   widget = new OktaSignIn({
-    baseUrl: 'https://revaturerichard.okta.com/oauth2/default',
+    baseUrl: 'https://dev-5859084.okta.com/oauth2/default',
+    clientId: '0oaatkg49eXgLauJt5d5',
     authParams: {
-      pkce: true
-    }
+      pkce: true,
+    },
+    features: {
+      registration: true, // REQUIRED
+    },
   });
 
   loginForm: FormGroup;
@@ -34,9 +38,9 @@ export class LoginComponent implements OnInit {
     this.signIn = oktaAuth;
 
     // Show the widget when prompted, otherwise remove it from the DOM.
-    router.events.forEach(event => {
+    router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
-        switch(event.url) {
+        switch (event.url) {
           case '/login':
             break;
           case '/protected':
@@ -50,8 +54,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.widget.renderEl({
-      el: '#okta-signin-container'},
+    this.widget.renderEl(
+      {
+        el: '#okta-signin-container',
+      },
       (res) => {
         if (res.status === 'SUCCESS') {
           this.signIn.loginRedirect('/', { sessionToken: res.session.token });
