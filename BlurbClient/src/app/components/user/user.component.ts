@@ -9,6 +9,7 @@ import { UserRepository } from 'src/app/models/user.repository';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css'],
 })
+
 export class UserComponent implements OnInit {
   user: User;
   userEditForm: FormGroup;
