@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UserRepository } from 'src/app/models/user.repository';
 
 @Component({
@@ -10,10 +11,9 @@ import { UserRepository } from 'src/app/models/user.repository';
 
 // Signup should add a new user and sign them in
 export class SignupComponent implements OnInit {
-
   user: FormGroup;
 
-  constructor(private userRepo: UserRepository) {}
+  constructor(private userRepo: UserRepository, private router: Router) {}
 
   ngOnInit(): void {
     this.user = new FormGroup({
@@ -26,5 +26,6 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     this.userRepo.addUser(this.user.value);
+    this.router.navigateByUrl('/login');
   }
 }

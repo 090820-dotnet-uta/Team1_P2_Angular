@@ -1,25 +1,200 @@
 <ul class="list-group bg-dark-blue text-center">
-  <li class="list-group-item bg-dark-blue">
-    <a class="text-white" routerLink="/home">
+  <li
+    routerLink="/home"
+    class="list-group-item bg-dark-blue border-dark-grey hover-border-light-blue pointer focus-none"
+  >
+    <a class="text-white">
       <img
         style="height: 70px; width: 70px"
         src="../../../assets/blurbicon.png"
       />
     </a>
   </li>
-  <li class="list-group-item bg-dark-blue">
-    <a class="text-white" routerLink="/user"> Profile</a>
+  <li
+    routerLink="/user"
+    routerLinkActive="active-link"
+    class="list-group-item bg-dark-blue border-dark-grey hover-border-light-blue hover-text-light-blue pointer focus-none"
+  >
+    <h6 class="text-white font-weight-bold my-3">Profile</h6>
   </li>
-  <li class="list-group-item bg-dark-blue">
-    <a class="text-white" routerLink="/home"> Home</a>
+  <li
+    routerLink="/home"
+    routerLinkActive="active-link"
+    class="list-group-item bg-dark-blue border-dark-grey hover-border-light-blue hover-text-light-blue pointer focus-none"
+  >
+    <h6 class="text-white font-weight-bold my-3">Home</h6>
   </li>
-  <li class="list-group-item bg-dark-blue">
-    <a class="text-white" routerLink="/home"> Followers</a>
+  <li
+    routerLink="/followers"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    class="list-group-item bg-dark-blue border-dark-grey hover-border-light-blue hover-text-light-blue pointer focus-none"
+  >
+    <h6 class="text-white font-weight-bold my-3">Followers</h6>
   </li>
-  <li class="list-group-item bg-dark-blue">
-    <a class="text-white" routerLink="/home"> Create Blurb</a>
+  <li
+    class="list-group-item bg-dark-blue border-dark-grey hover-border-light-blue hover-text-light-blue pointer focus-none"
+    data-toggle="modal"
+    data-target="#exampleModal"
+  >
+    <h6 class="text-white font-weight-bold my-3">Create Blurb</h6>
   </li>
-  <li class="list-group-item bg-dark-blue">
-    <a class="text-white" routerLink="/login" (click)="Logout()">Logout</a>
-  </li>
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg bg-dark-blue">
+      <div class="modal-content bg-dark-blue px-4">
+        <div class="modal-header border-none justify-content-center">
+          <h3
+            class="modal-title text-white font-weight-light"
+            id="exampleModalLabel"
+          >
+            Create Blurb
+          </h3>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="blurb" novalidate>
+            <div
+              class="form-group row m-0 justify-content-between align-items-center"
+            >
+              <div class="col-3 p-0">
+                <label class="my-1 text-white float-left" for="inputType"
+                  >Media Type</label
+                >
+                <select
+                  id="inputType"
+                  class="form-control"
+                  formControlName="type"
+                >
+                  <option>Movie</option>
+                  <option>Game</option>
+                  <option>Book</option>
+                  <option>TV</option>
+                </select>
+              </div>
+              <div class="col-4 p-0">
+                <label class="my-1 text-white float-left" for="inputMediaName"
+                  >Name</label
+                >
+                <input
+                  formControlName="name"
+                  id="inputMediaName"
+                  type="text"
+                  maxlength="30"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-3 p-0">
+                <label class="my-1 text-white float-left" for="inputScore"
+                  >Score</label
+                >
+                <select
+                  id="inputScore"
+                  class="form-control"
+                  formControlName="score"
+                >
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>10</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group mt-2">
+              <label
+                class="text-white float-left m-0"
+                for="exampleFormControlTextarea1"
+                >Blurb</label
+              >
+              <textarea
+                formControlName="message"
+                class="form-control"
+                id="exampleFormControlTextarea1"
+                rows="2"
+                maxlength="142"
+              ></textarea>
+            </div>
+
+            <div class="form-group mt-2">
+              <label
+                class="text-white float-left m-0"
+                for="exampleFormControlTextarea1"
+                >Note</label
+              >
+              <textarea
+                formControlName="note"
+                class="form-control"
+                id="exampleFormControlTextarea1"
+                rows="4"
+                maxlength="240"
+              ></textarea>
+            </div>
+
+            <div class="form-group row align-items-center mt-2">
+              <div class="col">
+                <div class="form-check form-check-inline">
+                  <input
+                    formControlName="privacyBlurb"
+                    class="form-check-input"
+                    type="radio"
+                    name="privacyBlurb"
+                    id="inlineRadio1"
+                    value="Public"
+                  />
+                  <label class="form-check-label text-white" for="inlineRadio1"
+                    >Public</label
+                  >
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    formControlName="privacyBlurb"
+                    class="form-check-input"
+                    type="radio"
+                    name="privacyBlurb"
+                    id="inlineRadio2"
+                    value="Private"
+                  />
+                  <label class="form-check-label text-white" for="inlineRadio2"
+                    >Private</label
+                  >
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    formControlName="privacyBlurb"
+                    class="form-check-input"
+                    type="radio"
+                    name="privacyBlurb"
+                    id="inlineRadio3"
+                    value="FollowersOnly"
+                  />
+                  <label class="form-check-label text-white" for="inlineRadio3"
+                    >Followers Only</label
+                  >
+                </div>
+              </div>
+              <div class="col">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-lg"
+                  (click)="onSubmit()"
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </ul>

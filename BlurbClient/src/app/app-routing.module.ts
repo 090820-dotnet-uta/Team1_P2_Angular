@@ -11,6 +11,8 @@ import {
   OktaCallbackComponent,
   OktaAuthGuard,
 } from '@okta/okta-angular';
+import { FollowersComponent } from './components/followers/followers.component';
+import { ViewuserComponent } from './components/viewuser/viewuser.component';
 
 export function onAuthRequired(oktaAuth, injector) {
   const router = injector.get(Router);
@@ -21,17 +23,12 @@ export function onAuthRequired(oktaAuth, injector) {
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
-  {
-    path: 'user',
-    component: UserComponent,
-    canActivate: [OktaAuthGuard],
-    data: {
-      onAuthRequired,
-    },
-  },
+  { path: 'user', component: UserComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'followers', component: FollowersComponent },
+  { path: 'viewuser', component: ViewuserComponent },
 ];
 
 @NgModule({

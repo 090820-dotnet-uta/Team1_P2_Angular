@@ -1,11 +1,13 @@
 import { Injectable, OnInit } from '@angular/core';
 import { User } from './user.model';
 import { UserService } from '../services/user.service';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class UserRepository implements OnInit {
   private users: User[] = [];
   private user: User;
+  private success = false;
 
   constructor(private rest: UserService) {
     this.rest.getUsers().subscribe((data: any) => {
@@ -26,6 +28,9 @@ export class UserRepository implements OnInit {
     return this.users;
   }
 
+  loginUser(user: User): Observable<User> {
+    return this.rest.loginUser(user);
+  }
 
   addUser(user: User): void {
     this.rest.addUser(user).subscribe((p) => console.log(p));
@@ -51,5 +56,8 @@ export class UserRepository implements OnInit {
   editPassword(user: User): void {
     this.rest.editPassword(user).subscribe((p) => console.log(p));
   }
-}
 
+  editUser(user: User): void {
+    this.rest.editUser(user).subscribe((p) => console.log(p));
+  }
+}

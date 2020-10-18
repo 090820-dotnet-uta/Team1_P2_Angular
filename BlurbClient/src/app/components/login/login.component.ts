@@ -4,6 +4,7 @@ import { User } from 'src/app/models/user.model';
 import { Router, NavigationStart } from '@angular/router';
 import { OktaAuthService } from '@okta/okta-angular';
 import * as OktaSignIn from '@okta/okta-signin-widget';
+import { UserRepository } from 'src/app/models/user.repository';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,11 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  constructor(oktaAuth: OktaAuthService, router: Router) {
+  constructor(
+    private oktaAuth: OktaAuthService,
+    private router: Router,
+    private userRepo: UserRepository
+  ) {
     this.loginForm = new FormGroup({
       username: new FormControl(),
       password: new FormControl(),
@@ -71,15 +76,24 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  afterSubmit(u: any) {
+    if (localStorage.loggedInUser) {
+      console.log(localStorage.loggedInUser);
+      this.router.navigateByUrl('/home');
+    } else console.log('failed to log in');
+  }
+
   // Event listener for submitting the login form
   // Takes in a username and password and grabs
   //
   onSubmit() {
-    let user = new User();
-    user.username = this.username;
-    user.password = this.password;
-
     // Place method to get a user with the same
     // username and password
+    this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
+      if ('userId' in u) {
+        localStorage.loggedInUser = JSON.stringify(u);
+      }
+      this.afterSubmit(u);
+    });
   }
 }

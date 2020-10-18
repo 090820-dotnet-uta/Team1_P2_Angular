@@ -19,6 +19,10 @@ export class UserService {
     return this.httpClient.get<User[]>(this.BASE_URL + 'find/all');
   }
 
+  loginUser(user: User): Observable<User> {
+    return this.httpClient.post<User>(this.BASE_URL + 'login', user);
+  }
+
   addUser(user: User): Observable<User> {
     return this.httpClient.post<User>(this.BASE_URL + 'add', user);
   }
@@ -45,10 +49,10 @@ export class UserService {
   }
 
   setUser(user: User): Observable<User> {
-    return this.httpClient.post<User>(
-      this.BASE_URL + "add",
-      user
-    );
+    return this.httpClient.post<User>(this.BASE_URL + 'add', user);
   }
-  
+
+  editUser(user: User): Observable<User>{
+    return this.httpClient.put<User>(this.BASE_URL + 'edit/user', user);
+  }
 }
