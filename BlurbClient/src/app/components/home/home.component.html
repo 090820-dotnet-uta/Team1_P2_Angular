@@ -87,7 +87,7 @@
   </div>
   <div
     class="modal fade"
-    attr.data-num="{{ i }}"
+    attr.data-num="view{{ i }}"
     id="noteModal{{ i }}"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
@@ -95,33 +95,208 @@
   >
     <div class="modal-dialog modal-lg bg-dark-blue">
       <div class="modal-content bg-dark-blue px-4">
-        <div class="modal-header border-none justify-content-center">
-          <h3
-            class="modal-title text-white font-weight-light"
-            id="exampleModalLabel"
-          >
-            {{ b.user.screenName }}
-          </h3>
-        </div>
-        <div class="modal-body">
-          <h2 class="text-white">{{ b.media.name }}</h2>
-          <div class="row bg-dark-blue-light mt-2 mx-auto">
-            <div class="col text-center py-2">
-              <p
-                style="font-size: large; font-weight: 400"
-                class="m-0 lead text-white"
-              >
-                This will be the note body
-              </p>
-              <p
-                style="font-size: large; font-weight: 400"
-                class="m-0 lead text-white"
-              >
-                {{ b.message }}
-              </p>
+        <div *ngIf="edit">
+          <div class="modal-header border-none justify-content-center">
+            <h3
+              class="modal-title text-white font-weight-light"
+              id="exampleModalLabel"
+            >
+              {{ b.user.screenName }}
+            </h3>
+          </div>
+          <div class="modal-body">
+            <br />
+            <h2 class="text-white text-center">{{ b.media.name }}</h2>
+            <br />
+            <div class="row bg-dark-blue-light mt-2 mx-auto">
+              <div class="col text-center py-2">
+                <p
+                  style="font-size: large; font-weight: 400"
+                  class="m-0 lead text-white"
+                >
+                  This will be the note body
+                </p>
+                <p
+                  style="font-size: large; font-weight: 400"
+                  class="m-0 lead text-white"
+                >
+                  {{ b.message }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
+        <div *ngIf="!edit">
+          <div class="modal-dialog modal-lg bg-dark-blue">
+            <div class="modal-content bg-dark-blue px-4">
+              <div class="modal-header border-none justify-content-center">
+                <h3
+                  class="modal-title text-white font-weight-light"
+                  id="exampleModalLabel"
+                >
+                  Edit Blurb
+                </h3>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="blurb" novalidate>
+                  <div
+                    class="form-group row m-0 justify-content-between align-items-center"
+                  >
+                    <div class="col-3 p-0">
+                      <label class="my-1 text-white float-left" for="inputType"
+                        >Media Type</label
+                      >
+                      <select
+                        id="inputType"
+                        class="form-control"
+                        formControlName="type"
+                      >
+                        <option>Movie</option>
+                        <option>Game</option>
+                        <option>Book</option>
+                        <option>TV</option>
+                      </select>
+                    </div>
+                    <div class="col-4 p-0">
+                      <label
+                        class="my-1 text-white float-left"
+                        for="inputMediaName"
+                        >Name</label
+                      >
+                      <input
+                        formControlName="name"
+                        id="inputMediaName"
+                        type="text"
+                        maxlength="30"
+                        class="form-control"
+                        placeholder="{{ b.media.name }}"
+                      />
+                    </div>
+                    <div class="col-3 p-0">
+                      <label class="my-1 text-white float-left" for="inputScore"
+                        >Score</label
+                      >
+                      <select
+                        id="inputScore"
+                        class="form-control"
+                        formControlName="score"
+                      >
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group mt-2">
+                    <label
+                      class="text-white float-left m-0"
+                      for="exampleFormControlTextarea1"
+                      >Blurb</label
+                    >
+                    <textarea
+                      formControlName="message"
+                      class="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="2"
+                      maxlength="142"
+                      placeholder="{{ b.message }}"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group mt-2">
+                    <label
+                      class="text-white float-left m-0"
+                      for="exampleFormControlTextarea1"
+                      >Note</label
+                    >
+                    <textarea
+                      formControlName="note"
+                      class="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="4"
+                      maxlength="240"
+                      value="{{ b.notes }}"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group row align-items-center mt-2">
+                    <div class="col">
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio1"
+                          value="Public"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio1"
+                          >Public</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio2"
+                          value="Private"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio2"
+                          >Private</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio3"
+                          value="FollowersOnly"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio3"
+                          >Followers Only</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col">
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-lg"
+                        (click)="onSubmit(b)"
+                      >
+                        Complete Edit
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          *ngIf="b.userId === user.userId"
+          type="submit"
+          class="btn btn-info"
+          (click)="toggleEdit()"
+        >
+          Edit Blurb
+        </button>
       </div>
     </div>
   </div>

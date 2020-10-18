@@ -41,4 +41,8 @@ export class BlurbRepository implements OnInit {
   addBlurb(blurb: Blurb): void {
     this.rest.addBlurb(blurb).subscribe((p) => console.log(p));
   }
+
+  editBlurb(blurb: Blurb): void {
+    this.rest.editBlurb(blurb).subscribe((p) => console.log(p));
+  }
 }
