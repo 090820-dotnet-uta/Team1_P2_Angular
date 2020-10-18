@@ -28,7 +28,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
   { path: 'followers', component: FollowersComponent },
-  { path: 'viewuser', component: ViewuserComponent },
+  { path: 'viewuser/:id', component: ViewuserComponent },
 ];
 
 @NgModule({
