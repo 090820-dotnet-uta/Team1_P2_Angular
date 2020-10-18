@@ -20,9 +20,9 @@ export class UserRepository implements OnInit {
 
   ngOnInit() {}
 
-  // getUser(): User {
-  //   return this.user;
-  // }
+  getUser(id: number): Observable<User> {
+    return this.rest.getUser(id);
+  }
 
   getUsers(): User[] {
     return this.users;

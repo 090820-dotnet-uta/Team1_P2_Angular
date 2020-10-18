@@ -27,9 +27,10 @@ export class ViewuserComponent implements OnInit {
       this.blurbRepo
         .getBlurbsByUser(p['id'])
         .subscribe((b) => (this.blurbsByUserArr = b));
+      this.userRepo.getUser(p['id']).subscribe((u) => (this.user = u));
     });
-    
-    this.router.params.toPromise().then(p => this.user.userId = p['id'])
+
+    // this.router.params.toPromise().then(p => this.user.userId = p['id'])
   }
 
   ngOnInit(): void {}
