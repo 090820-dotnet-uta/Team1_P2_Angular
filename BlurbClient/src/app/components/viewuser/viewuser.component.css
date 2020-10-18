@@ -4,6 +4,13 @@
 
 .circle {
   background: grey;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.circle-lg {
+  background: grey;
   width: 100px;
   height: 100px;
   border-radius: 50%;
