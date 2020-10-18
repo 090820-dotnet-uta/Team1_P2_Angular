@@ -296,12 +296,20 @@
           </div>
         </div>
         <button
-          *ngIf="b.userId === user.userId"
+          *ngIf="b.userId === user.userId && edit"
           type="submit"
           class="btn btn-info"
           (click)="toggleEdit()"
         >
           Edit Blurb
+        </button>
+        <button
+          *ngIf="b.userId === user.userId && !edit"
+          type="submit"
+          class="btn btn-danger"
+          (click)="toggleEdit()"
+        >
+          Cancel
         </button>
       </div>
     </div>
