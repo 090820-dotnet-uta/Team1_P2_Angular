@@ -40,7 +40,10 @@
             class="circle d-inline focus-none"
           ></div>
           <h3 class="mt-2 mb-0 d-inline">
-            <span class="badge badge-info">
+            <span
+              class="badge"
+              [ngStyle]="{ 'background-color': calcBkgColor(b.score) }"
+            >
               {{ b.score }}
             </span>
           </h3>

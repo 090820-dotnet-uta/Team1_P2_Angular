@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Blurb } from '../../models/blurb.model';
 import { BlurbRepository } from '../../models/blurb.repository';
+import { CalcBkgColor } from '../../StaticFunctions';
 import * as moment from 'moment';
 import { User } from 'src/app/models/user.model';
 import { Router } from '@angular/router';
@@ -41,6 +42,7 @@ export class HomeComponent implements OnInit {
   }
 
   moment = moment;
+  calcBkgColor = CalcBkgColor;
 
   ngOnInit(): void {}
 
