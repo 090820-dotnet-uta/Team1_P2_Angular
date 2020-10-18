@@ -17,7 +17,16 @@
         <div class="circle-lg focus-none"></div>
       </div>
       <div class="col text-right my-auto">
-        <div class="btn btn-info">Following</div>
+        <div class="btn btn-info" *ngIf="currentUser.userId !== user.userId">
+          Following
+        </div>
+        <div
+          class="btn btn-info"
+          *ngIf="currentUser.userId === user.userId"
+          routerLink="/user"
+        >
+          Edit
+        </div>
       </div>
     </div>
   </div>
