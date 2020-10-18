@@ -26,4 +26,8 @@ export class BlurbService {
   addBlurb(blurb: Blurb): Observable<Blurb> {
     return this.httpClient.post<Blurb>(this.BASE_URL + 'add', blurb);
   }
+
+  editBlurb(blurb: Blurb): Observable<Blurb> {
+    return this.httpClient.post<Blurb>(this.BASE_URL + 'edit', blurb);
+  }
 }
