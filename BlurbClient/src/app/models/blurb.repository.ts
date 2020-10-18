@@ -30,6 +30,14 @@ export class BlurbRepository implements OnInit {
     return this.blurbs;
   }
 
+  getBlurbsByUser(id: number) {
+    let b: Blurb[];
+    this.rest.getBlurbsByUser(id).subscribe((data: any) => {
+      b = data;
+    });
+    return b;
+  }
+
   addBlurb(blurb: Blurb): void {
     this.rest.addBlurb(blurb).subscribe((p) => console.log(p));
   }

@@ -19,6 +19,10 @@ export class BlurbService {
     return this.httpClient.get<Blurb[]>(this.BASE_URL + 'find/all');
   }
 
+  getBlurbsByUser(id: number) {
+    return this.httpClient.get<Blurb[]>(`${this.BASE_URL}find/all/user/${id}`);
+  }
+
   addBlurb(blurb: Blurb): Observable<Blurb> {
     return this.httpClient.post<Blurb>(this.BASE_URL + 'add', blurb);
   }

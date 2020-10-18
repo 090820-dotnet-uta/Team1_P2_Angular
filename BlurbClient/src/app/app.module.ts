@@ -32,6 +32,7 @@ import {
 } from '@okta/okta-angular';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { FollowersComponent } from './components/followers/followers.component';
+import { ViewuserComponent } from './components/viewuser/viewuser.component';
 
 const config = {
   issuer: 'https://dev-5859084.okta.com/oauth2/default',
@@ -78,6 +79,7 @@ const appRoutes: Routes = [
     LandingComponent,
     ProtectedComponent,
     FollowersComponent,
+    ViewuserComponent,
   ],
   imports: [
     BrowserModule,
