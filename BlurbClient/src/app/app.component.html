@@ -2,14 +2,14 @@
   <div class="col-8 p-0">
     <div class="row w-100 m-0">
       <div class="col-3 p-0 mx-4">
-        <!-- <app-navbar></app-navbar> -->
+        <app-navbar></app-navbar>
       </div>
       <div class="col p-0 d-flex justify-content-center mx-4">
         <!-- src/app/app.component.html -->
 
         <!-- Latest CDN production CSS -->
-        <button *ngIf="!isAuthenticated" routerLink="/login">Login</button>
-        <button *ngIf="isAuthenticated" (click)="logout()">Logout</button>
+        <!-- <button *ngIf="!isAuthenticated" routerLink="/login">Login</button>
+        <button *ngIf="isAuthenticated" (click)="logout()">Logout</button> -->
         <router-outlet></router-outlet>
       </div>
     </div>
