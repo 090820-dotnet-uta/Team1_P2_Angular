@@ -8,8 +8,8 @@
         <!-- src/app/app.component.html -->
 
         <!-- Latest CDN production CSS -->
-        <!-- <button *ngIf="!isAuthenticated" routerLink="/login">Login</button> -->
-        <!-- <button *ngIf="isAuthenticated" (click)="logout()">Logout</button>  -->
+        <button *ngIf="!isAuthenticated" routerLink="/login">Login</button>
+        <button *ngIf="isAuthenticated" (click)="logout()">Logout</button>
         <router-outlet></router-outlet>
       </div>
     </div>
