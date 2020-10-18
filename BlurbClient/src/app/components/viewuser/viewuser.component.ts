@@ -11,14 +11,15 @@ import * as moment from 'moment';
 })
 export class ViewuserComponent implements OnInit {
   user: User;
+  blurbsByUserArr = [];
 
   moment = moment;
 
-  constructor(private blurbRepo: BlurbRepository) {}
+  constructor(private blurbRepo: BlurbRepository) {
+    this.blurbRepo
+      .getBlurbsByUser(1)
+      .subscribe((b) => (this.blurbsByUserArr = b));
+  }
 
   ngOnInit(): void {}
-
-  get blurbs(): Blurb[] {
-    return this.blurbRepo.getBlurbsByUser(1);
-  }
 }

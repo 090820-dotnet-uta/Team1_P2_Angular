@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Blurb } from './blurb.model';
 import { BlurbService } from '../services/blurb.service';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class BlurbRepository implements OnInit {
@@ -11,9 +12,6 @@ export class BlurbRepository implements OnInit {
       this.blurbs = data;
       console.log(data);
     });
-    // this.rest.getBlurb().subscribe((data:any) => {
-    //   this.blurb = data;
-    // })
   }
 
   ngOnInit() {}
@@ -30,12 +28,12 @@ export class BlurbRepository implements OnInit {
     return this.blurbs;
   }
 
-  getBlurbsByUser(id: number) {
-    let b: Blurb[];
-    this.rest.getBlurbsByUser(id).subscribe((data: any) => {
-      b = data;
-    });
-    return b;
+  // getBlurbsByUser(id: number): Blurb[] {
+  //   return this.blurbs.filter((b) => b.userId == id);
+  // }
+
+  getBlurbsByUser(id: number): Observable<Blurb[]> {
+    return this.rest.getBlurbsByUser(id);
   }
 
   addBlurb(blurb: Blurb): void {
