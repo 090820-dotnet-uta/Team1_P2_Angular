@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Blurb } from '../../models/blurb.model';
 import { BlurbRepository } from '../../models/blurb.repository';
+import { CalcBkgColor } from '../../StaticFunctions';
 import * as moment from 'moment';
 import { User } from 'src/app/models/user.model';
 import { Router } from '@angular/router';
@@ -8,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Media } from 'src/app/models/media.model';
 import { Privacy } from 'src/app/models/privacy.model';
 import { MediaType } from 'src/app/models/mediatype.model';
+import { SortSettings } from './SortSettings';
 
 @Component({
   selector: 'app-home',
@@ -20,9 +22,20 @@ import { MediaType } from 'src/app/models/mediatype.model';
 export class HomeComponent implements OnInit {
   user: User;
   edit = true;
+  filterSettingsVisible = false;
   blurb: FormGroup;
   mediaType: MediaType = new MediaType();
   blurbPrivacy: Privacy = new Privacy();
+  sortSettings: SortSettings = new SortSettings(
+    1,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  );
 
   constructor(private blurbRepo: BlurbRepository, private router: Router) {
     this.user = JSON.parse(localStorage.loggedInUser);
@@ -41,6 +54,7 @@ export class HomeComponent implements OnInit {
   }
 
   moment = moment;
+  calcBkgColor = CalcBkgColor;
 
   ngOnInit(): void {}
 
@@ -48,11 +62,11 @@ export class HomeComponent implements OnInit {
     return this.blurbRepo.getBlurbs();
   }
 
-  toggleEdit(){
+  toggleEdit() {
     this.edit = !this.edit;
   }
 
-  onSubmit(blurb: Blurb){
+  onSubmit(blurb: Blurb) {
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
       name: this.blurb.get('name').value,
@@ -68,7 +82,44 @@ export class HomeComponent implements OnInit {
     b.notes = [];
 
     console.log(b, this.blurbPrivacy.Public);
-    
+
     this.blurbRepo.editBlurb(b);
+  }
+
+  toggleFilterSettingsVisible() {
+    this.filterSettingsVisible = !this.filterSettingsVisible;
+  }
+
+  updateSortSetting(setting: number) {
+    if (Number.isInteger(setting) && setting >= 0 && setting <= 3)
+      this.sortSettings.sortSetting = setting;
+  }
+
+  toggleMovieFilter() {
+    this.sortSettings.filterMovies = !this.sortSettings.filterMovies;
+  }
+
+  toggleGamesFilter() {
+    this.sortSettings.filterGames = !this.sortSettings.filterGames;
+  }
+
+  toggleTVFilter() {
+    this.sortSettings.filterTV = !this.sortSettings.filterTV;
+  }
+
+  toggleBooksFilter() {
+    this.sortSettings.filterBooks = !this.sortSettings.filterBooks;
+  }
+
+  toggleFollowersFilter() {
+    this.sortSettings.includeFollowers = !this.sortSettings.includeFollowers;
+  }
+
+  toggleSelfFilter() {
+    this.sortSettings.includeSelf = !this.sortSettings.includeSelf;
+  }
+
+  toggleUnfollowedFilter() {
+    this.sortSettings.includeUnfollowed = !this.sortSettings.includeUnfollowed;
   }
 }

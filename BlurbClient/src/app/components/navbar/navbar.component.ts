@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
   blurb: FormGroup;
   mediaType: MediaType = new MediaType();
   blurbPrivacy: Privacy = new Privacy();
+  user: User = JSON.parse(localStorage.loggedInUser);
 
   constructor(
     public oktaAuth: OktaAuthService,
