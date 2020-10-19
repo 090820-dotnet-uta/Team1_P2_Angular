@@ -11,183 +11,195 @@
       <div class="col"></div>
       <div class="col-1">
         <button
-          class="btn btn-success btn-sm d-flex"
+          class="btn btn-outline-info btn-sm d-flex"
           data-toggle="modal"
           data-target="#exampleModal"
         >
           <span class="material-icons">add</span>
         </button>
         <div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-lg bg-dark-blue">
-          <div class="modal-content bg-dark-blue px-4">
-            <div class="modal-header border-none justify-content-center">
-              <h3
-                class="modal-title text-white font-weight-light"
-                id="exampleModalLabel"
-              >
-                Create Blurb
-              </h3>
-            </div>
-            <div class="modal-body">
-              <form [formGroup]="blurbAddForm" novalidate>
-                <div
-                  class="form-group row m-0 justify-content-between align-items-center"
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg bg-dark-blue">
+            <div class="modal-content bg-dark-blue px-4">
+              <div class="modal-header border-none justify-content-center">
+                <h3
+                  class="modal-title text-white font-weight-light"
+                  id="exampleModalLabel"
                 >
-                  <div class="col-3 p-0">
-                    <label class="my-1 text-white float-left" for="inputType"
-                      >Media Type</label
-                    >
-                    <select
-                      id="inputType"
-                      class="form-control"
-                      formControlName="type"
-                    >
-                      <option>Movie</option>
-                      <option>Game</option>
-                      <option>Book</option>
-                      <option>TV</option>
-                    </select>
-                  </div>
-                  <div class="col-4 p-0">
-                    <label class="my-1 text-white float-left" for="inputMediaName"
-                      >Name</label
-                    >
-                    <input
-                      formControlName="name"
-                      id="inputMediaName"
-                      type="text"
-                      maxlength="30"
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-3 p-0">
-                    <label class="my-1 text-white float-left" for="inputScore"
-                      >Score</label
-                    >
-                    <select
-                      id="inputScore"
-                      class="form-control"
-                      formControlName="score"
-                    >
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      <option>7</option>
-                      <option>8</option>
-                      <option>9</option>
-                      <option>10</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group mt-2">
-                  <label
-                    class="text-white float-left m-0"
-                    for="exampleFormControlTextarea1"
-                    >Blurb</label
+                  Create Blurb
+                </h3>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="blurbAddForm" novalidate>
+                  <div
+                    class="form-group row m-0 justify-content-between align-items-center"
                   >
-                  <textarea
-                    formControlName="message"
-                    class="form-control"
-                    id="exampleFormControlTextarea1"
-                    rows="2"
-                    maxlength="142"
-                  ></textarea>
-                </div>
-    
-                <div *ngIf="isAddingNote" class="form-group mt-2">
-                  <label
-                    class="text-white float-left m-0"
-                    for="exampleFormControlTextarea1"
-                    >Note</label
-                  >
-                  <textarea
-                    formControlName="note"
-                    class="form-control"
-                    id="exampleFormControlTextarea1"
-                    rows="4"
-                    maxlength="240"
-                  ></textarea>
-                </div>
-    
-                <div class="form-group row align-items-center mt-2">
-                  <div class="col">
-                    <div class="form-check form-check-inline">
-                      <input
-                        formControlName="privacyBlurb"
-                        class="form-check-input"
-                        type="radio"
-                        name="privacyBlurb"
-                        id="inlineRadio1"
-                        value="Public"
-                      />
-                      <label class="form-check-label text-white" for="inlineRadio1"
-                        >Public</label
+                    <div class="col-3 p-0">
+                      <label class="my-1 text-white float-left" for="inputType"
+                        >Media Type</label
                       >
+                      <select
+                        id="inputType"
+                        class="form-control"
+                        formControlName="type"
+                      >
+                        <option>Movie</option>
+                        <option>Game</option>
+                        <option>Book</option>
+                        <option>TV</option>
+                      </select>
                     </div>
-                    <div class="form-check form-check-inline">
-                      <input
-                        formControlName="privacyBlurb"
-                        class="form-check-input"
-                        type="radio"
-                        name="privacyBlurb"
-                        id="inlineRadio2"
-                        value="Private"
-                      />
-                      <label class="form-check-label text-white" for="inlineRadio2"
-                        >Private</label
+                    <div class="col-4 p-0">
+                      <label
+                        class="my-1 text-white float-left"
+                        for="inputMediaName"
+                        >Name</label
                       >
+                      <input
+                        formControlName="name"
+                        id="inputMediaName"
+                        type="text"
+                        maxlength="30"
+                        class="form-control"
+                      />
                     </div>
-                    <div class="form-check form-check-inline">
-                      <input
-                        formControlName="privacyBlurb"
-                        class="form-check-input"
-                        type="radio"
-                        name="privacyBlurb"
-                        id="inlineRadio3"
-                        value="FollowersOnly"
-                      />
-                      <label class="form-check-label text-white" for="inlineRadio3"
-                        >Followers Only</label
+                    <div class="col-3 p-0">
+                      <label class="my-1 text-white float-left" for="inputScore"
+                        >Score</label
                       >
+                      <select
+                        id="inputScore"
+                        class="form-control"
+                        formControlName="score"
+                      >
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                      </select>
                     </div>
                   </div>
-                  <div class="col-2">
-                    <button
-                      data-dismiss="modal"
-                      type="button"
-                      class="btn btn-primary btn-lg"
-                      (click)="onSubmitAdd()"
+                  <div class="form-group mt-2">
+                    <label
+                      class="text-white float-left m-0"
+                      for="exampleFormControlTextarea1"
+                      >Blurb</label
                     >
-                      Create
-                    </button>
+                    <textarea
+                      formControlName="message"
+                      class="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="2"
+                      maxlength="142"
+                    ></textarea>
                   </div>
-                  <div class="col-2">
-                    <button
-                      type="button"
-                      class="btn btn-info btn-lg"
-                      (click)="isAddingNote = !isAddingNote"
+
+                  <div *ngIf="isAddingNote" class="form-group mt-2">
+                    <label
+                      class="text-white float-left m-0"
+                      for="exampleFormControlTextarea1"
+                      >Note</label
                     >
-                      Note
-                    </button>
+                    <textarea
+                      formControlName="note"
+                      class="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="4"
+                      maxlength="240"
+                    ></textarea>
                   </div>
-                </div>
-              </form>
+
+                  <div class="form-group row align-items-center mt-2">
+                    <div class="col">
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio1"
+                          value="Public"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio1"
+                          >Public</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio2"
+                          value="Private"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio2"
+                          >Private</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio3"
+                          value="FollowersOnly"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio3"
+                          >Followers Only</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <button
+                        data-dismiss="modal"
+                        type="button"
+                        class="btn btn-primary btn-lg"
+                        (click)="onSubmitAdd()"
+                      >
+                        Create
+                      </button>
+                    </div>
+                    <div class="col-2">
+                      <button
+                        type="button"
+                        class="btn btn-info btn-lg"
+                        (click)="isAddingNote = !isAddingNote"
+                      >
+                        Note
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      </div>
     </div>
-    <div class="row text-center" *ngIf="filterSettingsVisible">
+    <div
+      class="row text-center"
+      *ngIf="filterSettingsVisible"
+      style="margin-top: 12px"
+    >
       <div class="col text-white">
         <button
           class="btn btn-dark dropdown-toggle"
@@ -264,7 +276,7 @@
             color: sortSettings.includeFollowing ? 'lightblue' : 'grey'
           }"
         >
-          Followers
+          Following
         </button>
         <button
           class="btn"
@@ -369,6 +381,7 @@
       </div>
     </div>
   </div>
+  <!-- This is the modal displaying a blurb -->
   <div
     class="modal fade"
     attr.data-num="view{{ i }}"
@@ -388,18 +401,26 @@
               {{ b.user.screenName }}
             </h3>
           </div>
-          <div class="modal-body">
+          <div class="modal-body col justify-content-center text-center">
             <br />
-            <h2 class="text-white text-center">{{ b.media.name }}</h2>
+            <div
+              class="text-center row d-flex justify-content-center align-items-center"
+            >
+              <h2 class="text-white text-center">{{ b.media.name }}</h2>
+              <span
+                class="badge display-4"
+                [ngStyle]="{
+                  'background-color': calcBkgColor(b.score),
+                  'font-size': 'xx-Large',
+                  'margin-left': '20px'
+                }"
+              >
+                {{ b.score }}
+              </span>
+            </div>
             <br />
             <div class="row bg-dark-blue-light mt-2 mx-auto">
               <div class="col text-center py-2">
-                <p
-                  style="font-size: large; font-weight: 400"
-                  class="m-0 lead text-white"
-                >
-                  This will be the note body
-                </p>
                 <p
                   style="font-size: large; font-weight: 400"
                   class="m-0 lead text-white"
