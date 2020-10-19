@@ -33,8 +33,12 @@ export class BlurbRepository implements OnInit {
   //   return this.blurbs.filter((b) => b.userId == id);
   // }
 
-  getBlurbsByUser(id: number): Observable<Blurb[]> {
-    return this.rest.getBlurbsByUser(id);
+  getBlurbsByUser(
+    fullQueryObj: FullQueryObj,
+    id: number,
+    byId: number
+  ): Observable<Blurb[]> {
+    return this.rest.getBlurbsByUser(fullQueryObj, id, byId);
   }
 
   addBlurb(blurb: Blurb): void {
