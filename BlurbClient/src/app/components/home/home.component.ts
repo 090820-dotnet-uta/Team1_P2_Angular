@@ -178,8 +178,15 @@ export class HomeComponent implements OnInit {
 
     this.blurbRepo.addBlurb(b).subscribe((newBlurb) => {
       console.log(newBlurb);
-      this.blurbsList.push(newBlurb);
+      // this.blurbsList.push(newBlurb);
     });
+    // this.blurbsList = [];
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array:`, p);
+      });
   }
 
   onDelete(blurb: Blurb) {
