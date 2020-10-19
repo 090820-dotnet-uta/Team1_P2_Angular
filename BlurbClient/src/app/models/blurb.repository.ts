@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Blurb } from './blurb.model';
 import { BlurbService } from '../services/blurb.service';
 import { Observable } from 'rxjs';
+import { FullQueryObj } from '../components/home/FullQueryObj';
 
 @Injectable()
 export class BlurbRepository implements OnInit {
@@ -42,5 +43,9 @@ export class BlurbRepository implements OnInit {
 
   editBlurb(blurb: Blurb): void {
     this.rest.editBlurb(blurb).subscribe((p) => console.log(p));
+  }
+
+  fullQuery(fullQueryObj: FullQueryObj, id: number): Observable<Blurb[]> {
+    return this.rest.fullQuery(fullQueryObj, id);
   }
 }

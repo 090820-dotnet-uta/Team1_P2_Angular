@@ -166,3 +166,19 @@ export function CalcBkgColor(scoreOutOfTen: number) {
   }
   return colorString;
 }
+
+
+export function GetTypeIcon(type: number): string {
+  if (type == 0) {
+    return "movie";
+  }
+  else if (type == 1) {
+    return "sports_esports";
+  }
+  else if (type == 2) {
+    return "menu_book";
+  }
+  else {
+    return "tv";
+  }
+}
