@@ -146,6 +146,8 @@ export class HomeComponent implements OnInit {
       console.log(newBlurb);
       this.blurbsList.push(newBlurb);
     });
+
+    this.ngOnInit();
   }
 
   onDelete(blurb: Blurb) {
