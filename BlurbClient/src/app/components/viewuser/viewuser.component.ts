@@ -5,7 +5,7 @@ import { User } from 'src/app/models/user.model';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserRepository } from 'src/app/models/user.repository';
-import { CalcBkgColor } from '../../StaticFunctions';
+import { CalcBkgColor, GetTypeIcon } from '../../StaticFunctions';
 import { Observable } from 'rxjs';
 import { Settings } from '../home/Settings';
 import { FullQueryObj } from '../home/FullQueryObj';
@@ -24,6 +24,7 @@ export class ViewuserComponent implements OnInit {
   isFollowing = false;
   lazyLoad = true;
   filterSettingsVisible = false;
+  getTypeIcon = GetTypeIcon;
 
   sortSettings: Settings = new Settings(
     0, //0 is sort by most recent
