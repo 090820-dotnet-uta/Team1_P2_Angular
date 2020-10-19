@@ -57,26 +57,34 @@ export class HomeComponent implements OnInit {
       : {};
     this.blurbEditForm = new FormGroup({
       type: new FormControl(),
-      name: new FormControl(),
+      name: new FormControl('', [
+        Validators.required
+      ]),
       score: new FormControl('', [
         Validators.required,
         Validators.pattern('^[0-9]*$'),
         Validators.minLength(2),
       ]),
-      message: new FormControl(),
+      message: new FormControl('', [
+        Validators.required
+      ]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
 
     this.blurbAddForm = new FormGroup({
       type: new FormControl(),
-      name: new FormControl(),
+      name: new FormControl('', [
+        Validators.required
+      ]),
       score: new FormControl('', [
         Validators.required,
         Validators.pattern('^[0-9]*$'),
         Validators.minLength(2),
       ]),
-      message: new FormControl(),
+      message: new FormControl('', [
+        Validators.required
+      ]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
@@ -110,16 +118,42 @@ export class HomeComponent implements OnInit {
       name: this.blurbEditForm.get('name').value,
       type: this.mediaType[this.blurbEditForm.get('type').value],
     };
+    console.log("Non edited blurb",blurb);
     let b: Blurb = blurb;
+    console.log("b is real",b)
     b.media = m;
-    b.message = this.blurbEditForm.get('message').value;
-    b.score = +this.blurbEditForm.get('score').value;
-    b.privacy = this.blurbPrivacy[this.blurbEditForm.get('privacyBlurb').value];
+
+    if(this.blurbEditForm.get('message').value){
+      console.log("message working")
+      b.message = this.blurbEditForm.get('message').value;
+    }else{
+      console.log("message else working")
+      b.message = blurb.message
+    }
+    
+    if(this.blurbEditForm.get('score').value >= 0){
+      console.log("score working")
+      b.score = +this.blurbEditForm.get('score').value;
+    }else{
+      console.log("score esle working")
+      b.score = blurb.score;
+    }
+
+    if(this.blurbEditForm.get('privacyBlurb').value){
+      console.log("privacy working")
+      b.privacy = this.blurbPrivacy[this.blurbEditForm.get('privacyBlurb').value];
+    }else{
+      console.log("privacy else working")
+      b.privacy = blurb.privacy
+    }  
+
     b.userId = loggedInUser.userId;
+
     b.name = m.name;
+
     b.notes = [];
 
-    console.log(b, this.blurbPrivacy.Public);
+    console.log("Edited Blurb ",b);
 
     this.blurbRepo.editBlurb(b);
   }

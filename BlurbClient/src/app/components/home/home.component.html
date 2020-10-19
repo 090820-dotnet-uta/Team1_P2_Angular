@@ -453,6 +453,7 @@
                       >
                       <select
                         id="inputType"
+                        required
                         class="form-control"
                         formControlName="type"
                       >
@@ -485,11 +486,14 @@
                         >Name</label
                       >
                       <input
+                        required
+                        [(ngModel)]="b.name"
                         formControlName="name"
                         id="inputMediaName"
                         type="text"
                         maxlength="30"
                         class="form-control"
+                        value="{{ b.name }}"
                       />
                     </div>
                     <div class="col-3 p-0">
@@ -497,6 +501,7 @@
                         >Score</label
                       >
                       <select
+                        required
                         id="inputScore"
                         class="form-control"
                         formControlName="score"
@@ -541,12 +546,15 @@
                       >Blurb</label
                     >
                     <textarea
+                      required
+                      [(ngModel)]="b.message"
                       formControlName="message"
                       class="form-control"
                       id="exampleFormControlTextarea1"
                       rows="2"
                       maxlength="142"
                       placeholder="{{ b.message }}"
+                      value="{{ b.message }}"
                     ></textarea>
                   </div>
 
