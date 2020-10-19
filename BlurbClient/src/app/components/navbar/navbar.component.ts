@@ -18,14 +18,10 @@ export class NavbarComponent implements OnInit {
     ? JSON.parse(localStorage.loggedInUser)
     : {};
 
-  constructor(public oktaAuth: OktaAuthService, public router: Router) {
+  constructor(public router: Router) {
     this.user = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
       : {};
-    // Subscribe to authentication state changes
-    this.oktaAuth.$authenticationState.subscribe(
-      (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
-    );
 
     // Listend for route changed to assign this.user for passing to viewuser route on navbar routerlink
     this.router.events.subscribe((event: any) => {
@@ -35,9 +31,8 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  async ngOnInit() {
-    // Get the authentication state for immediate use
-    this.isAuthenticated = await this.oktaAuth.isAuthenticated();
+  ngOnInit(): void {}
+
     this.user = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
       : {};

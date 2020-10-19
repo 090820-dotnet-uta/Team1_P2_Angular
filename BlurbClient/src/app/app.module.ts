@@ -36,9 +36,9 @@ import { ViewuserComponent } from './components/viewuser/viewuser.component';
 import { MatIconModule } from '@angular/material/icon';
 
 const config = {
-  issuer: 'https://dev-5859084.okta.com/oauth2/default',
+  issuer: 'https://dev-5859084.okta.com',
   redirectUri: window.location.origin + '/login/callback',
-  clientId: '0oaatkg49eXgLauJt5d5',
+  clientId: '0oabyyofa84U20IFv5d5',
   pkce: true,
 };
 
@@ -57,6 +57,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
   },
   {
     path: 'protected',
