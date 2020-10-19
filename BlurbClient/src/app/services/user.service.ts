@@ -11,8 +11,8 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getUser(): Observable<User> {
-    return this.httpClient.get<User>(this.BASE_URL + 'find');
+  getUser(id: number): Observable<User> {
+    return this.httpClient.get<User>(`${this.BASE_URL}find/${id}`);
   }
 
   getUsers(): Observable<User[]> {
@@ -52,7 +52,26 @@ export class UserService {
     return this.httpClient.post<User>(this.BASE_URL + 'add', user);
   }
 
-  editUser(user: User): Observable<User>{
+  editUser(user: User): Observable<User> {
     return this.httpClient.put<User>(this.BASE_URL + 'edit/user', user);
+  }
+
+  followUser(user: User, toFollowId: number): Observable<User> {
+    return this.httpClient.put<User>(
+      `${this.BASE_URL}follow/${toFollowId}`,
+      user
+    );
+  }
+
+  getFollowers(id: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(
+      `${this.BASE_URL}find/all/follower/${id}`
+    );
+  }
+
+  getFollowing(id: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(
+      `${this.BASE_URL}find/all/following/${id}`
+    );
   }
 }
