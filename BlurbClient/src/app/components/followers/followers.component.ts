@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.model';
+import { UserRepository } from 'src/app/models/user.repository';
 
 @Component({
   selector: 'app-followers',
@@ -7,6 +8,7 @@ import { User } from 'src/app/models/user.model';
   styleUrls: ['./followers.component.css'],
 })
 export class FollowersComponent implements OnInit {
+  user: User;
   filtering = true;
   displayArr = [];
   dummyFollowersArr = [
@@ -44,7 +46,14 @@ export class FollowersComponent implements OnInit {
     } as User,
   ];
 
-  constructor() {}
+  constructor() {
+    this.user = localStorage.loggedInUser
+      ? JSON.parse(localStorage.loggedInUser)
+      : {};
+    let x = JSON.parse(localStorage.loggedInUser);
+    this.dummyFollowingArr = x.followers;
+    this.dummyFollowersArr = x.following;
+  }
 
   toggleFilter() {
     this.filtering = !this.filtering;
