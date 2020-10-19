@@ -196,7 +196,17 @@ export class HomeComponent implements OnInit {
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
       });
+  }
+
+  //Adds the next 10 blurbs to the currently loaded list
+  loadNextBlurbs(span: number) {
+    if (Number.isInteger(span) && span > 0) {
+      this.blurbRepo
+        .fullQuery(this.fullQueryObj, this.user.userId)
+        .subscribe((p) => {
+          this.blurbsList = this.blurbsList.concat(p);
+        });
+    }
   }
 }
