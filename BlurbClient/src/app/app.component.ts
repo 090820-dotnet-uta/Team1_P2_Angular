@@ -9,13 +9,10 @@ import { User } from './models/user.model';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  user: User;
 
   constructor(public router: Router) {
     
   }
 
-  async ngOnInit() {
-   
-  }
+  ngOnInit(): void {}
 }

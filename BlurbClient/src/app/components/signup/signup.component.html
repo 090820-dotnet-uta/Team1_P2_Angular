@@ -1,48 +1,62 @@
 <div>
   <form [formGroup]="user" novalidate>
-    <div>
-      <br />
-      <input
-        formControlName="name"
-        type="text"
-        placeholder="name"
-        name="name"
-        id="name"
-        required
-      />
-    </div>
-    <div>
-      <input
-        formControlName="screenName"
-        type="text"
-        placeholder="screenname"
-        name="screenName"
-        id="screenName"
-        required
-      />
-    </div>
-    <div>
-      <input
-        formControlName="username"
-        type="text"
-        placeholder="username"
-        name="username"
-        id="username"
-        required
-      />
-    </div>
-    <div>
-      <input
-        formControlName="password"
-        type="password"
-        placeholder="password"
-        name="password"
-        id="password"
-        required
-      />
-    </div>
-    <div>
-      <button type="submit" (click)="onSubmit()">Sign Up</button>
+    <div class="row justify-content-center mt-3">
+      <div class="col-6 justify-content-center">
+        <div>
+          <br />
+          <input
+            class="form-control text-center"
+            formControlName="name"
+            type="text"
+            placeholder="name"
+            name="name"
+            id="name"
+            required
+          />
+        </div>
+        <div>
+          <input
+            class="form-control text-center"
+            formControlName="screenName"
+            type="text"
+            placeholder="screenname"
+            name="screenName"
+            id="screenName"
+            required
+          />
+        </div>
+        <div>
+          <input
+            class="form-control text-center"
+            formControlName="username"
+            type="text"
+            placeholder="username"
+            name="username"
+            id="username"
+            required
+          />
+        </div>
+        <div>
+          <input
+            class="form-control text-center"
+            formControlName="password"
+            type="password"
+            placeholder="password"
+            name="password"
+            id="password"
+            required
+          />
+        </div>
+        <div>
+          <button
+            class="btn btn-info btn-block"
+            type="submit"
+            (click)="onSubmit()"
+          >
+            Sign Up
+          </button>
+        </div>
+      </div>
     </div>
   </form>
 </div>

@@ -15,25 +15,12 @@ import { UserRepository } from 'src/app/models/user.repository';
 // Login should prompt them to login and redirect them to the seeblurbs page
 export class LoginComponent implements OnInit {
   user: User;
-  isAuthenticated: boolean;
-  signIn;
-  widget = new OktaSignIn({
-    baseUrl: 'https://dev-5859084.okta.com',
-    clientId: '0oabyyofa84U20IFv5d5',
-    authParams: {
-      pkce: true,
-    },
-    features: {
-      registration: true, // REQUIRED
-    },
-  });
-
+  
   loginForm: FormGroup;
   username: string;
   password: string;
 
   constructor(
-    private oktaAuth: OktaAuthService,
     private router: Router,
     private userRepo: UserRepository
   ) {
@@ -41,36 +28,15 @@ export class LoginComponent implements OnInit {
       username: new FormControl(),
       password: new FormControl(),
     });
-
-    this.signIn = oktaAuth;
-
-    // Show the widget when prompted, otherwise remove it from the DOM.
-    router.events.forEach((event) => {
-      if (event instanceof NavigationStart) {
-        switch (event.url) {
-          case '/login':
-            break;
-          case '/protected':
-            break;
-          default:
-            this.widget.remove();
-            break;
-        }
-      }
-    });
   }
 
-  ngOnInit() {
-    
-  }
+  ngOnInit(): void {}
 
   afterSubmit(u: any) {
     if (localStorage.loggedInUser) {
       console.log(localStorage.loggedInUser);
       console.log(localStorage.followers);
-      this.user = localStorage.loggedInUser;
-      let num = this.user.userId;
-      this.router.navigateByUrl('/viewuser/'+ num);
+      this.router.navigateByUrl('/home');
     } else console.log('failed to log in');
     setTimeout(() => {
       let x = JSON.parse(localStorage.loggedInUser);

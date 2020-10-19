@@ -29,8 +29,10 @@ import {
 export class HomeComponent implements OnInit {
   user: User;
   edit = true;
+  isAddingNote: boolean = false;
   filterSettingsVisible = false;
-  blurb: FormGroup;
+  blurbEditForm: FormGroup;
+  blurbAddForm: FormGroup;
   blurbsList: Blurb[];
   mediaType: MediaType = new MediaType();
   blurbPrivacy: Privacy = new Privacy();
@@ -50,8 +52,10 @@ export class HomeComponent implements OnInit {
   privacySelectedTxt = PrivacySelectedTxt;
 
   constructor(private blurbRepo: BlurbRepository, private router: Router) {
-    this.user = JSON.parse(localStorage.loggedInUser);
-    this.blurb = new FormGroup({
+    this.user = localStorage.loggedInUser
+      ? JSON.parse(localStorage.loggedInUser)
+      : {};
+    this.blurbEditForm = new FormGroup({
       type: new FormControl(),
       name: new FormControl(),
       score: new FormControl('', [
@@ -63,11 +67,25 @@ export class HomeComponent implements OnInit {
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
+
+    this.blurbAddForm = new FormGroup({
+      type: new FormControl(),
+      name: new FormControl(),
+      score: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+        Validators.minLength(2),
+      ]),
+      message: new FormControl(),
+      note: new FormControl(),
+      privacyBlurb: new FormControl(),
+    });
+
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
+        console.log(`blurbs array:`, p);
       });
   }
 
@@ -85,17 +103,18 @@ export class HomeComponent implements OnInit {
     this.edit = !this.edit;
   }
 
-  onSubmit(blurb: Blurb) {
+  onSubmitEdit(blurb: Blurb) {
+    this.edit = false;
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
-      name: this.blurb.get('name').value,
-      type: this.mediaType[this.blurb.get('type').value],
+      name: this.blurbEditForm.get('name').value,
+      type: this.mediaType[this.blurbEditForm.get('type').value],
     };
     let b: Blurb = blurb;
     b.media = m;
-    b.message = this.blurb.get('message').value;
-    b.score = +this.blurb.get('score').value;
-    b.privacy = this.blurbPrivacy[this.blurb.get('privacyBlurb').value];
+    b.message = this.blurbEditForm.get('message').value;
+    b.score = +this.blurbEditForm.get('score').value;
+    b.privacy = this.blurbPrivacy[this.blurbEditForm.get('privacyBlurb').value];
     b.userId = loggedInUser.userId;
     b.name = m.name;
     b.notes = [];
@@ -103,6 +122,43 @@ export class HomeComponent implements OnInit {
     console.log(b, this.blurbPrivacy.Public);
 
     this.blurbRepo.editBlurb(b);
+  }
+
+  onSubmitAdd() {
+    let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
+    let m: Media = {
+      name: this.blurbAddForm.get('name').value,
+      type: this.mediaType[this.blurbAddForm.get('type').value],
+    };
+    let b: Blurb = {
+      message: this.blurbAddForm.get('message').value,
+      score: +this.blurbAddForm.get('score').value,
+      privacy: this.blurbPrivacy[this.blurbAddForm.get('privacyBlurb').value],
+      name: m.name,
+      userId: loggedInUser.userId,
+      media: m,
+      notes: this.isAddingNote ? this.blurbAddForm.get('note').value : [],
+    };
+
+    console.log(b, this.blurbPrivacy.Public);
+
+    this.blurbRepo.addBlurb(b).subscribe((newBlurb) => {
+      console.log(newBlurb);
+      this.blurbsList.push(newBlurb);
+    });
+  }
+
+  onDelete(blurb: Blurb) {
+    console.log('Trying to delete: ', blurb);
+    if (blurb.userId == this.user.userId)
+      this.blurbRepo.deleteBlurb(blurb.blurbId).subscribe((p) => {
+        console.log(`Delete succeeded: ${p}`);
+        if (p) {
+          this.blurbsList = this.blurbsList.filter(
+            (b) => b.blurbId != blurb.blurbId
+          );
+        }
+      });
   }
 
   //not used anymore

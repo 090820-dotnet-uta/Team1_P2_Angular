@@ -20,8 +20,15 @@ export class BlurbService {
     return this.httpClient.get<Blurb[]>(this.BASE_URL + 'find/all');
   }
 
-  getBlurbsByUser(id: number): Observable<Blurb[]> {
-    return this.httpClient.get<Blurb[]>(`${this.BASE_URL}find/all/user/${id}`);
+  getBlurbsByUser(
+    fullQueryObj: FullQueryObj,
+    id: number,
+    byId: number
+  ): Observable<Blurb[]> {
+    return this.httpClient.post<Blurb[]>(
+      `${this.BASE_URL}query/user/${id}/${byId}`,
+      fullQueryObj
+    );
   }
 
   addBlurb(blurb: Blurb): Observable<Blurb> {
@@ -29,10 +36,17 @@ export class BlurbService {
   }
 
   editBlurb(blurb: Blurb): Observable<Blurb> {
-    return this.httpClient.post<Blurb>(this.BASE_URL + 'edit', blurb);
+    return this.httpClient.put<Blurb>(this.BASE_URL + 'edit', blurb);
   }
 
   fullQuery(fullQueryObj: FullQueryObj, id: number): Observable<Blurb[]> {
-    return this.httpClient.post<Blurb[]>(`${this.BASE_URL}fullquery/${id}`, fullQueryObj);
+    return this.httpClient.post<Blurb[]>(
+      `${this.BASE_URL}fullquery/${id}`,
+      fullQueryObj
+    );
+  }
+
+  deleteBlurb(blurbId: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(this.BASE_URL + `remove/${blurbId}`);
   }
 }

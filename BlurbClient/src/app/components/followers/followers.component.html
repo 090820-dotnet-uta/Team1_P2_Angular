@@ -1,6 +1,10 @@
 <div class="row bg-dark-blue border-dark-grey py-2">
   <div class="col-9 text-center">
-    <h3 class="m-0 text-white">Followers</h3>
+    <h3 class="m-0 text-white d-inline">{{ user.name }}'s&nbsp;</h3>
+    <h3
+      [textContent]="!filtering ? 'Followers' : 'Following'"
+      class="m-0 text-white d-inline"
+    ></h3>
   </div>
   <div class="col">
     <div
@@ -26,13 +30,13 @@
         <div class="row mx-auto">
           <div class="col">
             <div class="row flex-column">
-              <h5 class="mb-0 text-white">{{ d.screenName }}</h5>
+              <h4 class="mb-0 text-white">{{ d.screenName }}</h4>
             </div>
           </div>
           <div class="col-6 text-center text-white">
             <h4 class="m-0 text-white">{{ d.name }}</h4>
           </div>
-          <div class="col">
+          <div *ngIf="filtering" class="col">
             <div class="btn btn-info">Unfollow</div>
           </div>
         </div>

@@ -65,6 +65,10 @@ export class UserRepository implements OnInit {
     return this.rest.followUser(user, toFollowId);
   }
 
+  unfollowUser(user: User, toUnfollowId: number): Observable<boolean> {
+    return this.rest.unfollowUser(user, toUnfollowId);
+  }
+
   getFollowers(id: number): Observable<any[]> {
     return this.rest.getFollowers(id);
   }

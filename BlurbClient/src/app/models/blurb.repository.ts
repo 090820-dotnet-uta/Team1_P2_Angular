@@ -29,16 +29,16 @@ export class BlurbRepository implements OnInit {
     return this.blurbs;
   }
 
-  // getBlurbsByUser(id: number): Blurb[] {
-  //   return this.blurbs.filter((b) => b.userId == id);
-  // }
-
-  getBlurbsByUser(id: number): Observable<Blurb[]> {
-    return this.rest.getBlurbsByUser(id);
+  getBlurbsByUser(
+    fullQueryObj: FullQueryObj,
+    id: number,
+    byId: number
+  ): Observable<Blurb[]> {
+    return this.rest.getBlurbsByUser(fullQueryObj, id, byId);
   }
 
-  addBlurb(blurb: Blurb): void {
-    this.rest.addBlurb(blurb).subscribe((p) => console.log(p));
+  addBlurb(blurb: Blurb): Observable<Blurb> {
+    return this.rest.addBlurb(blurb);
   }
 
   editBlurb(blurb: Blurb): void {
@@ -47,5 +47,9 @@ export class BlurbRepository implements OnInit {
 
   fullQuery(fullQueryObj: FullQueryObj, id: number): Observable<Blurb[]> {
     return this.rest.fullQuery(fullQueryObj, id);
+  }
+
+  deleteBlurb(blurbId: number): Observable<boolean> {
+    return this.rest.deleteBlurb(blurbId);
   }
 }

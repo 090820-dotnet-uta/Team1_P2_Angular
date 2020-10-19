@@ -1,95 +1,281 @@
-<div class="col bg-dark-blue border-dark-grey py-2 mb3">
-  <div class="row text-center mb3">
-    <h3 class="m-0 text-white">Filter/Sort:</h3>
-    <button
-      class="btn btn-dark dropdown-toggle"
-      (click)="toggleFilterSettingsVisible()"
-    ></button>
-  </div>
-  <div class="row text-center" *ngIf="filterSettingsVisible">
-    <div class="col text-white">
-      <button
-        class="btn btn-dark dropdown-toggle"
-        type="button"
-        id="settingsDropdownBtn"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-        [textContent]="sortSettings.getSortName()"
-      ></button>
-      <div class="dropdown-menu" aria-labelledby="settingsDropdownBtn">
-        <a class="dropdown-item" (click)="updateSortSetting(0)">Most Recent</a>
-        <a class="dropdown-item" (click)="updateSortSetting(1)">Least Recent</a>
-        <a class="dropdown-item" (click)="updateSortSetting(2)">10 - 0</a>
-        <a class="dropdown-item" (click)="updateSortSetting(3)">0 - 10</a>
+<div class="row">
+  <div class="col bg-dark-blue border-dark-grey py-2 w-100">
+    <div class="row text-center">
+      <div class="col-3 d-flex align-items-center">
+        <h3 class="m-0 text-white d-inline">Filter/Sort:</h3>
+        <button
+          class="btn btn-dark dropdown-toggle d-inline btn-sm mx-2"
+          (click)="toggleFilterSettingsVisible()"
+        ></button>
+      </div>
+      <div class="col"></div>
+      <div class="col-1">
+        <button
+          class="btn btn-success btn-sm d-flex"
+          data-toggle="modal"
+          data-target="#exampleModal"
+        >
+          <span class="material-icons">add</span>
+        </button>
+        <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg bg-dark-blue">
+          <div class="modal-content bg-dark-blue px-4">
+            <div class="modal-header border-none justify-content-center">
+              <h3
+                class="modal-title text-white font-weight-light"
+                id="exampleModalLabel"
+              >
+                Create Blurb
+              </h3>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="blurbAddForm" novalidate>
+                <div
+                  class="form-group row m-0 justify-content-between align-items-center"
+                >
+                  <div class="col-3 p-0">
+                    <label class="my-1 text-white float-left" for="inputType"
+                      >Media Type</label
+                    >
+                    <select
+                      id="inputType"
+                      class="form-control"
+                      formControlName="type"
+                    >
+                      <option>Movie</option>
+                      <option>Game</option>
+                      <option>Book</option>
+                      <option>TV</option>
+                    </select>
+                  </div>
+                  <div class="col-4 p-0">
+                    <label class="my-1 text-white float-left" for="inputMediaName"
+                      >Name</label
+                    >
+                    <input
+                      formControlName="name"
+                      id="inputMediaName"
+                      type="text"
+                      maxlength="30"
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-3 p-0">
+                    <label class="my-1 text-white float-left" for="inputScore"
+                      >Score</label
+                    >
+                    <select
+                      id="inputScore"
+                      class="form-control"
+                      formControlName="score"
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                      <option>10</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group mt-2">
+                  <label
+                    class="text-white float-left m-0"
+                    for="exampleFormControlTextarea1"
+                    >Blurb</label
+                  >
+                  <textarea
+                    formControlName="message"
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="2"
+                    maxlength="142"
+                  ></textarea>
+                </div>
+    
+                <div *ngIf="isAddingNote" class="form-group mt-2">
+                  <label
+                    class="text-white float-left m-0"
+                    for="exampleFormControlTextarea1"
+                    >Note</label
+                  >
+                  <textarea
+                    formControlName="note"
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="4"
+                    maxlength="240"
+                  ></textarea>
+                </div>
+    
+                <div class="form-group row align-items-center mt-2">
+                  <div class="col">
+                    <div class="form-check form-check-inline">
+                      <input
+                        formControlName="privacyBlurb"
+                        class="form-check-input"
+                        type="radio"
+                        name="privacyBlurb"
+                        id="inlineRadio1"
+                        value="Public"
+                      />
+                      <label class="form-check-label text-white" for="inlineRadio1"
+                        >Public</label
+                      >
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        formControlName="privacyBlurb"
+                        class="form-check-input"
+                        type="radio"
+                        name="privacyBlurb"
+                        id="inlineRadio2"
+                        value="Private"
+                      />
+                      <label class="form-check-label text-white" for="inlineRadio2"
+                        >Private</label
+                      >
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        formControlName="privacyBlurb"
+                        class="form-check-input"
+                        type="radio"
+                        name="privacyBlurb"
+                        id="inlineRadio3"
+                        value="FollowersOnly"
+                      />
+                      <label class="form-check-label text-white" for="inlineRadio3"
+                        >Followers Only</label
+                      >
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <button
+                      data-dismiss="modal"
+                      type="button"
+                      class="btn btn-primary btn-lg"
+                      (click)="onSubmitAdd()"
+                    >
+                      Create
+                    </button>
+                  </div>
+                  <div class="col-2">
+                    <button
+                      type="button"
+                      class="btn btn-info btn-lg"
+                      (click)="isAddingNote = !isAddingNote"
+                    >
+                      Note
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
-    <div class="col text-white">
-      <button
-        class="material-icons btn"
-        (click)="toggleMovieFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeMovies ? 'lightblue' : 'grey'
-        }"
-      >
-        movie
-      </button>
-      <button
-        class="material-icons btn"
-        (click)="toggleBooksFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeBooks ? 'lightblue' : 'grey'
-        }"
-      >
-        menu_book
-      </button>
-      <button
-        class="material-icons btn"
-        (click)="toggleGamesFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeGames ? 'lightblue' : 'grey'
-        }"
-      >
-        sports_esports
-      </button>
-      <button
-        class="material-icons btn"
-        (click)="toggleTVFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeTV ? 'lightblue' : 'grey'
-        }"
-      >
-        tv
-      </button>
-    </div>
-    <div class="col text-white">
-      <button
-        class="btn"
-        (click)="toggleSelfFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeSelf ? 'lightblue' : 'grey'
-        }"
-      >
-        Yours
-      </button>
-      <button
-        class="btn"
-        (click)="toggleFollowersFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeFollowing ? 'lightblue' : 'grey'
-        }"
-      >
-        Followers
-      </button>
-      <button
-        class="btn"
-        (click)="toggleUnfollowedFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeUnfollowed ? 'lightblue' : 'grey'
-        }"
-      >
-        Not Followed
-      </button>
+    <div class="row text-center" *ngIf="filterSettingsVisible">
+      <div class="col text-white">
+        <button
+          class="btn btn-dark dropdown-toggle"
+          type="button"
+          id="settingsDropdownBtn"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          [textContent]="sortSettings.getSortName()"
+        ></button>
+        <div class="dropdown-menu" aria-labelledby="settingsDropdownBtn">
+          <a class="dropdown-item" (click)="updateSortSetting(0)"
+            >Most Recent</a
+          >
+          <a class="dropdown-item" (click)="updateSortSetting(1)"
+            >Least Recent</a
+          >
+          <a class="dropdown-item" (click)="updateSortSetting(2)">10 - 0</a>
+          <a class="dropdown-item" (click)="updateSortSetting(3)">0 - 10</a>
+        </div>
+      </div>
+      <div class="col text-white">
+        <button
+          class="material-icons btn"
+          (click)="toggleMovieFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeMovies ? 'lightblue' : 'grey'
+          }"
+        >
+          movie
+        </button>
+        <button
+          class="material-icons btn"
+          (click)="toggleBooksFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeBooks ? 'lightblue' : 'grey'
+          }"
+        >
+          menu_book
+        </button>
+        <button
+          class="material-icons btn"
+          (click)="toggleGamesFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeGames ? 'lightblue' : 'grey'
+          }"
+        >
+          sports_esports
+        </button>
+        <button
+          class="material-icons btn"
+          (click)="toggleTVFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeTV ? 'lightblue' : 'grey'
+          }"
+        >
+          tv
+        </button>
+      </div>
+      <div class="col text-white">
+        <button
+          class="btn"
+          (click)="toggleSelfFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeSelf ? 'lightblue' : 'grey'
+          }"
+        >
+          Yours
+        </button>
+        <button
+          class="btn"
+          (click)="toggleFollowersFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeFollowing ? 'lightblue' : 'grey'
+          }"
+        >
+          Followers
+        </button>
+        <button
+          class="btn"
+          (click)="toggleUnfollowedFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeUnfollowed ? 'lightblue' : 'grey'
+          }"
+        >
+          Not Followed
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -145,15 +331,6 @@
           </div>
           <div class="col-6 text-center text-white">
             <div class="row justify-content-center">
-              <!-- <span
-                class="material-icons btn"
-                (click)="toggleBooksFilter()"
-                [ngStyle]="{
-                  color: calcBkgColor(b.score)
-                }"
-              >
-                {{ getTypeIcon(b.media.type) }}
-              </span> -->
               <h4 class="m-0 text-white">{{ b.media.name }}</h4>
             </div>
           </div>
@@ -161,7 +338,6 @@
           <div class="col justify-content-end">
             <span
               class="material-icons float-right"
-              (click)="toggleBooksFilter()"
               [ngStyle]="{
                 color: calcBkgColor(b.score)
               }"
@@ -203,7 +379,7 @@
   >
     <div class="modal-dialog modal-lg bg-dark-blue">
       <div class="modal-content bg-dark-blue px-4">
-        <div *ngIf="edit">
+        <div *ngIf="edit || b.userId != user.userId">
           <div class="modal-header border-none justify-content-center">
             <h3
               class="modal-title text-white font-weight-light"
@@ -234,7 +410,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="!edit">
+        <div *ngIf="!edit && b.userId == user.userId">
           <div class="modal-dialog modal-lg bg-dark-blue">
             <div class="modal-content bg-dark-blue px-4">
               <div class="modal-header border-none justify-content-center">
@@ -246,7 +422,7 @@
                 </h3>
               </div>
               <div class="modal-body">
-                <form [formGroup]="blurb" novalidate>
+                <form [formGroup]="blurbEditForm" novalidate>
                   <div
                     class="form-group row m-0 justify-content-between align-items-center"
                   >
@@ -293,7 +469,6 @@
                         type="text"
                         maxlength="30"
                         class="form-control"
-                        placeholder="{{ b.media.name }}"
                       />
                     </div>
                     <div class="col-3 p-0">
@@ -366,7 +541,6 @@
                       id="exampleFormControlTextarea1"
                       rows="4"
                       maxlength="240"
-                      value="{{ b.notes }}"
                     ></textarea>
                   </div>
 
@@ -396,7 +570,6 @@
                           name="privacyBlurb"
                           id="inlineRadio2"
                           value="Private"
-                          checked
                           checked="{{ privacySelectedTxt(b.privacy, 1) }}"
                         />
                         <label
@@ -426,9 +599,20 @@
                       <button
                         type="button"
                         class="btn btn-primary btn-lg"
-                        (click)="onSubmit(b)"
+                        (click)="onSubmitEdit(b)"
+                        data-dismiss="modal"
+                        *ngIf="b.userId == user.userId"
                       >
                         Complete Edit
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-lg"
+                        (click)="onDelete(b)"
+                        data-dismiss="modal"
+                        *ngIf="b.userId == user.userId"
+                      >
+                        Delete
                       </button>
                     </div>
                   </div>
