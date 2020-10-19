@@ -19,12 +19,13 @@ import { User } from 'src/app/models/user.model';
 // useredit page, logout, search, and see blurbs
 export class NavbarComponent implements OnInit {
   isAuthenticated: boolean;
-  blurb: FormGroup;
+  blurbAddForm: FormGroup;
   mediaType: MediaType = new MediaType();
   blurbPrivacy: Privacy = new Privacy();
   user: User = localStorage.loggedInUser
     ? JSON.parse(localStorage.loggedInUser)
     : {};
+  isAddingNote: boolean = false;
 
   constructor(
     public oktaAuth: OktaAuthService,
@@ -38,7 +39,7 @@ export class NavbarComponent implements OnInit {
     this.oktaAuth.$authenticationState.subscribe(
       (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
     );
-    this.blurb = new FormGroup({
+    this.blurbAddForm = new FormGroup({
       type: new FormControl(),
       name: new FormControl(),
       score: new FormControl('', [
@@ -65,49 +66,26 @@ export class NavbarComponent implements OnInit {
     this.user = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
       : {};
-
-    this.blurb.get('message').setValue(this.user.name);
   }
 
   onSubmit() {
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
-      name: this.blurb.get('name').value,
-      type: this.mediaType[this.blurb.get('type').value],
+      name: this.blurbAddForm.get('name').value,
+      type: this.mediaType[this.blurbAddForm.get('type').value],
     };
     let b: Blurb = {
-      message: this.blurb.get('message').value,
-      score: +this.blurb.get('score').value,
-      privacy: this.blurbPrivacy[this.blurb.get('privacyBlurb').value],
+      message: this.blurbAddForm.get('message').value,
+      score: +this.blurbAddForm.get('score').value,
+      privacy: this.blurbPrivacy[this.blurbAddForm.get('privacyBlurb').value],
       name: m.name,
       userId: loggedInUser.userId,
       media: m,
-      notes: [],
+      notes: this.isAddingNote ? this.blurbAddForm.get('note').value : [],
     };
 
     console.log(b, this.blurbPrivacy.Public);
 
     this.blurbRepo.addBlurb(b);
-  }
-
-  // This should take in the user's id (Maybe in cookies?)
-  // Uses the id to redirect them to the edit user page
-  // Or the see user page
-  RedirectProfile() {
-    console.log('Not Implemented!');
-  }
-
-  // This should take in the user's list of followed users
-  // and redirect them to the seeblurbs page
-  RedirectBlurbs() {
-    console.log('Not Implemented!');
-  }
-
-  // This should take in the user's input and search
-  // the movie names for the blurbs or the users
-  // Maybe split this into search users vs search
-  // blurbs?
-  SearchBlurb() {
-    console.log('Not Implemented!');
   }
 }
