@@ -145,15 +145,6 @@
           </div>
           <div class="col-6 text-center text-white">
             <div class="row justify-content-center">
-              <!-- <span
-                class="material-icons btn"
-                (click)="toggleBooksFilter()"
-                [ngStyle]="{
-                  color: calcBkgColor(b.score)
-                }"
-              >
-                {{ getTypeIcon(b.media.type) }}
-              </span> -->
               <h4 class="m-0 text-white">{{ b.media.name }}</h4>
             </div>
           </div>
@@ -161,7 +152,6 @@
           <div class="col justify-content-end">
             <span
               class="material-icons float-right"
-              (click)="toggleBooksFilter()"
               [ngStyle]="{
                 color: calcBkgColor(b.score)
               }"
@@ -203,7 +193,7 @@
   >
     <div class="modal-dialog modal-lg bg-dark-blue">
       <div class="modal-content bg-dark-blue px-4">
-        <div *ngIf="edit">
+        <div *ngIf="edit || b.userId != user.userId">
           <div class="modal-header border-none justify-content-center">
             <h3
               class="modal-title text-white font-weight-light"
@@ -234,7 +224,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="!edit">
+        <div *ngIf="!edit && b.userId == user.userId">
           <div class="modal-dialog modal-lg bg-dark-blue">
             <div class="modal-content bg-dark-blue px-4">
               <div class="modal-header border-none justify-content-center">
@@ -258,6 +248,7 @@
                         id="inputType"
                         class="form-control"
                         formControlName="type"
+                        ngModel="{{ b.media.type }}"
                       >
                         <option
                           selected="{{ typeSelectedTxt(b.media.type, 0) }}"
@@ -293,7 +284,7 @@
                         type="text"
                         maxlength="30"
                         class="form-control"
-                        placeholder="{{ b.media.name }}"
+                        ngModel="{{ b.media.name }}"
                       />
                     </div>
                     <div class="col-3 p-0">
@@ -304,6 +295,7 @@
                         id="inputScore"
                         class="form-control"
                         formControlName="score"
+                        ngModel="{{ b.score }}"
                       >
                         <option selected="{{ scoreSelectedTxt(b.score, 1) }}">
                           1
@@ -351,6 +343,7 @@
                       rows="2"
                       maxlength="142"
                       placeholder="{{ b.message }}"
+                      ngModel="{{ b.message }}"
                     ></textarea>
                   </div>
 
@@ -366,7 +359,7 @@
                       id="exampleFormControlTextarea1"
                       rows="4"
                       maxlength="240"
-                      value="{{ b.notes }}"
+                      ngModel="{{ b.notes }}"
                     ></textarea>
                   </div>
 
@@ -380,6 +373,7 @@
                           name="privacyBlurb"
                           id="inlineRadio1"
                           value="Public"
+                          ngModel="{{ b.privacy }}"
                           checked="{{ privacySelectedTxt(b.privacy, 0) }}"
                         />
                         <label
@@ -427,6 +421,8 @@
                         type="button"
                         class="btn btn-primary btn-lg"
                         (click)="onSubmit(b)"
+                        data-dismiss="modal"
+                        *ngIf="b.userId == user.userId"
                       >
                         Complete Edit
                       </button>

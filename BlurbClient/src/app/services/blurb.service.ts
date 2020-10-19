@@ -29,10 +29,13 @@ export class BlurbService {
   }
 
   editBlurb(blurb: Blurb): Observable<Blurb> {
-    return this.httpClient.post<Blurb>(this.BASE_URL + 'edit', blurb);
+    return this.httpClient.put<Blurb>(this.BASE_URL + 'edit', blurb);
   }
 
   fullQuery(fullQueryObj: FullQueryObj, id: number): Observable<Blurb[]> {
-    return this.httpClient.post<Blurb[]>(`${this.BASE_URL}fullquery/${id}`, fullQueryObj);
+    return this.httpClient.post<Blurb[]>(
+      `${this.BASE_URL}fullquery/${id}`,
+      fullQueryObj
+    );
   }
 }
