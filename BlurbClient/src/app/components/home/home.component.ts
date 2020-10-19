@@ -10,6 +10,8 @@ import { Media } from 'src/app/models/media.model';
 import { Privacy } from 'src/app/models/privacy.model';
 import { MediaType } from 'src/app/models/mediatype.model';
 import { SortSettings } from './SortSettings';
+import { FullQueryObj } from './FullQueryObj';
+import { GetTypeIcon } from '../../StaticFunctions';
 
 @Component({
   selector: 'app-home',
@@ -24,10 +26,11 @@ export class HomeComponent implements OnInit {
   edit = true;
   filterSettingsVisible = false;
   blurb: FormGroup;
+  blurbsList: Blurb[] = this.blurbRepo.getBlurbs();
   mediaType: MediaType = new MediaType();
   blurbPrivacy: Privacy = new Privacy();
   sortSettings: SortSettings = new SortSettings(
-    1,
+    0,
     true,
     true,
     true,
@@ -36,6 +39,7 @@ export class HomeComponent implements OnInit {
     true,
     true
   );
+  fullQueryObj: FullQueryObj = new FullQueryObj(this.sortSettings, -1, 10); //SinceId = -1 because -1 makes you start at the beginning
 
   constructor(private blurbRepo: BlurbRepository, private router: Router) {
     this.user = JSON.parse(localStorage.loggedInUser);
@@ -55,6 +59,7 @@ export class HomeComponent implements OnInit {
 
   moment = moment;
   calcBkgColor = CalcBkgColor;
+  getTypeIcon = GetTypeIcon;
 
   ngOnInit(): void {}
 
@@ -86,40 +91,62 @@ export class HomeComponent implements OnInit {
     this.blurbRepo.editBlurb(b);
   }
 
+  //not used anymore
   toggleFilterSettingsVisible() {
     this.filterSettingsVisible = !this.filterSettingsVisible;
   }
 
   updateSortSetting(setting: number) {
-    if (Number.isInteger(setting) && setting >= 0 && setting <= 3)
+    if (Number.isInteger(setting) && setting >= 0 && setting <= 3) {
       this.sortSettings.sortSetting = setting;
+    }
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 
   toggleMovieFilter() {
     this.sortSettings.filterMovies = !this.sortSettings.filterMovies;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 
   toggleGamesFilter() {
     this.sortSettings.filterGames = !this.sortSettings.filterGames;
+    this.fullQueryObj.updateSettings(this.sortSettings);
   }
 
   toggleTVFilter() {
     this.sortSettings.filterTV = !this.sortSettings.filterTV;
+    this.fullQueryObj.updateSettings(this.sortSettings);
   }
 
   toggleBooksFilter() {
     this.sortSettings.filterBooks = !this.sortSettings.filterBooks;
+    this.fullQueryObj.updateSettings(this.sortSettings);
   }
 
   toggleFollowersFilter() {
     this.sortSettings.includeFollowers = !this.sortSettings.includeFollowers;
+    this.fullQueryObj.updateSettings(this.sortSettings);
   }
 
   toggleSelfFilter() {
     this.sortSettings.includeSelf = !this.sortSettings.includeSelf;
+    this.fullQueryObj.updateSettings(this.sortSettings);
   }
 
   toggleUnfollowedFilter() {
     this.sortSettings.includeUnfollowed = !this.sortSettings.includeUnfollowed;
+    this.fullQueryObj.updateSettings(this.sortSettings);
   }
 }

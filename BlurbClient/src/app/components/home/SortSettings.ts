@@ -1,5 +1,5 @@
 export class SortSettings {
-  sortSetting: number;
+  sortSetting: number = 0;
   includeSelf: boolean;
   includeFollowers: boolean;
   includeUnfollowed: boolean;
