@@ -108,6 +108,19 @@ export class HomeComponent implements OnInit {
     this.blurbRepo.editBlurb(b);
   }
 
+  onDelete(blurb: Blurb) {
+    console.log('Trying to delete: ', blurb);
+    if (blurb.userId == this.user.userId)
+      this.blurbRepo.deleteBlurb(blurb.blurbId).subscribe((p) => {
+        console.log(`Delete succeeded: ${p}`);
+        if (p) {
+          this.blurbsList = this.blurbsList.filter(
+            (b) => b.blurbId != blurb.blurbId
+          );
+        }
+      });
+  }
+
   //not used anymore
   toggleFilterSettingsVisible() {
     this.filterSettingsVisible = !this.filterSettingsVisible;

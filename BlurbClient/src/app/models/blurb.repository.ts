@@ -29,10 +29,6 @@ export class BlurbRepository implements OnInit {
     return this.blurbs;
   }
 
-  // getBlurbsByUser(id: number): Blurb[] {
-  //   return this.blurbs.filter((b) => b.userId == id);
-  // }
-
   getBlurbsByUser(
     fullQueryObj: FullQueryObj,
     id: number,
@@ -51,5 +47,9 @@ export class BlurbRepository implements OnInit {
 
   fullQuery(fullQueryObj: FullQueryObj, id: number): Observable<Blurb[]> {
     return this.rest.fullQuery(fullQueryObj, id);
+  }
+
+  deleteBlurb(blurbId: number): Observable<boolean> {
+    return this.rest.deleteBlurb(blurbId);
   }
 }

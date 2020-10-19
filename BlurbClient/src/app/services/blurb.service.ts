@@ -45,4 +45,8 @@ export class BlurbService {
       fullQueryObj
     );
   }
+
+  deleteBlurb(blurbId: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(this.BASE_URL + `remove/${blurbId}`);
+  }
 }
