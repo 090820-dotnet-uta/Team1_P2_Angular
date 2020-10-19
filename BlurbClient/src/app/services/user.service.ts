@@ -55,4 +55,23 @@ export class UserService {
   editUser(user: User): Observable<User> {
     return this.httpClient.put<User>(this.BASE_URL + 'edit/user', user);
   }
+
+  followUser(user: User, toFollowId: number): Observable<User> {
+    return this.httpClient.put<User>(
+      `${this.BASE_URL}follow/${toFollowId}`,
+      user
+    );
+  }
+
+  getFollowers(id: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(
+      `${this.BASE_URL}find/all/follower/${id}`
+    );
+  }
+
+  getFollowing(id: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(
+      `${this.BASE_URL}find/all/following/${id}`
+    );
+  }
 }

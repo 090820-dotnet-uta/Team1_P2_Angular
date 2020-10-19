@@ -79,8 +79,18 @@ export class LoginComponent implements OnInit {
   afterSubmit(u: any) {
     if (localStorage.loggedInUser) {
       console.log(localStorage.loggedInUser);
+      console.log(localStorage.followers);
       this.router.navigateByUrl('/home');
     } else console.log('failed to log in');
+    setTimeout(() => {
+      let x = JSON.parse(localStorage.loggedInUser);
+      let y = JSON.parse(localStorage.followers);
+      let z = JSON.parse(localStorage.following);
+      x.followers = y;
+      x.following = z;
+      localStorage.clear();
+      localStorage.loggedInUser = JSON.stringify(x);
+    }, 300);
   }
 
   // Event listener for submitting the login form
@@ -91,6 +101,14 @@ export class LoginComponent implements OnInit {
     // username and password
     this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
       if ('userId' in u) {
+        this.userRepo.getFollowers(u.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.followers = JSON.stringify(f);
+        });
+        this.userRepo.getFollowing(u.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.following = JSON.stringify(f);
+        });
         localStorage.loggedInUser = JSON.stringify(u);
       }
       this.afterSubmit(u);

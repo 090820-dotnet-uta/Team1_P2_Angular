@@ -60,4 +60,16 @@ export class UserRepository implements OnInit {
   editUser(user: User): void {
     this.rest.editUser(user).subscribe((p) => console.log(p));
   }
+
+  followUser(user: User, toFollowId: number): Observable<User> {
+    return this.rest.followUser(user, toFollowId);
+  }
+
+  getFollowers(id: number): Observable<any[]> {
+    return this.rest.getFollowers(id);
+  }
+
+  getFollowing(id: number): Observable<any[]> {
+    return this.rest.getFollowing(id);
+  }
 }
