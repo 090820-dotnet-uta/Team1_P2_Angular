@@ -12,6 +12,11 @@ import { MediaType } from 'src/app/models/mediatype.model';
 import { Settings } from './Settings';
 import { FullQueryObj } from './FullQueryObj';
 import { GetTypeIcon } from '../../StaticFunctions';
+import {
+  ScoreSelectedTxt,
+  PrivacySelectedTxt,
+  TypeSelectedTxt,
+} from '../../StaticFunctions';
 
 @Component({
   selector: 'app-home',
@@ -40,6 +45,9 @@ export class HomeComponent implements OnInit {
     true
   );
   fullQueryObj: FullQueryObj = new FullQueryObj(this.sortSettings, -1, 10); //SinceId = -1 because -1 makes you start at the beginning
+  typeSelectedTxt = TypeSelectedTxt;
+  scoreSelectedTxt = ScoreSelectedTxt;
+  privacySelectedTxt = PrivacySelectedTxt;
 
   constructor(private blurbRepo: BlurbRepository, private router: Router) {
     this.user = JSON.parse(localStorage.loggedInUser);

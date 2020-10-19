@@ -167,18 +167,35 @@ export function CalcBkgColor(scoreOutOfTen: number) {
   return colorString;
 }
 
-
 export function GetTypeIcon(type: number): string {
   if (type == 0) {
-    return "movie";
+    return 'movie';
+  } else if (type == 1) {
+    return 'sports_esports';
+  } else if (type == 2) {
+    return 'menu_book';
+  } else {
+    return 'tv';
   }
-  else if (type == 1) {
-    return "sports_esports";
+}
+
+export function TypeSelectedTxt(selectedType: number, type: number) {
+  if (selectedType == type) {
+    return 'selected';
   }
-  else if (type == 2) {
-    return "menu_book";
+  return '';
+}
+
+export function ScoreSelectedTxt(selectedScore: number, score: number) {
+  if (selectedScore == score) {
+    return 'selected';
   }
-  else {
-    return "tv";
+  return '';
+}
+
+export function PrivacySelectedTxt(selectedPrivacy: number, privacy: number) {
+  if (selectedPrivacy == privacy) {
+    return 'checked';
   }
+  return '';
 }
