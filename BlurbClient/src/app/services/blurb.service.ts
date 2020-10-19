@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Blurb } from '../models/blurb.model';
+import { FullQueryObj } from '../components/home/FullQueryObj';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +30,9 @@ export class BlurbService {
 
   editBlurb(blurb: Blurb): Observable<Blurb> {
     return this.httpClient.post<Blurb>(this.BASE_URL + 'edit', blurb);
+  }
+
+  fullQuery(fullQueryObj: FullQueryObj, id: number): Observable<Blurb[]> {
+    return this.httpClient.post<Blurb[]>(`${this.BASE_URL}fullquery/${id}`, fullQueryObj);
   }
 }

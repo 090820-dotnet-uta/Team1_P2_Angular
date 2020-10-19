@@ -33,6 +33,7 @@ import {
 import { Router, RouterModule, Routes } from '@angular/router';
 import { FollowersComponent } from './components/followers/followers.component';
 import { ViewuserComponent } from './components/viewuser/viewuser.component';
+import { MatIconModule } from '@angular/material/icon';
 
 const config = {
   issuer: 'https://dev-5859084.okta.com/oauth2/default',
@@ -67,6 +68,7 @@ const appRoutes: Routes = [
   },
 ];
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -88,6 +90,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
     OktaAuthModule,
+    MatIconModule,
   ],
   providers: [
     UserService,

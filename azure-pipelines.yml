@@ -1,0 +1,31 @@
+trigger:
+- main
+
+variables:
+  appDir: BlurbClient
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '12.x'
+
+- task: Npm@1
+  inputs:
+    command: 'ci'
+    workingDir: '$(appDir)'
+  displayName: npm ci
+
+- script: npx ng build --prod
+  workingDirectory: $(appDir)
+  displayName: npx ng build
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(18d07810-bd20-491d-95cd-4ea8dbdbe96b)'
+    appType: 'webApp'
+    WebAppName: 'blurbs'
+    packageForLinux: '$(appDir)/dist/*'

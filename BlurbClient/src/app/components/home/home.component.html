@@ -1,31 +1,102 @@
-<div class="row bg-dark-blue border-dark-grey py-2">
-  <div class="col-9 text-center">
-    <h3 class="m-0 text-white">Filtering By</h3>
+<div class="col bg-dark-blue border-dark-grey py-2 mb3">
+  <div class="row text-center mb3">
+    <h3 class="m-0 text-white">Filter/Sort:</h3>
+    <button
+      class="btn btn-dark dropdown-toggle"
+      (click)="toggleFilterSettingsVisible()"
+    ></button>
   </div>
-  <div class="col">
-    <div class="dropdown">
+  <div class="row text-center" *ngIf="filterSettingsVisible">
+    <div class="col text-white">
       <button
         class="btn btn-dark dropdown-toggle"
         type="button"
-        id="dropdownMenuButton"
+        id="settingsDropdownBtn"
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
-      >
-        Filter By
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
+        [textContent]="sortSettings.getSortName()"
+      ></button>
+      <div class="dropdown-menu" aria-labelledby="settingsDropdownBtn">
+        <a class="dropdown-item" (click)="updateSortSetting(0)">Most Recent</a>
+        <a class="dropdown-item" (click)="updateSortSetting(1)">Least Recent</a>
+        <a class="dropdown-item" (click)="updateSortSetting(2)">10 - 0</a>
+        <a class="dropdown-item" (click)="updateSortSetting(3)">0 - 10</a>
       </div>
+    </div>
+    <div class="col text-white">
+      <button
+        class="material-icons btn"
+        (click)="toggleMovieFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeMovies ? 'lightblue' : 'grey'
+        }"
+      >
+        movie
+      </button>
+      <button
+        class="material-icons btn"
+        (click)="toggleBooksFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeBooks ? 'lightblue' : 'grey'
+        }"
+      >
+        menu_book
+      </button>
+      <button
+        class="material-icons btn"
+        (click)="toggleGamesFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeGames ? 'lightblue' : 'grey'
+        }"
+      >
+        sports_esports
+      </button>
+      <button
+        class="material-icons btn"
+        (click)="toggleTVFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeTV ? 'lightblue' : 'grey'
+        }"
+      >
+        tv
+      </button>
+    </div>
+    <div class="col text-white">
+      <button
+        class="btn"
+        (click)="toggleSelfFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeSelf ? 'lightblue' : 'grey'
+        }"
+      >
+        Yours
+      </button>
+      <button
+        class="btn"
+        (click)="toggleFollowersFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeFollowing ? 'lightblue' : 'grey'
+        }"
+      >
+        Followers
+      </button>
+      <button
+        class="btn"
+        (click)="toggleUnfollowedFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeUnfollowed ? 'lightblue' : 'grey'
+        }"
+      >
+        Not Followed
+      </button>
     </div>
   </div>
 </div>
 
 <div
   class="row flex-column border-dark-grey py-2 mt-2"
-  *ngFor="let b of blurbs; index as i"
+  *ngFor="let b of blurbsList; index as i"
 >
   <div
     class="col p-0 pointer"
@@ -37,8 +108,12 @@
         <div class="row flex-column">
           <div
             [routerLink]="['/viewuser', b.userId]"
-            class="circle d-inline focus-none"
-          ></div>
+            class="circle d-flex focus-none text-center text-white align-content-center justify-content-center"
+          >
+            <p class="my-auto" style="font-size: xx-large; font-weight: 400">
+              {{ b.user.username[0].toUpperCase() }}
+            </p>
+          </div>
           <h3 class="mt-2 mb-0 d-inline">
             <span
               class="badge"
@@ -69,8 +144,32 @@
             </div>
           </div>
           <div class="col-6 text-center text-white">
-            <h4 class="m-0 text-white">{{ b.media.name }}</h4>
+            <div class="row justify-content-center">
+              <!-- <span
+                class="material-icons btn"
+                (click)="toggleBooksFilter()"
+                [ngStyle]="{
+                  color: calcBkgColor(b.score)
+                }"
+              >
+                {{ getTypeIcon(b.media.type) }}
+              </span> -->
+              <h4 class="m-0 text-white">{{ b.media.name }}</h4>
+            </div>
           </div>
+
+          <div class="col justify-content-end">
+            <span
+              class="material-icons float-right"
+              (click)="toggleBooksFilter()"
+              [ngStyle]="{
+                color: calcBkgColor(b.score)
+              }"
+            >
+              {{ getTypeIcon(b.media.type) }}
+            </span>
+          </div>
+
           <div class="col">
             <p
               style="font-size: large; font-weight: 400"
@@ -298,22 +397,24 @@
             </div>
           </div>
         </div>
-        <button
-          *ngIf="b.userId === user.userId && edit"
-          type="submit"
-          class="btn btn-info"
-          (click)="toggleEdit()"
-        >
-          Edit Blurb
-        </button>
-        <button
-          *ngIf="b.userId === user.userId && !edit"
-          type="submit"
-          class="btn btn-danger"
-          (click)="toggleEdit()"
-        >
-          Cancel
-        </button>
+        <div class="modal-content" style="margin-bottom: 10px">
+          <button
+            *ngIf="b.userId === user.userId && edit"
+            type="submit"
+            class="btn btn-info"
+            (click)="toggleEdit()"
+          >
+            Edit Blurb
+          </button>
+          <button
+            *ngIf="b.userId === user.userId && !edit"
+            type="submit"
+            class="btn btn-danger"
+            (click)="toggleEdit()"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   </div>

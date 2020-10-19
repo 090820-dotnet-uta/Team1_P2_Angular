@@ -9,6 +9,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Media } from 'src/app/models/media.model';
 import { Privacy } from 'src/app/models/privacy.model';
 import { MediaType } from 'src/app/models/mediatype.model';
+import { Settings } from './Settings';
+import { FullQueryObj } from './FullQueryObj';
+import { GetTypeIcon } from '../../StaticFunctions';
 
 @Component({
   selector: 'app-home',
@@ -21,9 +24,22 @@ import { MediaType } from 'src/app/models/mediatype.model';
 export class HomeComponent implements OnInit {
   user: User;
   edit = true;
+  filterSettingsVisible = false;
   blurb: FormGroup;
+  blurbsList: Blurb[];
   mediaType: MediaType = new MediaType();
   blurbPrivacy: Privacy = new Privacy();
+  sortSettings: Settings = new Settings(
+    0, //0 is sort by most recent
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  );
+  fullQueryObj: FullQueryObj = new FullQueryObj(this.sortSettings, -1, 10); //SinceId = -1 because -1 makes you start at the beginning
 
   constructor(private blurbRepo: BlurbRepository, private router: Router) {
     this.user = JSON.parse(localStorage.loggedInUser);
@@ -39,10 +55,17 @@ export class HomeComponent implements OnInit {
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 
   moment = moment;
   calcBkgColor = CalcBkgColor;
+  getTypeIcon = GetTypeIcon;
 
   ngOnInit(): void {}
 
@@ -50,11 +73,11 @@ export class HomeComponent implements OnInit {
     return this.blurbRepo.getBlurbs();
   }
 
-  toggleEdit(){
+  toggleEdit() {
     this.edit = !this.edit;
   }
 
-  onSubmit(blurb: Blurb){
+  onSubmit(blurb: Blurb) {
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
       name: this.blurb.get('name').value,
@@ -70,7 +93,102 @@ export class HomeComponent implements OnInit {
     b.notes = [];
 
     console.log(b, this.blurbPrivacy.Public);
-    
+
     this.blurbRepo.editBlurb(b);
+  }
+
+  //not used anymore
+  toggleFilterSettingsVisible() {
+    this.filterSettingsVisible = !this.filterSettingsVisible;
+  }
+
+  updateSortSetting(setting: number) {
+    if (Number.isInteger(setting) && setting >= 0 && setting <= 3) {
+      this.sortSettings.sortSetting = setting;
+    }
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleMovieFilter() {
+    this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleGamesFilter() {
+    this.sortSettings.includeGames = !this.sortSettings.includeGames;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleTVFilter() {
+    this.sortSettings.includeTV = !this.sortSettings.includeTV;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleBooksFilter() {
+    this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleFollowersFilter() {
+    this.sortSettings.includeFollowing = !this.sortSettings.includeFollowing;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleSelfFilter() {
+    this.sortSettings.includeSelf = !this.sortSettings.includeSelf;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleUnfollowedFilter() {
+    this.sortSettings.includeUnfollowed = !this.sortSettings.includeUnfollowed;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 }
