@@ -1,31 +1,31 @@
-export class SortSettings {
+export class Settings {
   sortSetting: number = 0;
+  includeBooks: boolean;
+  includeMovies: boolean;
+  includeGames: boolean;
+  includeTV: boolean;
   includeSelf: boolean;
-  includeFollowers: boolean;
+  includeFollowing: boolean;
   includeUnfollowed: boolean;
-  filterMovies: boolean;
-  filterTV: boolean;
-  filterBooks: boolean;
-  filterGames: boolean;
 
   constructor(
     sortSetting: number,
+    includeBooks: boolean,
+    includeMovies: boolean,
+    includeGames: boolean,
+    includeTV: boolean,
     includeSelf: boolean,
-    includeFollowers: boolean,
-    includeUnfollowed: boolean,
-    movies: boolean,
-    games: boolean,
-    tv: boolean,
-    books: boolean
+    includeFollowing: boolean,
+    includeUnfollowed: boolean
   ) {
     this.sortSetting = sortSetting;
-    this.includeFollowers = includeFollowers;
+    this.includeFollowing = includeFollowing;
     this.includeSelf = includeSelf;
     this.includeUnfollowed = includeUnfollowed;
-    this.filterBooks = books;
-    this.filterGames = games;
-    this.filterTV = tv;
-    this.filterMovies = movies;
+    this.includeBooks = includeBooks;
+    this.includeGames = includeGames;
+    this.includeTV = includeTV;
+    this.includeMovies = includeMovies;
   }
 
   getSortName(): string {

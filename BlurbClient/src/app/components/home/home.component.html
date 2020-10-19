@@ -29,7 +29,7 @@
         class="material-icons btn"
         (click)="toggleMovieFilter()"
         [ngStyle]="{
-          color: sortSettings.filterMovies ? 'lightblue' : 'grey'
+          color: sortSettings.includeMovies ? 'lightblue' : 'grey'
         }"
       >
         movie
@@ -38,7 +38,7 @@
         class="material-icons btn"
         (click)="toggleBooksFilter()"
         [ngStyle]="{
-          color: sortSettings.filterBooks ? 'lightblue' : 'grey'
+          color: sortSettings.includeBooks ? 'lightblue' : 'grey'
         }"
       >
         menu_book
@@ -47,7 +47,7 @@
         class="material-icons btn"
         (click)="toggleGamesFilter()"
         [ngStyle]="{
-          color: sortSettings.filterGames ? 'lightblue' : 'grey'
+          color: sortSettings.includeGames ? 'lightblue' : 'grey'
         }"
       >
         sports_esports
@@ -56,7 +56,7 @@
         class="material-icons btn"
         (click)="toggleTVFilter()"
         [ngStyle]="{
-          color: sortSettings.filterTV ? 'lightblue' : 'grey'
+          color: sortSettings.includeTV ? 'lightblue' : 'grey'
         }"
       >
         tv
@@ -76,7 +76,7 @@
         class="btn"
         (click)="toggleFollowersFilter()"
         [ngStyle]="{
-          color: sortSettings.includeFollowers ? 'lightblue' : 'grey'
+          color: sortSettings.includeFollowing ? 'lightblue' : 'grey'
         }"
       >
         Followers
