@@ -116,7 +116,9 @@ export class ViewuserComponent implements OnInit {
   checkFollow() {
     setTimeout(() => {
       console.log(this.currentUser);
-      this.isFollowing = this.currentUser.following.includes(this.user.userId);
+      this.isFollowing =
+        this.currentUser.following.filter((b) => b.userId == this.user.userId)
+          .length > 0;
       console.log(this.isFollowing);
       this.lazyLoad = !this.lazyLoad;
     }, 160);
