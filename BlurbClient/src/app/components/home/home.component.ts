@@ -86,6 +86,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit(blurb: Blurb) {
+    this.edit = false;
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
       name: this.blurb.get('name').value,
