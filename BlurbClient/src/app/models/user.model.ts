@@ -6,4 +6,6 @@ export class User {
   name?: string;
   screenName?: string;
   isFollowed?: boolean;
+  followers?: any[] = [];
+  following?: any[] = [];
 }

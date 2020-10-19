@@ -17,12 +17,35 @@
         <div class="circle-lg focus-none"></div>
       </div>
       <div class="col text-right my-auto">
-        <div class="btn btn-info" *ngIf="currentUser.userId !== user.userId">
-          Following
-        </div>
         <div
           class="btn btn-info"
-          *ngIf="currentUser.userId === user.userId"
+          style="color: #17a2b8; min-width: 89px"
+          *ngIf="lazyLoad"
+        >
+          invisible
+        </div>
+        <div
+          (click)="handleFollow()"
+          style="min-width: 89px"
+          class="btn btn-info"
+          *ngIf="
+            currentUser.userId !== user.userId && !isFollowing && !lazyLoad
+          "
+        >
+          Follow
+        </div>
+        <div
+          (click)="handleUnfollow()"
+          style="min-width: 89px"
+          class="btn btn-info"
+          *ngIf="currentUser.userId !== user.userId && isFollowing && !lazyLoad"
+        >
+          Unfollow
+        </div>
+        <div
+          style="min-width: 89px"
+          class="btn btn-info"
+          *ngIf="currentUser.userId === user.userId && !lazyLoad"
           routerLink="/user"
         >
           Edit
@@ -85,7 +108,10 @@
         <div class="row flex-column">
           <div routerLink="/viewuser" class="circle d-inline focus-none"></div>
           <h3 class="mt-2 mb-0 d-inline">
-            <span class="badge badge-info">
+            <span
+              [ngStyle]="{ 'background-color': calcBkgColor(b.score) }"
+              class="badge"
+            >
               {{ b.score }}
             </span>
           </h3>

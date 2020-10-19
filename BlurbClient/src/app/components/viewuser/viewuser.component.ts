@@ -5,6 +5,8 @@ import { User } from 'src/app/models/user.model';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserRepository } from 'src/app/models/user.repository';
+import { CalcBkgColor } from '../../StaticFunctions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-viewuser',
@@ -12,9 +14,13 @@ import { UserRepository } from 'src/app/models/user.repository';
   styleUrls: ['./viewuser.component.css'],
 })
 export class ViewuserComponent implements OnInit {
-  user: User;
+  user: User = {};
   currentUser: User = JSON.parse(localStorage.loggedInUser);
   blurbsByUserArr = [];
+  isFollowing = false;
+  lazyLoad = true;
+
+  calcBkgColor = CalcBkgColor;
 
   moment = moment;
 
@@ -27,11 +33,36 @@ export class ViewuserComponent implements OnInit {
       this.blurbRepo
         .getBlurbsByUser(p['id'])
         .subscribe((b) => (this.blurbsByUserArr = b));
-      this.userRepo.getUser(p['id']).subscribe((u) => (this.user = u));
+      console.log(p['id']);
+      this.userRepo.getUser(p['id']).subscribe((u) => {
+        this.user = u;
+        console.log('running');
+      });
     });
-
-    // this.router.params.toPromise().then(p => this.user.userId = p['id'])
+    this.checkFollow();
   }
 
   ngOnInit(): void {}
+
+  checkFollow() {
+    setTimeout(() => {
+      console.log(this.currentUser);
+      this.isFollowing = this.currentUser.following.includes(this.user.userId);
+      console.log(this.isFollowing);
+      this.lazyLoad = !this.lazyLoad;
+    }, 160);
+  }
+
+  handleFollow() {
+    console.log(`person to follow ${this.user.username}`);
+    console.log(`person doing the follow ${this.currentUser.username}`);
+    console.log(this.isFollowing);
+    //this.userRepo.followUser(this.currentUser, this.user.userId).subscribe((c => console.log(c)));
+  }
+  handleUnfollow() {
+    console.log(`person to unfollow ${this.user.username}`);
+    console.log(`person doing the unfollow ${this.currentUser.username}`);
+    console.log(this.isFollowing);
+    //this.userRepo.unfollowUser(this.currentUser, this.user.userId).subscribe((c => console.log(c)));
+  }
 }
