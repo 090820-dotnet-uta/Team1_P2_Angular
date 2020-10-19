@@ -199,9 +199,25 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  //Sets the sinceId in the full query object to a given since Id
+  //Provided that the sinceId exists in the current list of blurbs
+  setSinceId(sinceId: number): boolean {
+    if (
+      Number.isInteger(sinceId) &&
+      this.blurbsList.map((a) => a.userId).includes(sinceId)
+    ) {
+      this.fullQueryObj.sinceId = sinceId;
+      return true;
+    }
+    return false;
+  }
+
   //Adds the next 10 blurbs to the currently loaded list
-  loadNextBlurbs(span: number) {
-    if (Number.isInteger(span) && span > 0) {
+  loadBlurbs(span: number) {
+    var sinceIdOk = this.setSinceId(
+      this.blurbsList[this.blurbsList.length - 1].userId
+    );
+    if (Number.isInteger(span) && span > 0 && sinceIdOk) {
       this.blurbRepo
         .fullQuery(this.fullQueryObj, this.user.userId)
         .subscribe((p) => {
