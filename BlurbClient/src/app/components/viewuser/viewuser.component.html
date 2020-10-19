@@ -94,6 +94,73 @@
   </div>
 </div>
 
+<div>
+  <div class="row text-center mb3">
+    <h3 class="m-0 text-white">Filter/Sort:</h3>
+    <button
+      class="btn btn-dark dropdown-toggle"
+      (click)="toggleFilterSettingsVisible()"
+    ></button>
+  </div>
+  <div class="row text-center" *ngIf="filterSettingsVisible">
+    <div class="col text-white">
+      <button
+        class="btn btn-dark dropdown-toggle"
+        type="button"
+        id="settingsDropdownBtn"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+        [textContent]="sortSettings.getSortName()"
+      ></button>
+      <div class="dropdown-menu" aria-labelledby="settingsDropdownBtn">
+        <a class="dropdown-item" (click)="updateSortSetting(0)">Most Recent</a>
+        <a class="dropdown-item" (click)="updateSortSetting(1)">Least Recent</a>
+        <a class="dropdown-item" (click)="updateSortSetting(2)">10 - 0</a>
+        <a class="dropdown-item" (click)="updateSortSetting(3)">0 - 10</a>
+      </div>
+    </div>
+    <div class="col text-white">
+      <button
+        class="material-icons btn"
+        (click)="toggleMovieFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeMovies ? 'lightblue' : 'grey'
+        }"
+      >
+        movie
+      </button>
+      <button
+        class="material-icons btn"
+        (click)="toggleBooksFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeBooks ? 'lightblue' : 'grey'
+        }"
+      >
+        menu_book
+      </button>
+      <button
+        class="material-icons btn"
+        (click)="toggleGamesFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeGames ? 'lightblue' : 'grey'
+        }"
+      >
+        sports_esports
+      </button>
+      <button
+        class="material-icons btn"
+        (click)="toggleTVFilter()"
+        [ngStyle]="{
+          color: sortSettings.includeTV ? 'lightblue' : 'grey'
+        }"
+      >
+        tv
+      </button>
+    </div>
+  </div>
+</div>
+
 <div
   class="row flex-column border-dark-grey py-2 mt-2"
   *ngFor="let b of blurbsByUserArr; index as i"

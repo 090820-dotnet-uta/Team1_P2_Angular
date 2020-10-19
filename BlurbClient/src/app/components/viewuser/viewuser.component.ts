@@ -7,6 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserRepository } from 'src/app/models/user.repository';
 import { CalcBkgColor } from '../../StaticFunctions';
 import { Observable } from 'rxjs';
+import { Settings } from '../home/Settings';
+import { FullQueryObj } from '../home/FullQueryObj';
 
 @Component({
   selector: 'app-viewuser',
@@ -21,6 +23,19 @@ export class ViewuserComponent implements OnInit {
   blurbsByUserArr = [];
   isFollowing = false;
   lazyLoad = true;
+  filterSettingsVisible = false;
+
+  sortSettings: Settings = new Settings(
+    0, //0 is sort by most recent
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  );
+  fullQueryObj: FullQueryObj = new FullQueryObj(this.sortSettings, -1, 10); //SinceId = -1 because -1 makes you start at the beginning
 
   calcBkgColor = CalcBkgColor;
 
@@ -36,13 +51,13 @@ export class ViewuserComponent implements OnInit {
       : {};
 
     this.router.params.subscribe((p) => {
-      this.blurbRepo
-        .getBlurbsByUser(p['id'])
-        .subscribe((b) => (this.blurbsByUserArr = b));
-      console.log(p['id']);
       this.userRepo.getUser(p['id']).subscribe((u) => {
         this.user = u;
         console.log('running');
+        this.blurbRepo
+          .getBlurbsByUser(this.fullQueryObj, p['id'], this.user.userId)
+          .subscribe((b) => (this.blurbsByUserArr = b));
+        console.log(p['id']);
       });
     });
     this.checkFollow();
@@ -112,5 +127,87 @@ export class ViewuserComponent implements OnInit {
   }
   handleUnfollow() {
     this.followUtil(false);
+  }
+
+  //not used anymore
+  toggleFilterSettingsVisible() {
+    this.filterSettingsVisible = !this.filterSettingsVisible;
+  }
+
+  updateSortSetting(setting: number) {
+    if (Number.isInteger(setting) && setting >= 0 && setting <= 3) {
+      this.sortSettings.sortSetting = setting;
+    }
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .getBlurbsByUser(
+        this.fullQueryObj,
+        this.user.userId,
+        this.currentUser.userId
+      )
+      .subscribe((p) => {
+        this.blurbsByUserArr = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleMovieFilter() {
+    this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .getBlurbsByUser(
+        this.fullQueryObj,
+        this.user.userId,
+        this.currentUser.userId
+      )
+      .subscribe((p) => {
+        this.blurbsByUserArr = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleGamesFilter() {
+    this.sortSettings.includeGames = !this.sortSettings.includeGames;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .getBlurbsByUser(
+        this.fullQueryObj,
+        this.user.userId,
+        this.currentUser.userId
+      )
+      .subscribe((p) => {
+        this.blurbsByUserArr = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleTVFilter() {
+    this.sortSettings.includeTV = !this.sortSettings.includeTV;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .getBlurbsByUser(
+        this.fullQueryObj,
+        this.user.userId,
+        this.currentUser.userId
+      )
+      .subscribe((p) => {
+        this.blurbsByUserArr = p;
+        console.log(`blurbs array: ${p}`);
+      });
+  }
+
+  toggleBooksFilter() {
+    this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.blurbRepo
+      .getBlurbsByUser(
+        this.fullQueryObj,
+        this.user.userId,
+        this.currentUser.userId
+      )
+      .subscribe((p) => {
+        this.blurbsByUserArr = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 }
