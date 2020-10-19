@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit {
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
+        console.log(`blurbs array:`, p);
       });
   }
 

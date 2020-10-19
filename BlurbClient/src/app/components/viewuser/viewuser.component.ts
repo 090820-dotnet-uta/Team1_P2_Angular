@@ -57,12 +57,36 @@ export class ViewuserComponent implements OnInit {
     console.log(`person to follow ${this.user.username}`);
     console.log(`person doing the follow ${this.currentUser.username}`);
     console.log(this.isFollowing);
-    //this.userRepo.followUser(this.currentUser, this.user.userId).subscribe((c => console.log(c)));
+    this.userRepo
+      .followUser(this.currentUser, this.user.userId)
+      .subscribe((c) => console.log(c));
+    this.userRepo.getFollowers(this.currentUser.userId).subscribe((f) => {
+      console.log(f);
+      localStorage.followers = JSON.stringify(f);
+    });
+    this.userRepo.getFollowing(this.currentUser.userId).subscribe((f) => {
+      console.log(f);
+      localStorage.following = JSON.stringify(f);
+    });
+    setTimeout(() => {
+      let x = JSON.parse(localStorage.loggedInUser);
+      let y = JSON.parse(localStorage.followers);
+      let z = JSON.parse(localStorage.following);
+      x.followers = y;
+      x.following = z;
+      localStorage.clear();
+      localStorage.loggedInUser = JSON.stringify(x);
+    }, 300);
+    this.isFollowing = true;
   }
   handleUnfollow() {
     console.log(`person to unfollow ${this.user.username}`);
     console.log(`person doing the unfollow ${this.currentUser.username}`);
     console.log(this.isFollowing);
+    // this.userRepo
+    //   .unfollowUser(this.currentUser, this.user.userId)
+    //   .subscribe((c) => console.log(c));
+    this.isFollowing = false;
     //this.userRepo.unfollowUser(this.currentUser, this.user.userId).subscribe((c => console.log(c)));
   }
 }
