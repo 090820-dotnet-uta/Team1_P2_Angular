@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OktaAuthService } from '@okta/okta-angular';
-import { Blurb } from 'src/app/models/blurb.model';
-import { BlurbRepository } from 'src/app/models/blurb.repository';
-import { Media } from 'src/app/models/media.model';
-import { MediaType } from 'src/app/models/mediatype.model';
-import { Privacy } from 'src/app/models/privacy.model';
+
 import { User } from 'src/app/models/user.model';
 
 @Component({
@@ -19,19 +14,11 @@ import { User } from 'src/app/models/user.model';
 // useredit page, logout, search, and see blurbs
 export class NavbarComponent implements OnInit {
   isAuthenticated: boolean;
-  blurbAddForm: FormGroup;
-  mediaType: MediaType = new MediaType();
-  blurbPrivacy: Privacy = new Privacy();
   user: User = localStorage.loggedInUser
     ? JSON.parse(localStorage.loggedInUser)
     : {};
-  isAddingNote: boolean = false;
 
-  constructor(
-    public oktaAuth: OktaAuthService,
-    public router: Router,
-    private blurbRepo: BlurbRepository
-  ) {
+  constructor(public oktaAuth: OktaAuthService, public router: Router) {
     this.user = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
       : {};
@@ -39,18 +26,6 @@ export class NavbarComponent implements OnInit {
     this.oktaAuth.$authenticationState.subscribe(
       (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
     );
-    this.blurbAddForm = new FormGroup({
-      type: new FormControl(),
-      name: new FormControl(),
-      score: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-        Validators.minLength(2),
-      ]),
-      message: new FormControl(),
-      note: new FormControl(),
-      privacyBlurb: new FormControl(),
-    });
 
     // Listend for route changed to assign this.user for passing to viewuser route on navbar routerlink
     this.router.events.subscribe((event: any) => {
@@ -66,26 +41,5 @@ export class NavbarComponent implements OnInit {
     this.user = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
       : {};
-  }
-
-  onSubmit() {
-    let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
-    let m: Media = {
-      name: this.blurbAddForm.get('name').value,
-      type: this.mediaType[this.blurbAddForm.get('type').value],
-    };
-    let b: Blurb = {
-      message: this.blurbAddForm.get('message').value,
-      score: +this.blurbAddForm.get('score').value,
-      privacy: this.blurbPrivacy[this.blurbAddForm.get('privacyBlurb').value],
-      name: m.name,
-      userId: loggedInUser.userId,
-      media: m,
-      notes: this.isAddingNote ? this.blurbAddForm.get('note').value : [],
-    };
-
-    console.log(b, this.blurbPrivacy.Public);
-
-    this.blurbRepo.addBlurb(b);
   }
 }

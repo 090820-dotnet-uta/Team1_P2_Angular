@@ -37,8 +37,8 @@ export class BlurbRepository implements OnInit {
     return this.rest.getBlurbsByUser(fullQueryObj, id, byId);
   }
 
-  addBlurb(blurb: Blurb): void {
-    this.rest.addBlurb(blurb).subscribe((p) => console.log(p));
+  addBlurb(blurb: Blurb): Observable<Blurb> {
+    return this.rest.addBlurb(blurb);
   }
 
   editBlurb(blurb: Blurb): void {
