@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   mediaType: MediaType = new MediaType();
   blurbPrivacy: Privacy = new Privacy();
   sortSettings: Settings = new Settings(
-    0,
+    0, //0 is sort by most recent
     true,
     true,
     true,
