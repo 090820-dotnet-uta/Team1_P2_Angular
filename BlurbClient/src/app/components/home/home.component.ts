@@ -50,7 +50,9 @@ export class HomeComponent implements OnInit {
   privacySelectedTxt = PrivacySelectedTxt;
 
   constructor(private blurbRepo: BlurbRepository, private router: Router) {
-    this.user = JSON.parse(localStorage.loggedInUser);
+    this.user = localStorage.loggedInUser
+      ? JSON.parse(localStorage.loggedInUser)
+      : {};
     this.blurb = new FormGroup({
       type: new FormControl(),
       name: new FormControl(),
@@ -67,7 +69,7 @@ export class HomeComponent implements OnInit {
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
+        console.log(`blurbs array:`, p);
       });
   }
 
