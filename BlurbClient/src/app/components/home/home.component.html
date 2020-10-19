@@ -259,10 +259,26 @@
                         class="form-control"
                         formControlName="type"
                       >
-                        <option>Movie</option>
-                        <option>Game</option>
-                        <option>Book</option>
-                        <option>TV</option>
+                        <option
+                          selected="{{ typeSelectedTxt(b.media.type, 0) }}"
+                        >
+                          Movie
+                        </option>
+                        <option
+                          selected="{{ typeSelectedTxt(b.media.type, 1) }}"
+                        >
+                          Game
+                        </option>
+                        <option
+                          selected="{{ typeSelectedTxt(b.media.type, 2) }}"
+                        >
+                          Book
+                        </option>
+                        <option
+                          selected="{{ typeSelectedTxt(b.media.type, 3) }}"
+                        >
+                          TV
+                        </option>
                       </select>
                     </div>
                     <div class="col-4 p-0">
@@ -289,16 +305,36 @@
                         class="form-control"
                         formControlName="score"
                       >
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 1) }}">
+                          1
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 2) }}">
+                          2
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 3) }}">
+                          3
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 4) }}">
+                          4
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 5) }}">
+                          5
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 6) }}">
+                          6
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 7) }}">
+                          7
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 8) }}">
+                          8
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 9) }}">
+                          9
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 10) }}">
+                          10
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -344,6 +380,7 @@
                           name="privacyBlurb"
                           id="inlineRadio1"
                           value="Public"
+                          checked="{{ privacySelectedTxt(b.privacy, 0) }}"
                         />
                         <label
                           class="form-check-label text-white"
@@ -359,6 +396,8 @@
                           name="privacyBlurb"
                           id="inlineRadio2"
                           value="Private"
+                          checked
+                          checked="{{ privacySelectedTxt(b.privacy, 1) }}"
                         />
                         <label
                           class="form-check-label text-white"
@@ -374,6 +413,7 @@
                           name="privacyBlurb"
                           id="inlineRadio3"
                           value="FollowersOnly"
+                          checked="{{ privacySelectedTxt(b.privacy, 2) }}"
                         />
                         <label
                           class="form-check-label text-white"
