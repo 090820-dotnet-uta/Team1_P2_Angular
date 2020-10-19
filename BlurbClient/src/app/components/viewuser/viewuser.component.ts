@@ -15,7 +15,9 @@ import { Observable } from 'rxjs';
 })
 export class ViewuserComponent implements OnInit {
   user: User = {};
-  currentUser: User = JSON.parse(localStorage.loggedInUser);
+  currentUser: User = localStorage.loggedInUser
+    ? JSON.parse(localStorage.loggedInUser)
+    : {};
   blurbsByUserArr = [];
   isFollowing = false;
   lazyLoad = true;
@@ -29,6 +31,10 @@ export class ViewuserComponent implements OnInit {
     private userRepo: UserRepository,
     private router: ActivatedRoute
   ) {
+    this.currentUser = localStorage.loggedInUser
+      ? JSON.parse(localStorage.loggedInUser)
+      : {};
+
     this.router.params.subscribe((p) => {
       this.blurbRepo
         .getBlurbsByUser(p['id'])
@@ -59,15 +65,17 @@ export class ViewuserComponent implements OnInit {
     console.log(this.isFollowing);
     this.userRepo
       .followUser(this.currentUser, this.user.userId)
-      .subscribe((c) => console.log(c));
-    this.userRepo.getFollowers(this.currentUser.userId).subscribe((f) => {
-      console.log(f);
-      localStorage.followers = JSON.stringify(f);
-    });
-    this.userRepo.getFollowing(this.currentUser.userId).subscribe((f) => {
-      console.log(f);
-      localStorage.following = JSON.stringify(f);
-    });
+      .subscribe((c) => {
+        console.log(c);
+        this.userRepo.getFollowers(this.currentUser.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.followers = JSON.stringify(f);
+        });
+        this.userRepo.getFollowing(this.currentUser.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.following = JSON.stringify(f);
+        });
+      });
     setTimeout(() => {
       let x = JSON.parse(localStorage.loggedInUser);
       let y = JSON.parse(localStorage.followers);
@@ -76,16 +84,37 @@ export class ViewuserComponent implements OnInit {
       x.following = z;
       localStorage.clear();
       localStorage.loggedInUser = JSON.stringify(x);
-    }, 300);
+      console.log('Loading new localstore data', localStorage.loggedInUser);
+    }, 500);
     this.isFollowing = true;
   }
   handleUnfollow() {
     console.log(`person to unfollow ${this.user.username}`);
     console.log(`person doing the unfollow ${this.currentUser.username}`);
     console.log(this.isFollowing);
-    // this.userRepo
-    //   .unfollowUser(this.currentUser, this.user.userId)
-    //   .subscribe((c) => console.log(c));
+    this.userRepo
+      .unfollowUser(this.currentUser, this.user.userId)
+      .subscribe((c) => {
+        console.log(c);
+        this.userRepo.getFollowers(this.currentUser.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.followers = JSON.stringify(f);
+        });
+        this.userRepo.getFollowing(this.currentUser.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.following = JSON.stringify(f);
+        });
+      });
+    setTimeout(() => {
+      let x = JSON.parse(localStorage.loggedInUser);
+      let y = JSON.parse(localStorage.followers);
+      let z = JSON.parse(localStorage.following);
+      x.followers = y;
+      x.following = z;
+      localStorage.clear();
+      localStorage.loggedInUser = JSON.stringify(x);
+      console.log('Loading new localstore data', localStorage.loggedInUser);
+    }, 500);
     this.isFollowing = false;
     //this.userRepo.unfollowUser(this.currentUser, this.user.userId).subscribe((c => console.log(c)));
   }

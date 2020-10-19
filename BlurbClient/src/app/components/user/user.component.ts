@@ -9,7 +9,6 @@ import { UserRepository } from 'src/app/models/user.repository';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css'],
 })
-
 export class UserComponent implements OnInit {
   user: User; // user obj to hold the logged in user
   userEditForm: FormGroup;
@@ -18,12 +17,14 @@ export class UserComponent implements OnInit {
     this.userEditForm = new FormGroup({
       name: new FormControl(),
       screenName: new FormControl(),
-      password: new FormControl()
-    })
+      password: new FormControl(),
+    });
   }
 
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.loggedInUser); //Store the loggedin user into the user obj
+    this.user = localStorage.loggedInUser
+      ? JSON.parse(localStorage.loggedInUser)
+      : {};
   }
 
   get users(): User[] {
@@ -33,17 +34,17 @@ export class UserComponent implements OnInit {
   //Checks if the useredit form has any values inside of them and
   //if they have no values, leave the default values the same
   //if they have new values then change the editeduser's values to those values
-  onSubmit(){ 
+  onSubmit() {
     let editedUser: User = this.user;
-    if(this.userEditForm.get('name').value){
+    if (this.userEditForm.get('name').value) {
       editedUser.name = this.userEditForm.get('name').value;
     }
 
-    if(this.userEditForm.get('screenName').value){
+    if (this.userEditForm.get('screenName').value) {
       editedUser.screenName = this.userEditForm.get('screenName').value;
     }
 
-    if(this.userEditForm.get('password').value){
+    if (this.userEditForm.get('password').value) {
       editedUser.password = this.userEditForm.get('password').value;
     }
 
@@ -53,7 +54,7 @@ export class UserComponent implements OnInit {
   }
 
   //Removes the loggedin user from cache and redirects them to the login page
-  async logout(){
+  async logout() {
     localStorage.clear();
     this.router.navigateByUrl('/login');
   }

@@ -31,6 +31,9 @@ export class NavbarComponent implements OnInit {
     public router: Router,
     private blurbRepo: BlurbRepository
   ) {
+    this.user = localStorage.loggedInUser
+      ? JSON.parse(localStorage.loggedInUser)
+      : {};
     // Subscribe to authentication state changes
     this.oktaAuth.$authenticationState.subscribe(
       (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
@@ -47,14 +50,23 @@ export class NavbarComponent implements OnInit {
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
+
+    // Listend for route changed to assign this.user for passing to viewuser route on navbar routerlink
+    this.router.events.subscribe((event: any) => {
+      this.user = localStorage.loggedInUser
+        ? JSON.parse(localStorage.loggedInUser)
+        : {};
+    });
   }
 
   async ngOnInit() {
     // Get the authentication state for immediate use
     this.isAuthenticated = await this.oktaAuth.isAuthenticated();
-    let user: User = JSON.parse(localStorage.loggedInUser);
+    this.user = localStorage.loggedInUser
+      ? JSON.parse(localStorage.loggedInUser)
+      : {};
 
-    this.blurb.get('message').setValue(user.name);
+    this.blurb.get('message').setValue(this.user.name);
   }
 
   onSubmit() {
