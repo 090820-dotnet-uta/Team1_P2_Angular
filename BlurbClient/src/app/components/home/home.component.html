@@ -293,7 +293,7 @@
 </div>
 
 <div
-  class="row flex-column border-dark-grey py-2 mt-2"
+  class="row flex-column border-dark-grey py-2 mt-2 hover-border-light-blue"
   *ngFor="let b of blurbsList; index as i"
 >
   <div
@@ -306,7 +306,7 @@
         <div class="row flex-column">
           <div
             [routerLink]="['/viewuser', b.userId]"
-            class="circle d-flex focus-none text-center text-white align-content-center justify-content-center"
+            class="circle d-flex focus-none text-center text-white align-content-center justify-content-center hover-border-light-blue"
           >
             <p class="my-auto" style="font-size: xx-large; font-weight: 400">
               {{ b.user.username[0].toUpperCase() }}
