@@ -25,14 +25,9 @@ export class NavbarComponent implements OnInit {
   user: User = JSON.parse(localStorage.loggedInUser);
 
   constructor(
-    public oktaAuth: OktaAuthService,
     public router: Router,
     private blurbRepo: BlurbRepository
   ) {
-    // Subscribe to authentication state changes
-    this.oktaAuth.$authenticationState.subscribe(
-      (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
-    );
     this.blurb = new FormGroup({
       type: new FormControl(),
       name: new FormControl(),
@@ -48,8 +43,6 @@ export class NavbarComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // Get the authentication state for immediate use
-    this.isAuthenticated = await this.oktaAuth.isAuthenticated();
     let user: User = JSON.parse(localStorage.loggedInUser);
 
     this.blurb.get('message').setValue(user.name);
