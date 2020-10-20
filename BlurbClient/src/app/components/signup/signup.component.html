@@ -10,7 +10,7 @@
           <h1 class="text-white display-4">blurbs</h1>
         </div>
         <br />
-        <div class="mb-3">
+        <div class="">
           <input
             class="form-control text-center"
             formControlName="name"
@@ -20,8 +20,20 @@
             id="name"
             required
           />
+          <div class="row">
+            <div style="height: 30px" class="col">
+              <p
+                *ngIf="
+                  user.controls.name.invalid && (user.dirty || user.touched)
+                "
+                class="text-danger m-0"
+              >
+                Name is required.
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
+        <div class="">
           <input
             class="form-control text-center"
             formControlName="screenName"
@@ -31,8 +43,21 @@
             id="screenName"
             required
           />
+          <div class="row">
+            <div style="height: 30px" class="col">
+              <p
+                *ngIf="
+                  user.controls.screenName.invalid &&
+                  (user.dirty || user.touched)
+                "
+                class="text-danger m-0"
+              >
+                Screen Name is required.
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
+        <div class="">
           <input
             class="form-control text-center"
             formControlName="username"
@@ -42,8 +67,20 @@
             id="username"
             required
           />
+          <div class="row">
+            <div style="height: 30px" class="col">
+              <p
+                *ngIf="
+                  user.controls.username.invalid && (user.dirty || user.touched)
+                "
+                class="text-danger m-0"
+              >
+                Username is required.
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
+        <div class="">
           <input
             class="form-control text-center"
             formControlName="password"
@@ -53,6 +90,18 @@
             id="password"
             required
           />
+          <div class="row">
+            <div style="height: 30px" class="col">
+              <p
+                *ngIf="
+                  user.controls.password.invalid && (user.dirty || user.touched)
+                "
+                class="text-danger m-0"
+              >
+                Password is required.
+              </p>
+            </div>
+          </div>
         </div>
         <div class="mb-3">
           <button
