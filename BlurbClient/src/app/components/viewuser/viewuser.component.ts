@@ -27,6 +27,9 @@ export class ViewuserComponent implements OnInit {
   canFetchMoreBlurbs: boolean = true;
   getTypeIcon = GetTypeIcon;
   logout = Logout;
+  followers: User[] = [];
+  following: User[] = [];
+  avatarLetter: string = '';
 
   sortSettings: Settings = new Settings(
     0, //0 is sort by most recent
@@ -57,6 +60,14 @@ export class ViewuserComponent implements OnInit {
     this.router.params.subscribe((p) => {
       this.userRepo.getUser(p['id']).subscribe((u) => {
         this.user = u;
+        this.avatarLetter = u.username[0].toUpperCase();
+        this.userRepo.getFollowers(u.userId).subscribe((f) => {
+          this.followers = f;
+          console.log(`followers list: `, f);
+        });
+        this.userRepo
+          .getFollowing(u.userId)
+          .subscribe((f) => (this.following = f));
         console.log('running');
         this.blurbRepo
           .getBlurbsByUser(this.fullQueryObj, p['id'], this.user.userId)
@@ -67,6 +78,7 @@ export class ViewuserComponent implements OnInit {
     this.checkFollow();
   }
 
+  //Initialize the followers and following lists
   ngOnInit(): void {}
 
   followUtil(f: boolean) {
