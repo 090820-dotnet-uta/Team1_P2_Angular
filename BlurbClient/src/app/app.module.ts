@@ -24,6 +24,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LandingComponent } from './components/landing/landing.component';
 import { ProtectedComponent } from './components/protected/protected.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   OKTA_CONFIG,
   OktaAuthModule,
@@ -73,7 +74,6 @@ const appRoutes: Routes = [
   },
 ];
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -97,6 +97,7 @@ const appRoutes: Routes = [
     OktaAuthModule,
     MatIconModule,
     InfiniteScrollModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     UserService,
