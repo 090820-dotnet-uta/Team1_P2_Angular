@@ -327,6 +327,7 @@
   <div
     class="col p-0 pointer"
     data-toggle="modal"
+    (click)="currentBlurbModal(b)"
     attr.data-target="#noteModal{{ i }}"
   >
     <div class="row bg-dark-blue mx-auto">
@@ -411,6 +412,7 @@
   <!-- This is the modal displaying a blurb -->
   <div
     class="modal fade"
+    (click)="checkEditModal($event)"
     attr.data-num="view{{ i }}"
     id="noteModal{{ i }}"
     tabindex="-1"
@@ -514,13 +516,11 @@
                       >
                       <input
                         required
-                        [(ngModel)]="b.name"
                         formControlName="name"
                         id="inputMediaName"
                         type="text"
                         maxlength="30"
                         class="form-control"
-                        value="{{ b.name }}"
                       />
                     </div>
                     <div class="col-3 p-0">
@@ -574,14 +574,11 @@
                     >
                     <textarea
                       required
-                      [(ngModel)]="b.message"
                       formControlName="message"
                       class="form-control"
                       id="exampleFormControlTextarea1"
                       rows="2"
                       maxlength="142"
-                      placeholder="{{ b.message }}"
-                      value="{{ b.message }}"
                     ></textarea>
                   </div>
 
@@ -610,7 +607,7 @@
                           name="privacyBlurb"
                           id="inlineRadio1"
                           value="Public"
-                          checked="{{ privacySelectedTxt(b.privacy, 0) }}"
+                          required
                         />
                         <label
                           class="form-check-label text-white"
@@ -626,7 +623,6 @@
                           name="privacyBlurb"
                           id="inlineRadio2"
                           value="Private"
-                          checked="{{ privacySelectedTxt(b.privacy, 1) }}"
                         />
                         <label
                           class="form-check-label text-white"
@@ -642,7 +638,6 @@
                           name="privacyBlurb"
                           id="inlineRadio3"
                           value="FollowersOnly"
-                          checked="{{ privacySelectedTxt(b.privacy, 2) }}"
                         />
                         <label
                           class="form-check-label text-white"
@@ -654,8 +649,8 @@
                     <div class="col">
                       <button
                         type="button"
-                        class="btn btn-primary btn-lg"
-                        (click)="onSubmitEdit(b)"
+                        class="btn btn-primary btn-lg complete-edit"
+                        (click)="onSubmitEdit()"
                         data-dismiss="modal"
                         *ngIf="b.userId == user.userId"
                       >
