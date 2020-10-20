@@ -31,10 +31,11 @@ export class HomeComponent implements OnInit {
   edit = true;
   isAddingNote: boolean = false;
   hasGottenMovie: boolean = false;
+  hasFoundMovieName: boolean = true;
+  canGetMoreBlurbs: boolean = true;
   apiMovie;
   filterSettingsVisible: boolean = false;
   canFetchMoreBlurbs: boolean = true;
-
   blurbEditForm: FormGroup;
   blurbAddForm: FormGroup;
   blurbsList: Blurb[];
@@ -104,23 +105,32 @@ export class HomeComponent implements OnInit {
   }
 
   checkMovie() {
-    // fetch(
-    //   `https://www.omdbapi.com/?t=${
-    //     this.blurbAddForm.get('name').value
-    //   }&apikey=4cac9bce`
-    // )
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     console.log(res);
-    //     this.hasGottenMovie = true;
-    //     this.apiMovie = res;
-    //   });
+    console.log(this.blurbAddForm.get('type').value);
+    if (this.blurbAddForm.get('type').value == 'Movie') {
+      fetch(
+        `https://www.omdbapi.com/?t=${
+          this.blurbAddForm.get('name').value
+        }&apikey=4cac9bce`
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          if (res.Response == 'True') {
+            this.hasFoundMovieName = true;
+            this.hasGottenMovie = true;
+            this.apiMovie = res;
+          } else if (res.Response == 'False') {
+            this.hasGottenMovie = true;
+            this.hasFoundMovieName = false;
+          }
+        });
+    }
 
-    this.hasGottenMovie = true;
-    this.apiMovie = {
-      Title: 'THis will be title',
-      Year: 'this will be year',
-    };
+    // this.hasGottenMovie = true;
+    // this.apiMovie = {
+    //   Title: 'THis will be title',
+    //   Year: 'this will be year',
+    // };
   }
 
   toggleEdit() {
@@ -334,26 +344,36 @@ export class HomeComponent implements OnInit {
 
   //Adds the next 10 blurbs to the currently loaded list
   loadBlurbs(span: number) {
-    var sinceIdOk = this.setSinceId(
-      this.blurbsList[this.blurbsList.length - 1].blurbId
-    );
-    console.log(
-      `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
-    );
-    if (
-      Number.isInteger(span) &&
-      span > 0 &&
-      sinceIdOk &&
-      this.canFetchMoreBlurbs
-    ) {
-      this.canFetchMoreBlurbs = false;
-      this.blurbRepo
-        .fullQuery(this.fullQueryObj, this.user.userId)
-        .subscribe((p) => {
-          console.log(p);
-          this.blurbsList = this.blurbsList.concat(p);
-          this.canFetchMoreBlurbs = true;
-        });
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (!this.canGetMoreBlurbs) return;
+      setTimeout(() => {
+        console.log('at the bottom', this.canGetMoreBlurbs);
+        // you're at the bottom of the page
+        var sinceIdOk = this.setSinceId(
+          this.blurbsList[this.blurbsList.length - 1].blurbId
+        );
+        console.log(
+          `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
+        );
+        if (
+          Number.isInteger(span) &&
+          span > 0 &&
+          sinceIdOk &&
+          this.canFetchMoreBlurbs
+        ) {
+          this.canFetchMoreBlurbs = false;
+          this.blurbRepo
+            .fullQuery(this.fullQueryObj, this.user.userId)
+            .subscribe((p) => {
+              console.log(p);
+              if (p.length === 0) {
+                this.canGetMoreBlurbs = false;
+              }
+              this.blurbsList = this.blurbsList.concat(p);
+              this.canFetchMoreBlurbs = true;
+            });
+        }
+      }, 400);
     }
   }
 }
