@@ -277,7 +277,7 @@
   </div>
   <div
     class="modal fade"
-    attr.data-num="{{ i }}"
+    attr.data-num="view{{ i }}"
     id="noteModal{{ i }}"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
@@ -293,16 +293,26 @@
             {{ b.user.screenName }}
           </h3>
         </div>
-        <div class="modal-body">
-          <h2 class="text-white">{{ b.media.name }}</h2>
+        <div class="modal-body col justify-content-center text-center">
+          <br />
+          <div
+            class="text-center row d-flex justify-content-center align-items-center"
+          >
+            <h2 class="text-white text-center">{{ b.media.name }}</h2>
+            <span
+              class="badge display-4"
+              [ngStyle]="{
+                'background-color': calcBkgColor(b.score),
+                'font-size': 'xx-Large',
+                'margin-left': '20px'
+              }"
+            >
+              {{ b.score }}
+            </span>
+          </div>
+          <br />
           <div class="row bg-dark-blue-light mt-2 mx-auto">
             <div class="col text-center py-2">
-              <p
-                style="font-size: large; font-weight: 400"
-                class="m-0 lead text-white"
-              >
-                This will be the note body
-              </p>
               <p
                 style="font-size: large; font-weight: 400"
                 class="m-0 lead text-white"
