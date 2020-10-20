@@ -19,41 +19,15 @@ import { NoteRepository } from './models/note.repository';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { EdituserComponent } from './components/edituser/edituser.component';
 import { HomeComponent } from './components/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LandingComponent } from './components/landing/landing.component';
-import { ProtectedComponent } from './components/protected/protected.component';
-import {
-  OKTA_CONFIG,
-  OktaAuthModule,
-  OktaCallbackComponent,
-  OktaAuthGuard,
-} from '@okta/okta-angular';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { FollowersComponent } from './components/followers/followers.component';
 import { ViewuserComponent } from './components/viewuser/viewuser.component';
 import { MatIconModule } from '@angular/material/icon';
 
-const config = {
-  issuer: 'https://dev-5859084.okta.com',
-  redirectUri: window.location.origin + '/login/callback',
-  clientId: '0oabyyofa84U20IFv5d5',
-  pkce: true,
-};
-
-export function onAuthRequired(oktaAuth, injector) {
-  const router = injector.get(Router);
-
-  // Redirect the user to your custom login page
-  router.navigate(['/login']);
-}
-
 const appRoutes: Routes = [
-  {
-    path: 'login/callback',
-    component: OktaCallbackComponent,
-  },
   {
     path: 'login',
     component: LoginComponent,
@@ -61,14 +35,6 @@ const appRoutes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-  },
-  {
-    path: 'protected',
-    component: ProtectedComponent,
-    canActivate: [OktaAuthGuard],
-    data: {
-      onAuthRequired,
-    },
   },
 ];
 
@@ -80,10 +46,8 @@ const appRoutes: Routes = [
     NavbarComponent,
     LoginComponent,
     SignupComponent,
-    EdituserComponent,
     HomeComponent,
     LandingComponent,
-    ProtectedComponent,
     FollowersComponent,
     ViewuserComponent,
   ],
@@ -93,7 +57,6 @@ const appRoutes: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
-    OktaAuthModule,
     MatIconModule,
   ],
   providers: [
@@ -109,7 +72,6 @@ const appRoutes: Routes = [
     TagRepository,
     NoteService,
     NoteRepository,
-    { provide: OKTA_CONFIG, useValue: config },
   ],
   bootstrap: [AppComponent],
 })
