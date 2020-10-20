@@ -30,8 +30,11 @@ export class HomeComponent implements OnInit {
   user: User;
   edit = true;
   isAddingNote: boolean = false;
+  hasGottenMovie: boolean = false;
+  apiMovie;
   filterSettingsVisible: boolean = false;
   canFetchMoreBlurbs: boolean = true;
+
   blurbEditForm: FormGroup;
   blurbAddForm: FormGroup;
   blurbsList: Blurb[];
@@ -98,6 +101,26 @@ export class HomeComponent implements OnInit {
 
   get blurbs(): Blurb[] {
     return this.blurbRepo.getBlurbs();
+  }
+
+  checkMovie() {
+    // fetch(
+    //   `https://www.omdbapi.com/?t=${
+    //     this.blurbAddForm.get('name').value
+    //   }&apikey=4cac9bce`
+    // )
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     console.log(res);
+    //     this.hasGottenMovie = true;
+    //     this.apiMovie = res;
+    //   });
+
+    this.hasGottenMovie = true;
+    this.apiMovie = {
+      Title: 'THis will be title',
+      Year: 'this will be year',
+    };
   }
 
   toggleEdit() {
