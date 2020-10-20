@@ -18,7 +18,6 @@ import {
   TypeSelectedTxt,
 } from '../../StaticFunctions';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -29,6 +28,7 @@ import {
 // will contain infinite scrolling
 export class HomeComponent implements OnInit {
   user: User;
+  currentBlurb: Blurb;
   edit = true;
   isAddingNote: boolean = false;
   hasGottenMovie: boolean = false;
@@ -105,8 +105,24 @@ export class HomeComponent implements OnInit {
     return this.blurbRepo.getBlurbs();
   }
 
+  checkEditModal(e: any) {
+    console.log('it happend', e.target.classList);
+    if (
+      [...e.target.classList].includes('modal') ||
+      [...e.target.classList].includes('complete-edit')
+    ) {
+      console.log('closing the modal!');
+      setTimeout(() => {
+        this.edit = true;
+      }, 300);
+    }
+  }
+
+  currentBlurbModal(blurb: Blurb) {
+    this.currentBlurb = blurb;
+  }
+
   checkMovie() {
-    console.log(this.blurbAddForm.get('type').value);
     if (this.blurbAddForm.get('type').value == 'Movie') {
       fetch(
         `https://www.omdbapi.com/?t=${
@@ -126,29 +142,28 @@ export class HomeComponent implements OnInit {
           }
         });
     }
-
-    // this.hasGottenMovie = true;
-    // this.apiMovie = {
-    //   Title: 'THis will be title',
-    //   Year: 'this will be year',
-    // };
   }
 
   toggleEdit() {
     this.edit = !this.edit;
+    console.log(this.currentBlurb);
+    let b: Blurb = this.currentBlurb;
+    this.blurbEditForm.get('name').setValue(b.name);
+    this.blurbEditForm.get('message').setValue(b.message);
+    this.blurbEditForm.get('score').setValue(+b.score);
+    this.blurbEditForm.get('privacyBlurb').setValue(b.privacy);
+    console.log(this.blurbEditForm.value);
   }
 
-  onSubmitEdit(blurb: Blurb) {
+  onSubmitEdit() {
     this.edit = false;
-
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
       name: this.blurbEditForm.get('name').value,
       type: this.mediaType[this.blurbEditForm.get('type').value],
     };
-    console.log('Non edited blurb', blurb);
-    let b: Blurb = blurb;
-    console.log('b is real', b);
+    console.log('Non edited blurb', this.currentBlurb);
+    let b: Blurb = this.currentBlurb;
     b.media = m;
 
     if (this.blurbEditForm.get('message').value) {
@@ -156,7 +171,7 @@ export class HomeComponent implements OnInit {
       b.message = this.blurbEditForm.get('message').value;
     } else {
       console.log('message else working');
-      b.message = blurb.message;
+      b.message = this.currentBlurb.message;
     }
 
     if (this.blurbEditForm.get('score').value >= 0) {
@@ -164,7 +179,7 @@ export class HomeComponent implements OnInit {
       b.score = +this.blurbEditForm.get('score').value;
     } else {
       console.log('score esle working');
-      b.score = blurb.score;
+      b.score = this.currentBlurb.score;
     }
 
     if (this.blurbEditForm.get('privacyBlurb').value) {
@@ -174,7 +189,7 @@ export class HomeComponent implements OnInit {
       ];
     } else {
       console.log('privacy else working');
-      b.privacy = blurb.privacy;
+      b.privacy = this.currentBlurb.privacy;
     }
 
     b.userId = loggedInUser.userId;
@@ -184,7 +199,7 @@ export class HomeComponent implements OnInit {
     b.notes = [];
 
     console.log('Edited Blurb ', b);
-    this.blurbRepo.editBlurb(b);
+    this.blurbRepo.editBlurb(this.currentBlurb);
   }
 
   onSubmitAdd() {
