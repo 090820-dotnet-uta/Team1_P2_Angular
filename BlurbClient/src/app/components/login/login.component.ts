@@ -25,6 +25,10 @@ export class LoginComponent implements OnInit {
       username: new FormControl(),
       password: new FormControl(),
     });
+
+    if (localStorage.loggedInUser) {
+      this.router.navigateByUrl('/home');
+    }
   }
 
   ngOnInit(): void {}

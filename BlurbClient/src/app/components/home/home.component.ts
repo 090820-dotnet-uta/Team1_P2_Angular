@@ -61,6 +61,11 @@ export class HomeComponent implements OnInit {
     this.user = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
       : {};
+
+    if (!localStorage.loggedInUser) {
+      this.router.navigateByUrl('/login');
+    }
+
     this.blurbEditForm = new FormGroup({
       type: new FormControl(),
       name: new FormControl('', [Validators.required]),
