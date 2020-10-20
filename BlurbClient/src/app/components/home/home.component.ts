@@ -9,9 +9,15 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Media } from 'src/app/models/media.model';
 import { Privacy } from 'src/app/models/privacy.model';
 import { MediaType } from 'src/app/models/mediatype.model';
-import { SortSettings } from './SortSettings';
+import { Settings } from './Settings';
 import { FullQueryObj } from './FullQueryObj';
 import { GetTypeIcon } from '../../StaticFunctions';
+import {
+  ScoreSelectedTxt,
+  PrivacySelectedTxt,
+  TypeSelectedTxt,
+} from '../../StaticFunctions';
+
 
 @Component({
   selector: 'app-home',
@@ -24,13 +30,20 @@ import { GetTypeIcon } from '../../StaticFunctions';
 export class HomeComponent implements OnInit {
   user: User;
   edit = true;
-  filterSettingsVisible = false;
-  blurb: FormGroup;
-  blurbsList: Blurb[] = this.blurbRepo.getBlurbs();
+  isAddingNote: boolean = false;
+  hasGottenMovie: boolean = false;
+  hasFoundMovieName: boolean = true;
+  canGetMoreBlurbs: boolean = true;
+  apiMovie;
+  filterSettingsVisible: boolean = false;
+  canFetchMoreBlurbs: boolean = true;
+  blurbEditForm: FormGroup;
+  blurbAddForm: FormGroup;
+  blurbsList: Blurb[];
   mediaType: MediaType = new MediaType();
   blurbPrivacy: Privacy = new Privacy();
-  sortSettings: SortSettings = new SortSettings(
-    0,
+  sortSettings: Settings = new Settings(
+    0, //0 is sort by most recent
     true,
     true,
     true,
@@ -40,21 +53,46 @@ export class HomeComponent implements OnInit {
     true
   );
   fullQueryObj: FullQueryObj = new FullQueryObj(this.sortSettings, -1, 10); //SinceId = -1 because -1 makes you start at the beginning
+  typeSelectedTxt = TypeSelectedTxt;
+  scoreSelectedTxt = ScoreSelectedTxt;
+  privacySelectedTxt = PrivacySelectedTxt;
 
   constructor(private blurbRepo: BlurbRepository, private router: Router) {
-    this.user = JSON.parse(localStorage.loggedInUser);
-    this.blurb = new FormGroup({
+    this.user = localStorage.loggedInUser
+      ? JSON.parse(localStorage.loggedInUser)
+      : {};
+    this.blurbEditForm = new FormGroup({
       type: new FormControl(),
-      name: new FormControl(),
+      name: new FormControl('', [Validators.required]),
       score: new FormControl('', [
         Validators.required,
         Validators.pattern('^[0-9]*$'),
         Validators.minLength(2),
       ]),
-      message: new FormControl(),
+      message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
+
+    this.blurbAddForm = new FormGroup({
+      type: new FormControl(),
+      name: new FormControl('', [Validators.required]),
+      score: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+        Validators.minLength(2),
+      ]),
+      message: new FormControl('', [Validators.required]),
+      note: new FormControl(),
+      privacyBlurb: new FormControl(),
+    });
+
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array:`, p);
+      });
   }
 
   moment = moment;
@@ -67,28 +105,130 @@ export class HomeComponent implements OnInit {
     return this.blurbRepo.getBlurbs();
   }
 
+  checkMovie() {
+    console.log(this.blurbAddForm.get('type').value);
+    if (this.blurbAddForm.get('type').value == 'Movie') {
+      fetch(
+        `https://www.omdbapi.com/?t=${
+          this.blurbAddForm.get('name').value
+        }&apikey=4cac9bce`
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          if (res.Response == 'True') {
+            this.hasFoundMovieName = true;
+            this.hasGottenMovie = true;
+            this.apiMovie = res;
+          } else if (res.Response == 'False') {
+            this.hasGottenMovie = true;
+            this.hasFoundMovieName = false;
+          }
+        });
+    }
+
+    // this.hasGottenMovie = true;
+    // this.apiMovie = {
+    //   Title: 'THis will be title',
+    //   Year: 'this will be year',
+    // };
+  }
+
   toggleEdit() {
     this.edit = !this.edit;
   }
 
-  onSubmit(blurb: Blurb) {
+  onSubmitEdit(blurb: Blurb) {
+    this.edit = false;
+
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
-      name: this.blurb.get('name').value,
-      type: this.mediaType[this.blurb.get('type').value],
+      name: this.blurbEditForm.get('name').value,
+      type: this.mediaType[this.blurbEditForm.get('type').value],
     };
+    console.log('Non edited blurb', blurb);
     let b: Blurb = blurb;
+    console.log('b is real', b);
     b.media = m;
-    b.message = this.blurb.get('message').value;
-    b.score = +this.blurb.get('score').value;
-    b.privacy = this.blurbPrivacy[this.blurb.get('privacyBlurb').value];
+
+    if (this.blurbEditForm.get('message').value) {
+      console.log('message working');
+      b.message = this.blurbEditForm.get('message').value;
+    } else {
+      console.log('message else working');
+      b.message = blurb.message;
+    }
+
+    if (this.blurbEditForm.get('score').value >= 0) {
+      console.log('score working');
+      b.score = +this.blurbEditForm.get('score').value;
+    } else {
+      console.log('score esle working');
+      b.score = blurb.score;
+    }
+
+    if (this.blurbEditForm.get('privacyBlurb').value) {
+      console.log('privacy working');
+      b.privacy = this.blurbPrivacy[
+        this.blurbEditForm.get('privacyBlurb').value
+      ];
+    } else {
+      console.log('privacy else working');
+      b.privacy = blurb.privacy;
+    }
+
     b.userId = loggedInUser.userId;
+
     b.name = m.name;
+
     b.notes = [];
+
+    console.log('Edited Blurb ', b);
+    this.blurbRepo.editBlurb(b);
+  }
+
+  onSubmitAdd() {
+    let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
+    let m: Media = {
+      name: this.blurbAddForm.get('name').value,
+      type: this.mediaType[this.blurbAddForm.get('type').value],
+    };
+    let b: Blurb = {
+      message: this.blurbAddForm.get('message').value,
+      score: +this.blurbAddForm.get('score').value,
+      privacy: this.blurbPrivacy[this.blurbAddForm.get('privacyBlurb').value],
+      name: m.name,
+      userId: loggedInUser.userId,
+      media: m,
+      notes: this.isAddingNote ? this.blurbAddForm.get('note').value : [],
+    };
 
     console.log(b, this.blurbPrivacy.Public);
 
-    this.blurbRepo.editBlurb(b);
+    this.blurbRepo.addBlurb(b).subscribe((newBlurb) => {
+      console.log(newBlurb);
+      this.blurbRepo
+        .fullQuery(this.fullQueryObj, this.user.userId)
+        .subscribe((p) => {
+          this.blurbsList = p;
+          console.log(`blurbs array:`, p);
+        });
+      // this.blurbsList.push(newBlurb);
+    });
+    // this.blurbsList = [];
+  }
+
+  onDelete(blurb: Blurb) {
+    console.log('Trying to delete: ', blurb);
+    if (blurb.userId == this.user.userId)
+      this.blurbRepo.deleteBlurb(blurb.blurbId).subscribe((p) => {
+        console.log(`Delete succeeded: ${p}`);
+        if (p) {
+          this.blurbsList = this.blurbsList.filter(
+            (b) => b.blurbId != blurb.blurbId
+          );
+        }
+      });
   }
 
   //not used anymore
@@ -99,19 +239,22 @@ export class HomeComponent implements OnInit {
   updateSortSetting(setting: number) {
     if (Number.isInteger(setting) && setting >= 0 && setting <= 3) {
       this.sortSettings.sortSetting = setting;
+      this.setSinceId(-1);
+      this.fullQueryObj.updateSettings(this.sortSettings);
+      this.blurbRepo
+        .fullQuery(this.fullQueryObj, this.user.userId)
+        .subscribe((p) => {
+          this.blurbsList = p;
+          console.log(`blurbs array: ${p}`);
+        });
     }
-    this.fullQueryObj.updateSettings(this.sortSettings);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
   }
 
   toggleMovieFilter() {
-    this.sortSettings.filterMovies = !this.sortSettings.filterMovies;
+    this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
+
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -121,32 +264,118 @@ export class HomeComponent implements OnInit {
   }
 
   toggleGamesFilter() {
-    this.sortSettings.filterGames = !this.sortSettings.filterGames;
+    this.sortSettings.includeGames = !this.sortSettings.includeGames;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 
   toggleTVFilter() {
-    this.sortSettings.filterTV = !this.sortSettings.filterTV;
+    this.sortSettings.includeTV = !this.sortSettings.includeTV;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 
   toggleBooksFilter() {
-    this.sortSettings.filterBooks = !this.sortSettings.filterBooks;
+    this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 
   toggleFollowersFilter() {
-    this.sortSettings.includeFollowers = !this.sortSettings.includeFollowers;
+    this.sortSettings.includeFollowing = !this.sortSettings.includeFollowing;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 
   toggleSelfFilter() {
     this.sortSettings.includeSelf = !this.sortSettings.includeSelf;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+        console.log(`blurbs array: ${p}`);
+      });
   }
 
   toggleUnfollowedFilter() {
     this.sortSettings.includeUnfollowed = !this.sortSettings.includeUnfollowed;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
+    this.blurbRepo
+      .fullQuery(this.fullQueryObj, this.user.userId)
+      .subscribe((p) => {
+        this.blurbsList = p;
+      });
+  }
+
+  //Sets the sinceId in the full query object to a given since Id
+  //Provided that the sinceId exists in the current list of blurbs
+  setSinceId(sinceId: number): boolean {
+    if (Number.isInteger(sinceId)) {
+      this.fullQueryObj.sinceId = sinceId;
+      return true;
+    }
+    return false;
+  }
+
+  //Adds the next 10 blurbs to the currently loaded list
+  loadBlurbs(span: number) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (!this.canGetMoreBlurbs) return;
+      setTimeout(() => {
+        console.log('at the bottom', this.canGetMoreBlurbs);
+        // you're at the bottom of the page
+        var sinceIdOk = this.setSinceId(
+          this.blurbsList[this.blurbsList.length - 1].blurbId
+        );
+        console.log(
+          `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
+        );
+        if (
+          Number.isInteger(span) &&
+          span > 0 &&
+          sinceIdOk &&
+          this.canFetchMoreBlurbs
+        ) {
+          this.canFetchMoreBlurbs = false;
+          this.blurbRepo
+            .fullQuery(this.fullQueryObj, this.user.userId)
+            .subscribe((p) => {
+              console.log(p);
+              if (p.length === 0) {
+                this.canGetMoreBlurbs = false;
+              }
+              this.blurbsList = this.blurbsList.concat(p);
+              this.canFetchMoreBlurbs = true;
+            });
+        }
+      }, 400);
+    }
   }
 }

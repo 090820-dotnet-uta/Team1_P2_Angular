@@ -1,240 +1,29 @@
-<div class="col bg-dark-blue border-dark-grey py-2 mb3">
-  <div class="row text-center mb3">
-    <h3 class="m-0 text-white">Filter/Sort:</h3>
-    <button
-      class="btn btn-dark dropdown-toggle"
-      (click)="toggleFilterSettingsVisible()"
-    ></button>
-  </div>
-  <div class="row text-center" *ngIf="filterSettingsVisible">
-    <div class="col text-white">
-      <button
-        class="btn btn-dark dropdown-toggle"
-        type="button"
-        id="settingsDropdownBtn"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-        [textContent]="sortSettings.getSortName()"
-      ></button>
-      <div class="dropdown-menu" aria-labelledby="settingsDropdownBtn">
-        <a class="dropdown-item" (click)="updateSortSetting(0)">Most Recent</a>
-        <a class="dropdown-item" (click)="updateSortSetting(1)">Least Recent</a>
-        <a class="dropdown-item" (click)="updateSortSetting(2)">10 - 0</a>
-        <a class="dropdown-item" (click)="updateSortSetting(3)">0 - 10</a>
+<div class="row">
+  <div class="col bg-dark-blue border-dark-grey py-2 w-100">
+    <div class="row text-center">
+      <div class="col-3 d-flex align-items-center">
+        <h3 class="m-0 text-white d-inline">Filter/Sort:</h3>
+        <button
+          class="btn btn-dark dropdown-toggle d-inline btn-sm mx-2"
+          (click)="toggleFilterSettingsVisible()"
+        ></button>
       </div>
-    </div>
-    <div class="col text-white">
-      <button
-        class="material-icons btn"
-        (click)="toggleMovieFilter()"
-        [ngStyle]="{
-          color: sortSettings.filterMovies ? 'lightblue' : 'grey'
-        }"
-      >
-        movie
-      </button>
-      <button
-        class="material-icons btn"
-        (click)="toggleBooksFilter()"
-        [ngStyle]="{
-          color: sortSettings.filterBooks ? 'lightblue' : 'grey'
-        }"
-      >
-        menu_book
-      </button>
-      <button
-        class="material-icons btn"
-        (click)="toggleGamesFilter()"
-        [ngStyle]="{
-          color: sortSettings.filterGames ? 'lightblue' : 'grey'
-        }"
-      >
-        sports_esports
-      </button>
-      <button
-        class="material-icons btn"
-        (click)="toggleTVFilter()"
-        [ngStyle]="{
-          color: sortSettings.filterTV ? 'lightblue' : 'grey'
-        }"
-      >
-        tv
-      </button>
-    </div>
-    <div class="col text-white">
-      <button
-        class="btn"
-        (click)="toggleSelfFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeSelf ? 'lightblue' : 'grey'
-        }"
-      >
-        Yours
-      </button>
-      <button
-        class="btn"
-        (click)="toggleFollowersFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeFollowers ? 'lightblue' : 'grey'
-        }"
-      >
-        Followers
-      </button>
-      <button
-        class="btn"
-        (click)="toggleUnfollowedFilter()"
-        [ngStyle]="{
-          color: sortSettings.includeUnfollowed ? 'lightblue' : 'grey'
-        }"
-      >
-        Not Followed
-      </button>
-    </div>
-  </div>
-</div>
-
-<div
-  class="row flex-column border-dark-grey py-2 mt-2"
-  *ngFor="let b of blurbsList; index as i"
->
-  <div
-    class="col p-0 pointer"
-    data-toggle="modal"
-    attr.data-target="#noteModal{{ i }}"
-  >
-    <div class="row bg-dark-blue mx-auto">
-      <div class="col-1 p-0 d-flex justify-content-center text-center">
-        <div class="row flex-column">
-          <div
-            [routerLink]="['/viewuser', b.userId]"
-            class="circle d-flex focus-none text-center text-white align-content-center justify-content-center"
-          >
-            <p class="my-auto" style="font-size: xx-large; font-weight: 400">
-              {{ b.user.username[0].toUpperCase() }}
-            </p>
-          </div>
-          <h3 class="mt-2 mb-0 d-inline">
-            <span
-              class="badge"
-              [ngStyle]="{ 'background-color': calcBkgColor(b.score) }"
-            >
-              {{ b.score }}
-            </span>
-          </h3>
-        </div>
-      </div>
-      <div class="col pl-1">
-        <div class="row mx-auto">
-          <div class="col">
-            <div class="row flex-column">
-              <h5
-                [routerLink]="['/viewuser', b.userId]"
-                class="mb-0 text-white focus-none"
-              >
-                {{ b.user.screenName }}
-              </h5>
-              <p
-                [routerLink]="['/viewuser', b.userId]"
-                style="font-size: medium; font-weight: 400"
-                class="m-0 lead text-secondary focus-none"
-              >
-                @{{ b.user.username }}
-              </p>
-            </div>
-          </div>
-          <div class="col-6 text-center text-white">
-            <div class="row justify-content-center">
-              <!-- <span
-                class="material-icons btn"
-                (click)="toggleBooksFilter()"
-                [ngStyle]="{
-                  color: calcBkgColor(b.score)
-                }"
-              >
-                {{ getTypeIcon(b.media.type) }}
-              </span> -->
-              <h4 class="m-0 text-white">{{ b.media.name }}</h4>
-            </div>
-          </div>
-
-          <div class="col justify-content-end">
-            <span
-              class="material-icons float-right"
-              (click)="toggleBooksFilter()"
-              [ngStyle]="{
-                color: calcBkgColor(b.score)
-              }"
-            >
-              {{ getTypeIcon(b.media.type) }}
-            </span>
-          </div>
-
-          <div class="col">
-            <p
-              style="font-size: large; font-weight: 400"
-              class="m-0 float-right lead text-secondary"
-            >
-              {{ moment(b.timestamp.toString()).fromNow() }}
-            </p>
-          </div>
-        </div>
-
-        <div class="row bg-dark-blue-light mt-2 mx-auto">
-          <div class="col p-0">
-            <p
-              style="font-size: large; font-weight: 400"
-              class="m-0 lead text-white"
-            >
-              {{ b.message }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    class="modal fade"
-    attr.data-num="view{{ i }}"
-    id="noteModal{{ i }}"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg bg-dark-blue">
-      <div class="modal-content bg-dark-blue px-4">
-        <div *ngIf="edit">
-          <div class="modal-header border-none justify-content-center">
-            <h3
-              class="modal-title text-white font-weight-light"
-              id="exampleModalLabel"
-            >
-              {{ b.user.screenName }}
-            </h3>
-          </div>
-          <div class="modal-body">
-            <br />
-            <h2 class="text-white text-center">{{ b.media.name }}</h2>
-            <br />
-            <div class="row bg-dark-blue-light mt-2 mx-auto">
-              <div class="col text-center py-2">
-                <p
-                  style="font-size: large; font-weight: 400"
-                  class="m-0 lead text-white"
-                >
-                  This will be the note body
-                </p>
-                <p
-                  style="font-size: large; font-weight: 400"
-                  class="m-0 lead text-white"
-                >
-                  {{ b.message }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="!edit">
+      <div class="col"></div>
+      <div class="col-1">
+        <button
+          class="btn btn-outline-info btn-sm d-flex"
+          data-toggle="modal"
+          data-target="#exampleModal"
+        >
+          <span class="material-icons">add</span>
+        </button>
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
           <div class="modal-dialog modal-lg bg-dark-blue">
             <div class="modal-content bg-dark-blue px-4">
               <div class="modal-header border-none justify-content-center">
@@ -242,11 +31,11 @@
                   class="modal-title text-white font-weight-light"
                   id="exampleModalLabel"
                 >
-                  Edit Blurb
+                  Create Blurb
                 </h3>
               </div>
               <div class="modal-body">
-                <form [formGroup]="blurb" novalidate>
+                <form [formGroup]="blurbAddForm" novalidate>
                   <div
                     class="form-group row m-0 justify-content-between align-items-center"
                   >
@@ -272,12 +61,12 @@
                         >Name</label
                       >
                       <input
+                        (focusout)="checkMovie()"
                         formControlName="name"
                         id="inputMediaName"
                         type="text"
                         maxlength="30"
                         class="form-control"
-                        placeholder="{{ b.media.name }}"
                       />
                     </div>
                     <div class="col-3 p-0">
@@ -302,6 +91,28 @@
                       </select>
                     </div>
                   </div>
+                  <div style="height: 24px" class="row justify-content-center">
+                    <div class="col">
+                      <p
+                        class="text-success mt-2 mb-0 ml-2 mr-2 d-inline"
+                        *ngIf="hasGottenMovie && hasFoundMovieName"
+                      >
+                        {{ apiMovie.Title }}
+                      </p>
+                      <p
+                        class="text-success mt-2 mb-0 ml-2 mr-2 d-inline"
+                        *ngIf="hasGottenMovie && hasFoundMovieName"
+                      >
+                        {{ apiMovie.Year }}
+                      </p>
+                      <p
+                        class="text-danger mt-2 mb-0 ml-2 mr-2 d-inline"
+                        *ngIf="!hasFoundMovieName"
+                      >
+                        Could not find that movie
+                      </p>
+                    </div>
+                  </div>
                   <div class="form-group mt-2">
                     <label
                       class="text-white float-left m-0"
@@ -314,11 +125,10 @@
                       id="exampleFormControlTextarea1"
                       rows="2"
                       maxlength="142"
-                      placeholder="{{ b.message }}"
                     ></textarea>
                   </div>
 
-                  <div class="form-group mt-2">
+                  <div *ngIf="isAddingNote" class="form-group mt-2">
                     <label
                       class="text-white float-left m-0"
                       for="exampleFormControlTextarea1"
@@ -330,7 +140,6 @@
                       id="exampleFormControlTextarea1"
                       rows="4"
                       maxlength="240"
-                      value="{{ b.notes }}"
                     ></textarea>
                   </div>
 
@@ -382,13 +191,484 @@
                         >
                       </div>
                     </div>
+                    <div class="col-2">
+                      <button
+                        data-dismiss="modal"
+                        type="button"
+                        class="btn btn-primary btn-lg"
+                        (click)="onSubmitAdd()"
+                      >
+                        Create
+                      </button>
+                    </div>
+                    <div class="col-2">
+                      <button
+                        type="button"
+                        class="btn btn-info btn-lg"
+                        (click)="isAddingNote = !isAddingNote"
+                      >
+                        Note
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row text-center"
+      *ngIf="filterSettingsVisible"
+      style="margin-top: 12px"
+    >
+      <div class="col text-white">
+        <button
+          class="btn btn-dark dropdown-toggle"
+          type="button"
+          id="settingsDropdownBtn"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          [textContent]="sortSettings.getSortName()"
+        ></button>
+        <div class="dropdown-menu" aria-labelledby="settingsDropdownBtn">
+          <a class="dropdown-item" (click)="updateSortSetting(0)"
+            >Most Recent</a
+          >
+          <a class="dropdown-item" (click)="updateSortSetting(1)"
+            >Least Recent</a
+          >
+          <a class="dropdown-item" (click)="updateSortSetting(2)">10 - 0</a>
+          <a class="dropdown-item" (click)="updateSortSetting(3)">0 - 10</a>
+        </div>
+      </div>
+      <div class="col text-white">
+        <button
+          class="material-icons btn"
+          (click)="toggleMovieFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeMovies ? 'lightblue' : 'grey'
+          }"
+        >
+          movie
+        </button>
+        <button
+          class="material-icons btn"
+          (click)="toggleBooksFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeBooks ? 'lightblue' : 'grey'
+          }"
+        >
+          menu_book
+        </button>
+        <button
+          class="material-icons btn"
+          (click)="toggleGamesFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeGames ? 'lightblue' : 'grey'
+          }"
+        >
+          sports_esports
+        </button>
+        <button
+          class="material-icons btn"
+          (click)="toggleTVFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeTV ? 'lightblue' : 'grey'
+          }"
+        >
+          tv
+        </button>
+      </div>
+      <div class="col text-white">
+        <button
+          class="btn"
+          (click)="toggleSelfFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeSelf ? 'lightblue' : 'grey'
+          }"
+        >
+          Yours
+        </button>
+        <button
+          class="btn"
+          (click)="toggleFollowersFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeFollowing ? 'lightblue' : 'grey'
+          }"
+        >
+          Following
+        </button>
+        <button
+          class="btn"
+          (click)="toggleUnfollowedFilter()"
+          [ngStyle]="{
+            color: sortSettings.includeUnfollowed ? 'lightblue' : 'grey'
+          }"
+        >
+          Not Followed
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="row flex-column border-dark-grey py-2 mt-2 hover-border-light-blue"
+  *ngFor="let b of blurbsList; index as i"
+  infiniteScroll
+  [infiniteScrollDisabled]="!canFetchMoreBlurbs"
+  [infiniteScrollDistance]="0"
+  [infiniteScrollThrottle]="500"
+  (scrolled)="loadBlurbs(10)"
+>
+  <div
+    class="col p-0 pointer"
+    data-toggle="modal"
+    attr.data-target="#noteModal{{ i }}"
+  >
+    <div class="row bg-dark-blue mx-auto">
+      <div class="col-1 p-0 d-flex justify-content-center text-center">
+        <div class="row flex-column">
+          <div
+            [routerLink]="['/viewuser', b.userId]"
+            class="circle d-flex focus-none text-center text-white align-content-center justify-content-center hover-border-light-blue"
+          >
+            <p class="my-auto" style="font-size: xx-large; font-weight: 400">
+              {{ b.user.username[0].toUpperCase() }}
+            </p>
+          </div>
+          <h3 class="mt-2 mb-0 d-inline">
+            <span
+              class="badge"
+              [ngStyle]="{ 'background-color': calcBkgColor(b.score) }"
+            >
+              {{ b.score }}
+            </span>
+          </h3>
+        </div>
+      </div>
+      <div class="col pl-1">
+        <div class="row mx-auto">
+          <div class="col">
+            <div class="row flex-column">
+              <h5
+                [routerLink]="['/viewuser', b.userId]"
+                class="mb-0 text-white focus-none"
+              >
+                {{ b.user.screenName }}
+              </h5>
+              <p
+                [routerLink]="['/viewuser', b.userId]"
+                style="font-size: medium; font-weight: 400"
+                class="m-0 lead text-secondary focus-none"
+              >
+                @{{ b.user.username }}
+              </p>
+            </div>
+          </div>
+          <div class="col-6 text-center text-white">
+            <div class="row justify-content-center">
+              <h4 class="m-0 text-white">{{ b.media.name }}</h4>
+            </div>
+          </div>
+
+          <div class="col justify-content-end">
+            <span
+              class="material-icons float-right"
+              [ngStyle]="{
+                color: calcBkgColor(b.score)
+              }"
+            >
+              {{ getTypeIcon(b.media.type) }}
+            </span>
+          </div>
+          <div class="col">
+            <p
+              style="font-size: large; font-weight: 400"
+              class="m-0 float-right lead text-secondary"
+            >
+              {{ moment(b.timestamp.toString()).fromNow() }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row bg-dark-blue-light mt-2 mx-auto">
+          <div class="col p-0">
+            <p
+              style="font-size: large; font-weight: 400"
+              class="m-0 lead text-white"
+            >
+              {{ b.message }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- This is the modal displaying a blurb -->
+  <div
+    class="modal fade"
+    attr.data-num="view{{ i }}"
+    id="noteModal{{ i }}"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg bg-dark-blue">
+      <div class="modal-content bg-dark-blue px-4">
+        <div *ngIf="edit || b.userId != user.userId">
+          <div class="modal-header border-none justify-content-center">
+            <h3
+              class="modal-title text-white font-weight-light"
+              id="exampleModalLabel"
+            >
+              {{ b.user.screenName }}
+            </h3>
+          </div>
+          <div class="modal-body col justify-content-center text-center">
+            <br />
+            <div
+              class="text-center row d-flex justify-content-center align-items-center"
+            >
+              <h2 class="text-white text-center">{{ b.media.name }}</h2>
+              <span
+                class="badge display-4"
+                [ngStyle]="{
+                  'background-color': calcBkgColor(b.score),
+                  'font-size': 'xx-Large',
+                  'margin-left': '20px'
+                }"
+              >
+                {{ b.score }}
+              </span>
+            </div>
+            <br />
+            <div class="row bg-dark-blue-light mt-2 mx-auto">
+              <div class="col text-center py-2">
+                <p
+                  style="font-size: large; font-weight: 400"
+                  class="m-0 lead text-white"
+                >
+                  {{ b.message }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!edit && b.userId == user.userId">
+          <div class="modal-dialog modal-lg bg-dark-blue">
+            <div class="modal-content bg-dark-blue px-4">
+              <div class="modal-header border-none justify-content-center">
+                <h3
+                  class="modal-title text-white font-weight-light"
+                  id="exampleModalLabel"
+                >
+                  Edit Blurb
+                </h3>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="blurbEditForm" novalidate>
+                  <div
+                    class="form-group row m-0 justify-content-between align-items-center"
+                  >
+                    <div class="col-3 p-0">
+                      <label class="my-1 text-white float-left" for="inputType"
+                        >Media Type</label
+                      >
+                      <select
+                        id="inputType"
+                        required
+                        class="form-control"
+                        formControlName="type"
+                      >
+                        <option
+                          selected="{{ typeSelectedTxt(b.media.type, 0) }}"
+                        >
+                          Movie
+                        </option>
+                        <option
+                          selected="{{ typeSelectedTxt(b.media.type, 1) }}"
+                        >
+                          Game
+                        </option>
+                        <option
+                          selected="{{ typeSelectedTxt(b.media.type, 2) }}"
+                        >
+                          Book
+                        </option>
+                        <option
+                          selected="{{ typeSelectedTxt(b.media.type, 3) }}"
+                        >
+                          TV
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-4 p-0">
+                      <label
+                        class="my-1 text-white float-left"
+                        for="inputMediaName"
+                        >Name</label
+                      >
+                      <input
+                        required
+                        [(ngModel)]="b.name"
+                        formControlName="name"
+                        id="inputMediaName"
+                        type="text"
+                        maxlength="30"
+                        class="form-control"
+                        value="{{ b.name }}"
+                      />
+                    </div>
+                    <div class="col-3 p-0">
+                      <label class="my-1 text-white float-left" for="inputScore"
+                        >Score</label
+                      >
+                      <select
+                        required
+                        id="inputScore"
+                        class="form-control"
+                        formControlName="score"
+                      >
+                        <option selected="{{ scoreSelectedTxt(b.score, 1) }}">
+                          1
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 2) }}">
+                          2
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 3) }}">
+                          3
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 4) }}">
+                          4
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 5) }}">
+                          5
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 6) }}">
+                          6
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 7) }}">
+                          7
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 8) }}">
+                          8
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 9) }}">
+                          9
+                        </option>
+                        <option selected="{{ scoreSelectedTxt(b.score, 10) }}">
+                          10
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group mt-2">
+                    <label
+                      class="text-white float-left m-0"
+                      for="exampleFormControlTextarea1"
+                      >Blurb</label
+                    >
+                    <textarea
+                      required
+                      [(ngModel)]="b.message"
+                      formControlName="message"
+                      class="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="2"
+                      maxlength="142"
+                      placeholder="{{ b.message }}"
+                      value="{{ b.message }}"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group mt-2">
+                    <label
+                      class="text-white float-left m-0"
+                      for="exampleFormControlTextarea1"
+                      >Note</label
+                    >
+                    <textarea
+                      formControlName="note"
+                      class="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="4"
+                      maxlength="240"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group row align-items-center mt-2">
+                    <div class="col">
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio1"
+                          value="Public"
+                          checked="{{ privacySelectedTxt(b.privacy, 0) }}"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio1"
+                          >Public</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio2"
+                          value="Private"
+                          checked="{{ privacySelectedTxt(b.privacy, 1) }}"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio2"
+                          >Private</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          formControlName="privacyBlurb"
+                          class="form-check-input"
+                          type="radio"
+                          name="privacyBlurb"
+                          id="inlineRadio3"
+                          value="FollowersOnly"
+                          checked="{{ privacySelectedTxt(b.privacy, 2) }}"
+                        />
+                        <label
+                          class="form-check-label text-white"
+                          for="inlineRadio3"
+                          >Followers Only</label
+                        >
+                      </div>
+                    </div>
                     <div class="col">
                       <button
                         type="button"
                         class="btn btn-primary btn-lg"
-                        (click)="onSubmit(b)"
+                        (click)="onSubmitEdit(b)"
+                        data-dismiss="modal"
+                        *ngIf="b.userId == user.userId"
                       >
                         Complete Edit
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-lg"
+                        (click)="onDelete(b)"
+                        data-dismiss="modal"
+                        *ngIf="b.userId == user.userId"
+                      >
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -417,5 +697,12 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col text-center">
+    <h3 class="text-white" *ngIf="canGetMoreBlurbs">Fetching more blurbs</h3>
+    <h3 class="text-white" *ngIf="!canGetMoreBlurbs">no more blurbs</h3>
   </div>
 </div>

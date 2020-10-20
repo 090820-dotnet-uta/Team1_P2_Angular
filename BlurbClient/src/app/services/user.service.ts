@@ -57,9 +57,15 @@ export class UserService {
   }
 
   followUser(user: User, toFollowId: number): Observable<User> {
-    return this.httpClient.put<User>(
+    return this.httpClient.post<User>(
       `${this.BASE_URL}follow/${toFollowId}`,
       user
+    );
+  }
+
+  unfollowUser(user: User, toUnfollowId: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      `${this.BASE_URL}remove/follow/${user.userId}/${toUnfollowId}`
     );
   }
 

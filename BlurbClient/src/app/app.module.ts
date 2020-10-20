@@ -34,11 +34,12 @@ import { Router, RouterModule, Routes } from '@angular/router';
 import { FollowersComponent } from './components/followers/followers.component';
 import { ViewuserComponent } from './components/viewuser/viewuser.component';
 import { MatIconModule } from '@angular/material/icon';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 const config = {
-  issuer: 'https://dev-5859084.okta.com/oauth2/default',
+  issuer: 'https://dev-5859084.okta.com',
   redirectUri: window.location.origin + '/login/callback',
-  clientId: '0oaatkg49eXgLauJt5d5',
+  clientId: '0oabyyofa84U20IFv5d5',
   pkce: true,
 };
 
@@ -57,6 +58,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
   },
   {
     path: 'protected',
@@ -91,6 +96,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     OktaAuthModule,
     MatIconModule,
+    InfiniteScrollModule,
   ],
   providers: [
     UserService,

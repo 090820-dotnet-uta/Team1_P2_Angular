@@ -1,18 +1,17 @@
-import { SortSettings } from './SortSettings';
+import { Settings } from './Settings';
 
 export class FullQueryObj {
-    settings: SortSettings;
-    sinceId: number;
-    span: number;
+  settings: Settings;
+  sinceId: number;
+  span: number;
 
-    constructor(settings: SortSettings, sinceId: number, span: number) {
-        this.settings = settings;
-        this.sinceId = sinceId;
-        this.span = span;
-    }
+  constructor(settings: Settings, sinceId: number, span: number) {
+    this.settings = settings;
+    this.sinceId = sinceId;
+    this.span = span;
+  }
 
-
-    updateSettings(settings: SortSettings) {
-        this.settings = settings;
-    }
+  updateSettings(settings: Settings) {
+    this.settings = settings;
+  }
 }
