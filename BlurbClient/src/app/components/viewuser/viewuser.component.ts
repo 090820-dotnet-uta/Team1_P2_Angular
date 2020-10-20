@@ -57,6 +57,10 @@ export class ViewuserComponent implements OnInit {
       ? JSON.parse(localStorage.loggedInUser)
       : {};
 
+    if (!localStorage.loggedInUser) {
+      this.router2.navigateByUrl('/login');
+    }
+
     this.router.params.subscribe((p) => {
       this.userRepo.getUser(p['id']).subscribe((u) => {
         this.user = u;

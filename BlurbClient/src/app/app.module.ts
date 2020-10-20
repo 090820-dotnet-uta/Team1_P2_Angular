@@ -19,11 +19,9 @@ import { NoteRepository } from './models/note.repository';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { EdituserComponent } from './components/edituser/edituser.component';
 import { HomeComponent } from './components/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LandingComponent } from './components/landing/landing.component';
-import { ProtectedComponent } from './components/protected/protected.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   OKTA_CONFIG,
@@ -64,14 +62,6 @@ const appRoutes: Routes = [
     path: 'home',
     component: HomeComponent,
   },
-  {
-    path: 'protected',
-    component: ProtectedComponent,
-    canActivate: [OktaAuthGuard],
-    data: {
-      onAuthRequired,
-    },
-  },
 ];
 
 @NgModule({
@@ -81,10 +71,8 @@ const appRoutes: Routes = [
     NavbarComponent,
     LoginComponent,
     SignupComponent,
-    EdituserComponent,
     HomeComponent,
     LandingComponent,
-    ProtectedComponent,
     FollowersComponent,
     ViewuserComponent,
   ],

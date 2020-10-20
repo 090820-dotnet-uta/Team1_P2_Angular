@@ -19,6 +19,10 @@ export class UserComponent implements OnInit {
       screenName: new FormControl(),
       password: new FormControl(),
     });
+
+    if (!localStorage.loggedInUser) {
+      this.router.navigateByUrl('/login');
+    }
   }
 
   ngOnInit(): void {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { UserRepository } from 'src/app/models/user.repository';
 
@@ -14,10 +15,15 @@ export class FollowersComponent implements OnInit {
   followers: User[] = [];
   following: User[] = [];
 
-  constructor(private userRepo: UserRepository) {
+  constructor(private userRepo: UserRepository, private router: Router) {
     this.user = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
       : {};
+
+    if (!localStorage.loggedInUser) {
+      this.router.navigateByUrl('/login');
+    }
+
     let x = JSON.parse(localStorage.loggedInUser);
 
     this.userRepo.getFollowers(this.user.userId).subscribe((f) => {
