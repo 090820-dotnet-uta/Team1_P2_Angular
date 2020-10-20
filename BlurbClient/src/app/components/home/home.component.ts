@@ -173,15 +173,15 @@ export class HomeComponent implements OnInit {
 
     this.blurbRepo.addBlurb(b).subscribe((newBlurb) => {
       console.log(newBlurb);
+      this.blurbRepo
+        .fullQuery(this.fullQueryObj, this.user.userId)
+        .subscribe((p) => {
+          this.blurbsList = p;
+          console.log(`blurbs array:`, p);
+        });
       // this.blurbsList.push(newBlurb);
     });
     // this.blurbsList = [];
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array:`, p);
-      });
   }
 
   onDelete(blurb: Blurb) {
@@ -317,7 +317,12 @@ export class HomeComponent implements OnInit {
     console.log(
       `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
     );
-    if (Number.isInteger(span) && span > 0 && sinceIdOk) {
+    if (
+      Number.isInteger(span) &&
+      span > 0 &&
+      sinceIdOk &&
+      this.canFetchMoreBlurbs
+    ) {
       this.canFetchMoreBlurbs = false;
       this.blurbRepo
         .fullQuery(this.fullQueryObj, this.user.userId)
