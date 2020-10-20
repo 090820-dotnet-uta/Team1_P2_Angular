@@ -9,15 +9,16 @@ import { FullQueryObj } from '../components/home/FullQueryObj';
 })
 export class BlurbService {
   private BASE_URL: string = 'https://localhost:5001/api/blurb/';
+  private API_URL: string = 'https://blurbsapi.azurewebsites.net/api/blurb/';
 
   constructor(private httpClient: HttpClient) {}
 
   getBlurb(id: number): Observable<Blurb> {
-    return this.httpClient.get<Blurb>(`${this.BASE_URL}find/${id}`);
+    return this.httpClient.get<Blurb>(`${this.API_URL}find/${id}`);
   }
 
   getBlurbs(): Observable<Blurb[]> {
-    return this.httpClient.get<Blurb[]>(this.BASE_URL + 'find/all');
+    return this.httpClient.get<Blurb[]>(this.API_URL + 'find/all');
   }
 
   getBlurbsByUser(
@@ -26,31 +27,27 @@ export class BlurbService {
     byId: number
   ): Observable<Blurb[]> {
     return this.httpClient.post<Blurb[]>(
-      `${this.BASE_URL}query/user/${id}/${byId}`,
+      `${this.API_URL}query/user/${id}/${byId}`,
       fullQueryObj
     );
   }
 
   addBlurb(blurb: Blurb): Observable<Blurb> {
-    return this.httpClient.post<Blurb>(this.BASE_URL + 'add', blurb);
+    return this.httpClient.post<Blurb>(this.API_URL + 'add', blurb);
   }
 
   editBlurb(blurb: Blurb): Observable<Blurb> {
-    return this.httpClient.put<Blurb>(this.BASE_URL + 'edit', blurb);
+    return this.httpClient.put<Blurb>(this.API_URL + 'edit', blurb);
   }
 
   fullQuery(fullQueryObj: FullQueryObj, id: number): Observable<Blurb[]> {
     return this.httpClient.post<Blurb[]>(
-      `${this.BASE_URL}fullquery/${id}`,
+      `${this.API_URL}fullquery/${id}`,
       fullQueryObj
     );
   }
 
   deleteBlurb(blurbId: number): Observable<boolean> {
-    return this.httpClient.delete<boolean>(this.BASE_URL + `remove/${blurbId}`);
-  }
-
-  fullQuery(fullQueryObj: FullQueryObj, id: number): Observable<Blurb[]> {
-    return this.httpClient.post<Blurb[]>(`${this.BASE_URL}fullquery/${id}`, fullQueryObj);
+    return this.httpClient.delete<boolean>(this.API_URL + `remove/${blurbId}`);
   }
 }
