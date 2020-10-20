@@ -30,6 +30,8 @@ export class HomeComponent implements OnInit {
   user: User;
   edit = true;
   isAddingNote: boolean = false;
+  hasGottenMovie: boolean = false;
+  apiMovie;
   filterSettingsVisible = false;
   blurbEditForm: FormGroup;
   blurbAddForm: FormGroup;
@@ -57,34 +59,26 @@ export class HomeComponent implements OnInit {
       : {};
     this.blurbEditForm = new FormGroup({
       type: new FormControl(),
-      name: new FormControl('', [
-        Validators.required
-      ]),
+      name: new FormControl('', [Validators.required]),
       score: new FormControl('', [
         Validators.required,
         Validators.pattern('^[0-9]*$'),
         Validators.minLength(2),
       ]),
-      message: new FormControl('', [
-        Validators.required
-      ]),
+      message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
 
     this.blurbAddForm = new FormGroup({
       type: new FormControl(),
-      name: new FormControl('', [
-        Validators.required
-      ]),
+      name: new FormControl('', [Validators.required]),
       score: new FormControl('', [
         Validators.required,
         Validators.pattern('^[0-9]*$'),
         Validators.minLength(2),
       ]),
-      message: new FormControl('', [
-        Validators.required
-      ]),
+      message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
@@ -107,6 +101,26 @@ export class HomeComponent implements OnInit {
     return this.blurbRepo.getBlurbs();
   }
 
+  checkMovie() {
+    // fetch(
+    //   `https://www.omdbapi.com/?t=${
+    //     this.blurbAddForm.get('name').value
+    //   }&apikey=4cac9bce`
+    // )
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     console.log(res);
+    //     this.hasGottenMovie = true;
+    //     this.apiMovie = res;
+    //   });
+
+    this.hasGottenMovie = true;
+    this.apiMovie = {
+      Title: 'THis will be title',
+      Year: 'this will be year',
+    };
+  }
+
   toggleEdit() {
     this.edit = !this.edit;
   }
@@ -118,34 +132,36 @@ export class HomeComponent implements OnInit {
       name: this.blurbEditForm.get('name').value,
       type: this.mediaType[this.blurbEditForm.get('type').value],
     };
-    console.log("Non edited blurb",blurb);
+    console.log('Non edited blurb', blurb);
     let b: Blurb = blurb;
-    console.log("b is real",b)
+    console.log('b is real', b);
     b.media = m;
 
-    if(this.blurbEditForm.get('message').value){
-      console.log("message working")
+    if (this.blurbEditForm.get('message').value) {
+      console.log('message working');
       b.message = this.blurbEditForm.get('message').value;
-    }else{
-      console.log("message else working")
-      b.message = blurb.message
+    } else {
+      console.log('message else working');
+      b.message = blurb.message;
     }
-    
-    if(this.blurbEditForm.get('score').value >= 0){
-      console.log("score working")
+
+    if (this.blurbEditForm.get('score').value >= 0) {
+      console.log('score working');
       b.score = +this.blurbEditForm.get('score').value;
-    }else{
-      console.log("score esle working")
+    } else {
+      console.log('score esle working');
       b.score = blurb.score;
     }
 
-    if(this.blurbEditForm.get('privacyBlurb').value){
-      console.log("privacy working")
-      b.privacy = this.blurbPrivacy[this.blurbEditForm.get('privacyBlurb').value];
-    }else{
-      console.log("privacy else working")
-      b.privacy = blurb.privacy
-    }  
+    if (this.blurbEditForm.get('privacyBlurb').value) {
+      console.log('privacy working');
+      b.privacy = this.blurbPrivacy[
+        this.blurbEditForm.get('privacyBlurb').value
+      ];
+    } else {
+      console.log('privacy else working');
+      b.privacy = blurb.privacy;
+    }
 
     b.userId = loggedInUser.userId;
 
@@ -153,7 +169,7 @@ export class HomeComponent implements OnInit {
 
     b.notes = [];
 
-    console.log("Edited Blurb ",b);
+    console.log('Edited Blurb ', b);
 
     this.blurbRepo.editBlurb(b);
   }
@@ -178,15 +194,16 @@ export class HomeComponent implements OnInit {
 
     this.blurbRepo.addBlurb(b).subscribe((newBlurb) => {
       console.log(newBlurb);
+      this.blurbRepo
+        .fullQuery(this.fullQueryObj, this.user.userId)
+        .subscribe((p) => {
+          this.blurbsList = p;
+          console.log(`blurbs array:`, p);
+          // this.ngOnInit();
+        });
       // this.blurbsList.push(newBlurb);
     });
     // this.blurbsList = [];
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array:`, p);
-      });
   }
 
   onDelete(blurb: Blurb) {
