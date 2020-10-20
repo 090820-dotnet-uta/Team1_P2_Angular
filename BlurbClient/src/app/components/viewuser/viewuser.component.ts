@@ -24,6 +24,7 @@ export class ViewuserComponent implements OnInit {
   isFollowing = false;
   lazyLoad = true;
   filterSettingsVisible = false;
+  canFetchMoreBlurbs: boolean = true;
   getTypeIcon = GetTypeIcon;
 
   sortSettings: Settings = new Settings(
@@ -140,28 +141,30 @@ export class ViewuserComponent implements OnInit {
   updateSortSetting(setting: number) {
     if (Number.isInteger(setting) && setting >= 0 && setting <= 3) {
       this.sortSettings.sortSetting = setting;
+      this.fullQueryObj.updateSettings(this.sortSettings);
+      this.fullQueryObj.sinceId = -1;
+      this.blurbRepo
+        .getBlurbsByUser(
+          this.fullQueryObj,
+          this.currentUser.userId,
+          this.user.userId
+        )
+        .subscribe((p) => {
+          this.blurbsByUserArr = p;
+          console.log(`blurbs array: ${p}`);
+        });
     }
-    this.fullQueryObj.updateSettings(this.sortSettings);
-    this.blurbRepo
-      .getBlurbsByUser(
-        this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
-      )
-      .subscribe((p) => {
-        this.blurbsByUserArr = p;
-        console.log(`blurbs array: ${p}`);
-      });
   }
 
   toggleMovieFilter() {
     this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.fullQueryObj.sinceId = -1;
     this.blurbRepo
       .getBlurbsByUser(
         this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
+        this.currentUser.userId,
+        this.user.userId
       )
       .subscribe((p) => {
         this.blurbsByUserArr = p;
@@ -172,11 +175,12 @@ export class ViewuserComponent implements OnInit {
   toggleGamesFilter() {
     this.sortSettings.includeGames = !this.sortSettings.includeGames;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.fullQueryObj.sinceId = -1;
     this.blurbRepo
       .getBlurbsByUser(
         this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
+        this.currentUser.userId,
+        this.user.userId
       )
       .subscribe((p) => {
         this.blurbsByUserArr = p;
@@ -187,11 +191,12 @@ export class ViewuserComponent implements OnInit {
   toggleTVFilter() {
     this.sortSettings.includeTV = !this.sortSettings.includeTV;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.fullQueryObj.sinceId = -1;
     this.blurbRepo
       .getBlurbsByUser(
         this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
+        this.currentUser.userId,
+        this.user.userId
       )
       .subscribe((p) => {
         this.blurbsByUserArr = p;
@@ -202,15 +207,50 @@ export class ViewuserComponent implements OnInit {
   toggleBooksFilter() {
     this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.fullQueryObj.sinceId = -1;
     this.blurbRepo
       .getBlurbsByUser(
         this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
+        this.currentUser.userId,
+        this.user.userId
       )
       .subscribe((p) => {
         this.blurbsByUserArr = p;
         console.log(`blurbs array: ${p}`);
       });
+  }
+
+  //Sets the sinceId in the full query object to a given since Id
+  //Provided that the sinceId exists in the current list of blurbs
+  setSinceId(sinceId: number): boolean {
+    if (Number.isInteger(sinceId)) {
+      this.fullQueryObj.sinceId = sinceId;
+      return true;
+    }
+    return false;
+  }
+
+  //Adds the next 10 blurbs to the currently loaded list
+  loadBlurbs(span: number) {
+    var sinceIdOk = this.setSinceId(
+      this.blurbsByUserArr[this.blurbsByUserArr.length - 1].blurbId
+    );
+    console.log(
+      `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
+    );
+    if (Number.isInteger(span) && span > 0 && sinceIdOk) {
+      this.canFetchMoreBlurbs = false;
+      this.blurbRepo
+        .getBlurbsByUser(
+          this.fullQueryObj,
+          this.currentUser.userId,
+          this.user.userId
+        )
+        .subscribe((p) => {
+          console.log(p);
+          this.blurbsByUserArr = this.blurbsByUserArr.concat(p);
+          this.canFetchMoreBlurbs = true;
+        });
+    }
   }
 }
