@@ -2,52 +2,59 @@
   <form [formGroup]="user" novalidate>
     <div class="row justify-content-center mt-3">
       <div class="col-6 justify-content-center">
-        <div>
-          <br />
+        <div class="d-flex justify-content-center">
+          <img
+            style="height: 70px; width: 70px"
+            src="../../../assets/blurbicon.png"
+          />
+          <h1 class="text-white display-4">blurbs</h1>
+        </div>
+        <br />
+        <div class="mb-3">
           <input
             class="form-control text-center"
             formControlName="name"
             type="text"
-            placeholder="name"
+            placeholder="Name"
             name="name"
             id="name"
             required
           />
         </div>
-        <div>
+        <div class="mb-3">
           <input
             class="form-control text-center"
             formControlName="screenName"
             type="text"
-            placeholder="screenname"
+            placeholder="Screen Name"
             name="screenName"
             id="screenName"
             required
           />
         </div>
-        <div>
+        <div class="mb-3">
           <input
             class="form-control text-center"
             formControlName="username"
             type="text"
-            placeholder="username"
+            placeholder="Username"
             name="username"
             id="username"
             required
           />
         </div>
-        <div>
+        <div class="mb-3">
           <input
             class="form-control text-center"
             formControlName="password"
             type="password"
-            placeholder="password"
+            placeholder="Password"
             name="password"
             id="password"
             required
           />
         </div>
-        <div>
+        <div class="mb-3">
           <button
             class="btn btn-info btn-block"
             type="submit"
@@ -55,6 +62,20 @@
           >
             Sign Up
           </button>
+        </div>
+        <div class="row-flex align-items-top mt-2">
+          <div class="col-flex pr-0">
+            <p class="text-white m-0">
+              Already have an account?
+              <a
+                class="text-info m-0 pointer"
+                type="submit"
+                routerLink="/login"
+              >
+                Login
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

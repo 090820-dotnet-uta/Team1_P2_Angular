@@ -36,5 +36,4 @@ export class NavbarComponent implements OnInit {
       ? JSON.parse(localStorage.loggedInUser)
       : {};
   }
-  
 }
