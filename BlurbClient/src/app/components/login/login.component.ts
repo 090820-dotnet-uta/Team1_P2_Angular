@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
-import { Router, NavigationStart } from '@angular/router';
-import { OktaAuthService } from '@okta/okta-angular';
-import * as OktaSignIn from '@okta/okta-signin-widget';
+import { Router } from '@angular/router';
+
 import { UserRepository } from 'src/app/models/user.repository';
 
 @Component({
@@ -20,18 +19,26 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  constructor(private router: Router, private userRepo: UserRepository) {
+  constructor(private router: Router, private userRepo: UserRepository) {}
+
+  ngOnInit(): void {
     this.loginForm = new FormGroup({
-      username: new FormControl(),
-      password: new FormControl(),
+      username: new FormControl(this.username, [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(30),
+      ]),
+      password: new FormControl(this.password, [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(30),
+      ]),
     });
 
     if (localStorage.loggedInUser) {
       this.router.navigateByUrl('/home');
     }
   }
-
-  ngOnInit(): void {}
 
   afterSubmit(u: any) {
     if (localStorage.loggedInUser) {
@@ -56,19 +63,20 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     // Place method to get a user with the same
     // username and password
-    this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
-      if ('userId' in u) {
-        this.userRepo.getFollowers(u.userId).subscribe((f) => {
-          console.log(f);
-          localStorage.followers = JSON.stringify(f);
-        });
-        this.userRepo.getFollowing(u.userId).subscribe((f) => {
-          console.log(f);
-          localStorage.following = JSON.stringify(f);
-        });
-        localStorage.loggedInUser = JSON.stringify(u);
-      }
-      this.afterSubmit(u);
-    });
+    console.log(this.loginForm.invalid);
+    // this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
+    //   if ('userId' in u) {
+    //     this.userRepo.getFollowers(u.userId).subscribe((f) => {
+    //       console.log(f);
+    //       localStorage.followers = JSON.stringify(f);
+    //     });
+    //     this.userRepo.getFollowing(u.userId).subscribe((f) => {
+    //       console.log(f);
+    //       localStorage.following = JSON.stringify(f);
+    //     });
+    //     localStorage.loggedInUser = JSON.stringify(u);
+    //   }
+    //   this.afterSubmit(u);
+    // });
   }
 }
