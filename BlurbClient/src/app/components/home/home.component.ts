@@ -18,7 +18,6 @@ import {
   TypeSelectedTxt,
 } from '../../StaticFunctions';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
