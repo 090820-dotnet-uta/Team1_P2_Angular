@@ -5,7 +5,7 @@ import { User } from 'src/app/models/user.model';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserRepository } from 'src/app/models/user.repository';
-import { CalcBkgColor, GetTypeIcon } from '../../StaticFunctions';
+import { CalcBkgColor, GetTypeIcon, Logout } from '../../StaticFunctions';
 import { Observable } from 'rxjs';
 import { Settings } from '../home/Settings';
 import { FullQueryObj } from '../home/FullQueryObj';
@@ -26,6 +26,7 @@ export class ViewuserComponent implements OnInit {
   filterSettingsVisible = false;
   canFetchMoreBlurbs: boolean = true;
   getTypeIcon = GetTypeIcon;
+  logout = Logout;
 
   sortSettings: Settings = new Settings(
     0, //0 is sort by most recent
@@ -46,7 +47,8 @@ export class ViewuserComponent implements OnInit {
   constructor(
     private blurbRepo: BlurbRepository,
     private userRepo: UserRepository,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private router2: Router
   ) {
     this.currentUser = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
@@ -252,5 +254,9 @@ export class ViewuserComponent implements OnInit {
           this.canFetchMoreBlurbs = true;
         });
     }
+  }
+
+  handleClick() {
+    this.logout(this.router2);
   }
 }
