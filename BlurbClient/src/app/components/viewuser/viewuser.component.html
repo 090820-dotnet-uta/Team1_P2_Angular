@@ -1,12 +1,35 @@
 <div class="row bg-dark-blue border-dark-grey py-2">
-  <div class="col-9 px-3">
+  <div class="col-7 px-3">
     <h3 class="m-0 text-white">{{ user.screenName }}'s Blurbs</h3>
     <p
       style="font-size: 15px; font-weight: 500"
       class="text-secondary d-inline my-0"
     >
-      15 Blurbs
+      {{ blurbsByUserArr.length }} Blurbs
     </p>
+  </div>
+  <div class="col justify-content-end">
+    <div class="row d-flex justify-content-end">
+      <div
+        style="min-width: 89px; max-height: 40"
+        class="btn d-inline btn-outline-info mx-2"
+        *ngIf="currentUser.userId === user.userId && !lazyLoad"
+        routerLink="/user"
+      >
+        Edit
+      </div>
+      <div
+        style="max-height: 50px"
+        class="btn btn-outline-danger d-flex mx-1"
+        *ngIf="currentUser.userId === user.userId"
+        (click)="handleClick()"
+      >
+        <span class="mx-1">Logout</span>
+        <span class="material-icons align-items-center my-auto mx-1">
+          exit_to_app
+        </span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -18,43 +41,35 @@
           class="circle-lg d-flex focus-none text-center text-white align-content-center justify-content-center"
         >
           <p class="my-auto display-4" style="font-weight: 400">
-            {{ user.username[0].toUpperCase() }}
+            {{ avatarLetter }}
           </p>
         </div>
       </div>
       <div class="col text-right my-auto">
-        <div
-          class="btn btn-info"
-          style="color: #17a2b8; min-width: 89px"
-          *ngIf="lazyLoad"
-        >
-          invisible
-        </div>
-        <div
-          (click)="handleFollow()"
-          style="min-width: 89px"
-          class="btn btn-outline-info"
-          *ngIf="
-            currentUser.userId !== user.userId && !isFollowing && !lazyLoad
-          "
-        >
-          Follow
-        </div>
-        <div
-          (click)="handleUnfollow()"
-          style="min-width: 89px"
-          class="btn btn-info"
-          *ngIf="currentUser.userId !== user.userId && isFollowing && !lazyLoad"
-        >
-          Following
-        </div>
-        <div
-          style="min-width: 89px"
-          class="btn btn-info"
-          *ngIf="currentUser.userId === user.userId && !lazyLoad"
-          routerLink="/user"
-        >
-          Edit
+        <div class="row d-flex justify-content-end align-items-top">
+          <div
+            (click)="handleFollow()"
+            style="min-width: 89px"
+            class="btn btn-outline-info align-top"
+            *ngIf="
+              currentUser.userId !== user.userId && !isFollowing && !lazyLoad
+            "
+          >
+            Follow
+          </div>
+          <div
+            style="max-height: 50px"
+            class="btn btn-info d-flex mx-1"
+            *ngIf="
+              currentUser.userId !== user.userId && isFollowing && !lazyLoad
+            "
+            (click)="handleUnfollow()"
+          >
+            <span class="mx-1">Following</span>
+            <span class="material-icons align-items-center my-auto mx-1">
+              done
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -73,7 +88,7 @@
           style="font-size: 15px; font-weight: 500"
           class="text-white d-inline my-0"
         >
-          8
+          {{ following.length }}
         </p>
         <p
           style="font-size: 15px; font-weight: 400"
@@ -87,7 +102,7 @@
           style="font-size: 15px; font-weight: 500"
           class="text-white d-inline my-0"
         >
-          12
+          {{ followers.length }}
         </p>
         <p
           style="font-size: 15px; font-weight: 400"
@@ -101,10 +116,14 @@
 </div>
 
 <div>
-  <div class="row text-center mb3">
+  <div
+    class="row text-center mb3"
+    style="margin-top: 12px; margin-bottom: 12px"
+  >
     <h3 class="m-0 text-white">Filter/Sort:</h3>
     <button
       class="btn btn-dark dropdown-toggle"
+      style="margin-left: 12px"
       (click)="toggleFilterSettingsVisible()"
     ></button>
   </div>
@@ -168,8 +187,13 @@
 </div>
 
 <div
-  class="row flex-column border-dark-grey py-2 mt-2"
+  class="row flex-column border-dark-grey py-2 mt-2 hover-border-light-blue"
   *ngFor="let b of blurbsByUserArr; index as i"
+  infiniteScroll
+  [infiniteScrollDisabled]="!canFetchMoreBlurbs"
+  [infiniteScrollDistance]="0"
+  [infiniteScrollThrottle]="500"
+  (scrolled)="loadBlurbs(10)"
 >
   <div
     class="col p-0 pointer"
@@ -184,7 +208,7 @@
             class="circle d-flex focus-none text-center text-white align-content-center justify-content-center"
           >
             <p class="my-auto" style="font-size: xx-large; font-weight: 400">
-              {{ b.user.username[0].toUpperCase() }}
+              {{ avatarLetter }}
             </p>
           </div>
           <h3 class="mt-2 mb-0 d-inline">
@@ -253,7 +277,7 @@
   </div>
   <div
     class="modal fade"
-    attr.data-num="{{ i }}"
+    attr.data-num="view{{ i }}"
     id="noteModal{{ i }}"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
@@ -269,16 +293,26 @@
             {{ b.user.screenName }}
           </h3>
         </div>
-        <div class="modal-body">
-          <h2 class="text-white">{{ b.media.name }}</h2>
+        <div class="modal-body col justify-content-center text-center">
+          <br />
+          <div
+            class="text-center row d-flex justify-content-center align-items-center"
+          >
+            <h2 class="text-white text-center">{{ b.media.name }}</h2>
+            <span
+              class="badge display-4"
+              [ngStyle]="{
+                'background-color': calcBkgColor(b.score),
+                'font-size': 'xx-Large',
+                'margin-left': '20px'
+              }"
+            >
+              {{ b.score }}
+            </span>
+          </div>
+          <br />
           <div class="row bg-dark-blue-light mt-2 mx-auto">
             <div class="col text-center py-2">
-              <p
-                style="font-size: large; font-weight: 400"
-                class="m-0 lead text-white"
-              >
-                This will be the note body
-              </p>
               <p
                 style="font-size: large; font-weight: 400"
                 class="m-0 lead text-white"

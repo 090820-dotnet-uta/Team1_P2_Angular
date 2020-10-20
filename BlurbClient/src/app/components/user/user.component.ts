@@ -15,7 +15,7 @@ export class UserComponent implements OnInit {
 
   constructor(private repo: UserRepository, public router: Router) {
     this.userEditForm = new FormGroup({
-      name: new FormControl(),
+      username: new FormControl(),
       screenName: new FormControl(),
       password: new FormControl(),
     });
@@ -36,8 +36,8 @@ export class UserComponent implements OnInit {
   //if they have new values then change the editeduser's values to those values
   onSubmit() {
     let editedUser: User = this.user;
-    if (this.userEditForm.get('name').value) {
-      editedUser.name = this.userEditForm.get('name').value;
+    if (this.userEditForm.get('username').value) {
+      editedUser.username = this.userEditForm.get('username').value;
     }
 
     if (this.userEditForm.get('screenName').value) {
@@ -48,9 +48,20 @@ export class UserComponent implements OnInit {
       editedUser.password = this.userEditForm.get('password').value;
     }
 
+    delete editedUser.followers;
+    delete editedUser.following;
     console.log(editedUser);
 
     this.repo.editUser(editedUser);
+    this.updateLocalStorage(editedUser);
+  }
+
+  updateLocalStorage(editedUser: User) {
+    let curUser: User = JSON.parse(localStorage.loggedInUser);
+    curUser.username = editedUser.username;
+    curUser.screenName = editedUser.screenName;
+    curUser.password = editedUser.password;
+    localStorage.loggedInUser = JSON.stringify(curUser);
   }
 
   //Removes the loggedin user from cache and redirects them to the login page

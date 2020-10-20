@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+
 export function CalcBkgColor(scoreOutOfTen: number) {
   var red = 0;
   var green = 0;
@@ -198,4 +200,10 @@ export function PrivacySelectedTxt(selectedPrivacy: number, privacy: number) {
     return 'checked';
   }
   return '';
+}
+
+//Removes the loggedin user from cache and redirects them to the login page
+export function Logout(router: Router) {
+  localStorage.clear();
+  router.navigateByUrl('/login');
 }

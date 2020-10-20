@@ -10,13 +10,13 @@
             <br />
             <p class="m-0 text-white">Username</p>
             <input
-              formControlName="name"
-              [(ngModel)]="user.name"
+              formControlName="username"
+              [(ngModel)]="user.username"
               class="form-control text-center"
               type="text"
               name="Name"
               id="Name"
-              placeholder="{{ user.name }}"
+              placeholder="{{ user.username }}"
             />
             <br />
             <br />
@@ -44,7 +44,12 @@
             />
             <div>
               <br />
-              <button type="submit" class="btn btn-info" (click)="onSubmit()">
+              <button
+                type="submit"
+                [routerLink]="['/viewuser', user.userId]"
+                class="btn btn-info"
+                (click)="onSubmit()"
+              >
                 Confirm Edit
               </button>
             </div>

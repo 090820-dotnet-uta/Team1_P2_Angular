@@ -28,9 +28,15 @@ import {
 // will contain infinite scrolling
 export class HomeComponent implements OnInit {
   user: User;
+  currentBlurb: Blurb;
   edit = true;
   isAddingNote: boolean = false;
-  filterSettingsVisible = false;
+  hasGottenMovie: boolean = false;
+  hasFoundMovieName: boolean = true;
+  canGetMoreBlurbs: boolean = true;
+  apiMovie;
+  filterSettingsVisible: boolean = false;
+  canFetchMoreBlurbs: boolean = true;
   blurbEditForm: FormGroup;
   blurbAddForm: FormGroup;
   blurbsList: Blurb[];
@@ -57,34 +63,26 @@ export class HomeComponent implements OnInit {
       : {};
     this.blurbEditForm = new FormGroup({
       type: new FormControl(),
-      name: new FormControl('', [
-        Validators.required
-      ]),
+      name: new FormControl('', [Validators.required]),
       score: new FormControl('', [
         Validators.required,
         Validators.pattern('^[0-9]*$'),
         Validators.minLength(2),
       ]),
-      message: new FormControl('', [
-        Validators.required
-      ]),
+      message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
 
     this.blurbAddForm = new FormGroup({
       type: new FormControl(),
-      name: new FormControl('', [
-        Validators.required
-      ]),
+      name: new FormControl('', [Validators.required]),
       score: new FormControl('', [
         Validators.required,
         Validators.pattern('^[0-9]*$'),
         Validators.minLength(2),
       ]),
-      message: new FormControl('', [
-        Validators.required
-      ]),
+      message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
@@ -107,45 +105,92 @@ export class HomeComponent implements OnInit {
     return this.blurbRepo.getBlurbs();
   }
 
-  toggleEdit() {
-    this.edit = !this.edit;
+  checkEditModal(e: any) {
+    console.log('it happend', e.target.classList);
+    if (
+      [...e.target.classList].includes('modal') ||
+      [...e.target.classList].includes('complete-edit')
+    ) {
+      console.log('closing the modal!');
+      setTimeout(() => {
+        this.edit = true;
+      }, 300);
+    }
   }
 
-  onSubmitEdit(blurb: Blurb) {
+  currentBlurbModal(blurb: Blurb) {
+    this.currentBlurb = blurb;
+  }
+
+  checkMovie() {
+    if (this.blurbAddForm.get('type').value == 'Movie') {
+      fetch(
+        `https://www.omdbapi.com/?t=${
+          this.blurbAddForm.get('name').value
+        }&apikey=4cac9bce`
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          if (res.Response == 'True') {
+            this.hasFoundMovieName = true;
+            this.hasGottenMovie = true;
+            this.apiMovie = res;
+          } else if (res.Response == 'False') {
+            this.hasGottenMovie = true;
+            this.hasFoundMovieName = false;
+          }
+        });
+    }
+  }
+
+  toggleEdit() {
+    this.edit = !this.edit;
+    console.log(this.currentBlurb);
+    let b: Blurb = this.currentBlurb;
+    this.blurbEditForm.get('name').setValue(b.name);
+    this.blurbEditForm.get('message').setValue(b.message);
+    this.blurbEditForm.get('score').setValue(+b.score);
+    this.blurbEditForm.get('privacyBlurb').setValue(b.privacy);
+    console.log(this.blurbEditForm.value);
+  }
+
+  onSubmitEdit() {
     this.edit = false;
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
       name: this.blurbEditForm.get('name').value,
       type: this.mediaType[this.blurbEditForm.get('type').value],
     };
-    console.log("Non edited blurb",blurb);
-    let b: Blurb = blurb;
-    console.log("b is real",b)
+    console.log('Non edited blurb', this.currentBlurb);
+    let b: Blurb = this.currentBlurb;
     b.media = m;
 
-    if(this.blurbEditForm.get('message').value){
-      console.log("message working")
+    if (this.blurbEditForm.get('message').value) {
+      console.log('message working');
       b.message = this.blurbEditForm.get('message').value;
-    }else{
-      console.log("message else working")
-      b.message = blurb.message
-    }
-    
-    if(this.blurbEditForm.get('score').value >= 0){
-      console.log("score working")
-      b.score = +this.blurbEditForm.get('score').value;
-    }else{
-      console.log("score esle working")
-      b.score = blurb.score;
+    } else {
+      console.log('message else working');
+      b.message = this.currentBlurb.message;
     }
 
-    if(this.blurbEditForm.get('privacyBlurb').value){
-      console.log("privacy working")
-      b.privacy = this.blurbPrivacy[this.blurbEditForm.get('privacyBlurb').value];
-    }else{
-      console.log("privacy else working")
-      b.privacy = blurb.privacy
-    }  
+    if (this.blurbEditForm.get('score').value >= 0) {
+      console.log('score working');
+      b.score = +this.blurbEditForm.get('score').value;
+    } else {
+      console.log('score esle working');
+      b.score = this.currentBlurb.score;
+    }
+
+    if (this.blurbEditForm.get('privacyBlurb').value) {
+      console.log('privacy working');
+      b.privacy = this.blurbPrivacy[
+        this.blurbEditForm.get('privacyBlurb').value
+      ];
+    } else {
+      console.log('privacy else working');
+      b.privacy = this.currentBlurb.privacy;
+    }
 
     b.userId = loggedInUser.userId;
 
@@ -153,9 +198,8 @@ export class HomeComponent implements OnInit {
 
     b.notes = [];
 
-    console.log("Edited Blurb ",b);
-
-    this.blurbRepo.editBlurb(b);
+    console.log('Edited Blurb ', b);
+    this.blurbRepo.editBlurb(this.currentBlurb);
   }
 
   onSubmitAdd() {
@@ -178,15 +222,15 @@ export class HomeComponent implements OnInit {
 
     this.blurbRepo.addBlurb(b).subscribe((newBlurb) => {
       console.log(newBlurb);
+      this.blurbRepo
+        .fullQuery(this.fullQueryObj, this.user.userId)
+        .subscribe((p) => {
+          this.blurbsList = p;
+          console.log(`blurbs array:`, p);
+        });
       // this.blurbsList.push(newBlurb);
     });
     // this.blurbsList = [];
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array:`, p);
-      });
   }
 
   onDelete(blurb: Blurb) {
@@ -210,99 +254,113 @@ export class HomeComponent implements OnInit {
   updateSortSetting(setting: number) {
     if (Number.isInteger(setting) && setting >= 0 && setting <= 3) {
       this.sortSettings.sortSetting = setting;
+      this.setSinceId(-1);
+      this.fullQueryObj.updateSettings(this.sortSettings);
+      this.blurbRepo
+        .fullQuery(this.fullQueryObj, this.user.userId)
+        .subscribe((p) => {
+          this.blurbsList = p;
+          console.log(`blurbs array: ${p}`);
+        });
+      this.canGetMoreBlurbs = true;
     }
-    this.fullQueryObj.updateSettings(this.sortSettings);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
   }
 
   toggleMovieFilter() {
     this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
+
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleGamesFilter() {
     this.sortSettings.includeGames = !this.sortSettings.includeGames;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleTVFilter() {
     this.sortSettings.includeTV = !this.sortSettings.includeTV;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleBooksFilter() {
     this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleFollowersFilter() {
     this.sortSettings.includeFollowing = !this.sortSettings.includeFollowing;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleSelfFilter() {
     this.sortSettings.includeSelf = !this.sortSettings.includeSelf;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleUnfollowedFilter() {
     this.sortSettings.includeUnfollowed = !this.sortSettings.includeUnfollowed;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
         this.blurbsList = p;
       });
+    this.canGetMoreBlurbs = true;
   }
 
   //Sets the sinceId in the full query object to a given since Id
   //Provided that the sinceId exists in the current list of blurbs
   setSinceId(sinceId: number): boolean {
-    if (
-      Number.isInteger(sinceId) &&
-      this.blurbsList.map((a) => a.userId).includes(sinceId)
-    ) {
+    if (Number.isInteger(sinceId)) {
       this.fullQueryObj.sinceId = sinceId;
       return true;
     }
@@ -311,15 +369,36 @@ export class HomeComponent implements OnInit {
 
   //Adds the next 10 blurbs to the currently loaded list
   loadBlurbs(span: number) {
-    var sinceIdOk = this.setSinceId(
-      this.blurbsList[this.blurbsList.length - 1].userId
-    );
-    if (Number.isInteger(span) && span > 0 && sinceIdOk) {
-      this.blurbRepo
-        .fullQuery(this.fullQueryObj, this.user.userId)
-        .subscribe((p) => {
-          this.blurbsList = this.blurbsList.concat(p);
-        });
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (!this.canGetMoreBlurbs) return;
+      setTimeout(() => {
+        console.log('at the bottom', this.canGetMoreBlurbs);
+        // you're at the bottom of the page
+        var sinceIdOk = this.setSinceId(
+          this.blurbsList[this.blurbsList.length - 1].blurbId
+        );
+        console.log(
+          `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
+        );
+        if (
+          Number.isInteger(span) &&
+          span > 0 &&
+          sinceIdOk &&
+          this.canFetchMoreBlurbs
+        ) {
+          this.canFetchMoreBlurbs = false;
+          this.blurbRepo
+            .fullQuery(this.fullQueryObj, this.user.userId)
+            .subscribe((p) => {
+              console.log(p);
+              if (p.length === 0) {
+                this.canGetMoreBlurbs = false;
+              }
+              this.blurbsList = this.blurbsList.concat(p);
+              this.canFetchMoreBlurbs = true;
+            });
+        }
+      }, 400);
     }
   }
 }

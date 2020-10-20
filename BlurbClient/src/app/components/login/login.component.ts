@@ -15,15 +15,12 @@ import { UserRepository } from 'src/app/models/user.repository';
 // Login should prompt them to login and redirect them to the seeblurbs page
 export class LoginComponent implements OnInit {
   user: User;
-  
+
   loginForm: FormGroup;
   username: string;
   password: string;
 
-  constructor(
-    private router: Router,
-    private userRepo: UserRepository
-  ) {
+  constructor(private router: Router, private userRepo: UserRepository) {
     this.loginForm = new FormGroup({
       username: new FormControl(),
       password: new FormControl(),

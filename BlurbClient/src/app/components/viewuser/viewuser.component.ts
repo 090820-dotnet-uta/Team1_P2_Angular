@@ -5,7 +5,7 @@ import { User } from 'src/app/models/user.model';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserRepository } from 'src/app/models/user.repository';
-import { CalcBkgColor, GetTypeIcon } from '../../StaticFunctions';
+import { CalcBkgColor, GetTypeIcon, Logout } from '../../StaticFunctions';
 import { Observable } from 'rxjs';
 import { Settings } from '../home/Settings';
 import { FullQueryObj } from '../home/FullQueryObj';
@@ -24,7 +24,12 @@ export class ViewuserComponent implements OnInit {
   isFollowing = false;
   lazyLoad = true;
   filterSettingsVisible = false;
+  canFetchMoreBlurbs: boolean = true;
   getTypeIcon = GetTypeIcon;
+  logout = Logout;
+  followers: User[] = [];
+  following: User[] = [];
+  avatarLetter: string = '';
 
   sortSettings: Settings = new Settings(
     0, //0 is sort by most recent
@@ -45,7 +50,8 @@ export class ViewuserComponent implements OnInit {
   constructor(
     private blurbRepo: BlurbRepository,
     private userRepo: UserRepository,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private router2: Router
   ) {
     this.currentUser = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
@@ -54,6 +60,14 @@ export class ViewuserComponent implements OnInit {
     this.router.params.subscribe((p) => {
       this.userRepo.getUser(p['id']).subscribe((u) => {
         this.user = u;
+        this.avatarLetter = u.username[0].toUpperCase();
+        this.userRepo.getFollowers(u.userId).subscribe((f) => {
+          this.followers = f;
+          console.log(`followers list: `, f);
+        });
+        this.userRepo
+          .getFollowing(u.userId)
+          .subscribe((f) => (this.following = f));
         console.log('running');
         this.blurbRepo
           .getBlurbsByUser(this.fullQueryObj, p['id'], this.user.userId)
@@ -64,6 +78,7 @@ export class ViewuserComponent implements OnInit {
     this.checkFollow();
   }
 
+  //Initialize the followers and following lists
   ngOnInit(): void {}
 
   followUtil(f: boolean) {
@@ -140,28 +155,30 @@ export class ViewuserComponent implements OnInit {
   updateSortSetting(setting: number) {
     if (Number.isInteger(setting) && setting >= 0 && setting <= 3) {
       this.sortSettings.sortSetting = setting;
+      this.fullQueryObj.updateSettings(this.sortSettings);
+      this.fullQueryObj.sinceId = -1;
+      this.blurbRepo
+        .getBlurbsByUser(
+          this.fullQueryObj,
+          this.currentUser.userId,
+          this.user.userId
+        )
+        .subscribe((p) => {
+          this.blurbsByUserArr = p;
+          console.log(`blurbs array: ${p}`);
+        });
     }
-    this.fullQueryObj.updateSettings(this.sortSettings);
-    this.blurbRepo
-      .getBlurbsByUser(
-        this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
-      )
-      .subscribe((p) => {
-        this.blurbsByUserArr = p;
-        console.log(`blurbs array: ${p}`);
-      });
   }
 
   toggleMovieFilter() {
     this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.fullQueryObj.sinceId = -1;
     this.blurbRepo
       .getBlurbsByUser(
         this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
+        this.currentUser.userId,
+        this.user.userId
       )
       .subscribe((p) => {
         this.blurbsByUserArr = p;
@@ -172,11 +189,12 @@ export class ViewuserComponent implements OnInit {
   toggleGamesFilter() {
     this.sortSettings.includeGames = !this.sortSettings.includeGames;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.fullQueryObj.sinceId = -1;
     this.blurbRepo
       .getBlurbsByUser(
         this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
+        this.currentUser.userId,
+        this.user.userId
       )
       .subscribe((p) => {
         this.blurbsByUserArr = p;
@@ -187,11 +205,12 @@ export class ViewuserComponent implements OnInit {
   toggleTVFilter() {
     this.sortSettings.includeTV = !this.sortSettings.includeTV;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.fullQueryObj.sinceId = -1;
     this.blurbRepo
       .getBlurbsByUser(
         this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
+        this.currentUser.userId,
+        this.user.userId
       )
       .subscribe((p) => {
         this.blurbsByUserArr = p;
@@ -202,15 +221,54 @@ export class ViewuserComponent implements OnInit {
   toggleBooksFilter() {
     this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.fullQueryObj.sinceId = -1;
     this.blurbRepo
       .getBlurbsByUser(
         this.fullQueryObj,
-        this.user.userId,
-        this.currentUser.userId
+        this.currentUser.userId,
+        this.user.userId
       )
       .subscribe((p) => {
         this.blurbsByUserArr = p;
         console.log(`blurbs array: ${p}`);
       });
+  }
+
+  //Sets the sinceId in the full query object to a given since Id
+  //Provided that the sinceId exists in the current list of blurbs
+  setSinceId(sinceId: number): boolean {
+    if (Number.isInteger(sinceId)) {
+      this.fullQueryObj.sinceId = sinceId;
+      return true;
+    }
+    return false;
+  }
+
+  //Adds the next 10 blurbs to the currently loaded list
+  loadBlurbs(span: number) {
+    var sinceIdOk = this.setSinceId(
+      this.blurbsByUserArr[this.blurbsByUserArr.length - 1].blurbId
+    );
+    console.log(
+      `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
+    );
+    if (Number.isInteger(span) && span > 0 && sinceIdOk) {
+      this.canFetchMoreBlurbs = false;
+      this.blurbRepo
+        .getBlurbsByUser(
+          this.fullQueryObj,
+          this.currentUser.userId,
+          this.user.userId
+        )
+        .subscribe((p) => {
+          console.log(p);
+          this.blurbsByUserArr = this.blurbsByUserArr.concat(p);
+          this.canFetchMoreBlurbs = true;
+        });
+    }
+  }
+
+  handleClick() {
+    this.logout(this.router2);
   }
 }

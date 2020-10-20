@@ -30,14 +30,15 @@
         <div class="row mx-auto">
           <div class="col">
             <div class="row flex-column">
-              <h4 class="mb-0 text-white">{{ d.screenName }}</h4>
+              <h4 class="mb-0 text-white">
+                <a class="a-none" [routerLink]="['/viewuser', d.userId]">{{
+                  d.screenName
+                }}</a>
+              </h4>
             </div>
           </div>
           <div class="col-6 text-center text-white">
             <h4 class="m-0 text-white">{{ d.name }}</h4>
-          </div>
-          <div *ngIf="filtering" class="col">
-            <div class="btn btn-info">Unfollow</div>
           </div>
         </div>
       </div>

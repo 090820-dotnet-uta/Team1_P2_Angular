@@ -61,6 +61,7 @@
                         >Name</label
                       >
                       <input
+                        (focusout)="checkMovie()"
                         formControlName="name"
                         id="inputMediaName"
                         type="text"
@@ -88,6 +89,28 @@
                         <option>9</option>
                         <option>10</option>
                       </select>
+                    </div>
+                  </div>
+                  <div style="height: 24px" class="row justify-content-center">
+                    <div class="col">
+                      <p
+                        class="text-success mt-2 mb-0 ml-2 mr-2 d-inline"
+                        *ngIf="hasGottenMovie && hasFoundMovieName"
+                      >
+                        {{ apiMovie.Title }}
+                      </p>
+                      <p
+                        class="text-success mt-2 mb-0 ml-2 mr-2 d-inline"
+                        *ngIf="hasGottenMovie && hasFoundMovieName"
+                      >
+                        {{ apiMovie.Year }}
+                      </p>
+                      <p
+                        class="text-danger mt-2 mb-0 ml-2 mr-2 d-inline"
+                        *ngIf="!hasFoundMovieName"
+                      >
+                        Could not find that movie
+                      </p>
                     </div>
                   </div>
                   <div class="form-group mt-2">
@@ -295,10 +318,16 @@
 <div
   class="row flex-column border-dark-grey py-2 mt-2 hover-border-light-blue"
   *ngFor="let b of blurbsList; index as i"
+  infiniteScroll
+  [infiniteScrollDisabled]="!canFetchMoreBlurbs"
+  [infiniteScrollDistance]="0"
+  [infiniteScrollThrottle]="500"
+  (scrolled)="loadBlurbs(10)"
 >
   <div
     class="col p-0 pointer"
     data-toggle="modal"
+    (click)="currentBlurbModal(b)"
     attr.data-target="#noteModal{{ i }}"
   >
     <div class="row bg-dark-blue mx-auto">
@@ -357,7 +386,6 @@
               {{ getTypeIcon(b.media.type) }}
             </span>
           </div>
-
           <div class="col">
             <p
               style="font-size: large; font-weight: 400"
@@ -384,6 +412,7 @@
   <!-- This is the modal displaying a blurb -->
   <div
     class="modal fade"
+    (click)="checkEditModal($event)"
     attr.data-num="view{{ i }}"
     id="noteModal{{ i }}"
     tabindex="-1"
@@ -487,13 +516,11 @@
                       >
                       <input
                         required
-                        [(ngModel)]="b.name"
                         formControlName="name"
                         id="inputMediaName"
                         type="text"
                         maxlength="30"
                         class="form-control"
-                        value="{{ b.name }}"
                       />
                     </div>
                     <div class="col-3 p-0">
@@ -547,14 +574,11 @@
                     >
                     <textarea
                       required
-                      [(ngModel)]="b.message"
                       formControlName="message"
                       class="form-control"
                       id="exampleFormControlTextarea1"
                       rows="2"
                       maxlength="142"
-                      placeholder="{{ b.message }}"
-                      value="{{ b.message }}"
                     ></textarea>
                   </div>
 
@@ -583,7 +607,7 @@
                           name="privacyBlurb"
                           id="inlineRadio1"
                           value="Public"
-                          checked="{{ privacySelectedTxt(b.privacy, 0) }}"
+                          required
                         />
                         <label
                           class="form-check-label text-white"
@@ -599,7 +623,6 @@
                           name="privacyBlurb"
                           id="inlineRadio2"
                           value="Private"
-                          checked="{{ privacySelectedTxt(b.privacy, 1) }}"
                         />
                         <label
                           class="form-check-label text-white"
@@ -615,7 +638,6 @@
                           name="privacyBlurb"
                           id="inlineRadio3"
                           value="FollowersOnly"
-                          checked="{{ privacySelectedTxt(b.privacy, 2) }}"
                         />
                         <label
                           class="form-check-label text-white"
@@ -627,8 +649,8 @@
                     <div class="col">
                       <button
                         type="button"
-                        class="btn btn-primary btn-lg"
-                        (click)="onSubmitEdit(b)"
+                        class="btn btn-primary btn-lg complete-edit"
+                        (click)="onSubmitEdit()"
                         data-dismiss="modal"
                         *ngIf="b.userId == user.userId"
                       >
@@ -670,5 +692,12 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col text-center">
+    <h3 class="text-white" *ngIf="canGetMoreBlurbs">Fetching more blurbs</h3>
+    <h3 class="text-white" *ngIf="!canGetMoreBlurbs">no more blurbs</h3>
   </div>
 </div>

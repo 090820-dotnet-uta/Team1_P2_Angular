@@ -8,23 +8,24 @@ import { User } from '../models/user.model';
 })
 export class UserService {
   private BASE_URL: string = 'https://localhost:5001/api/user/';
+  private API_URL: string = 'https://blurbsapi.azurewebsites.net/api/user/';
 
   constructor(private httpClient: HttpClient) {}
 
   getUser(id: number): Observable<User> {
-    return this.httpClient.get<User>(`${this.BASE_URL}find/${id}`);
+    return this.httpClient.get<User>(`${this.API_URL}find/${id}`);
   }
 
   getUsers(): Observable<User[]> {
-    return this.httpClient.get<User[]>(this.BASE_URL + 'find/all');
+    return this.httpClient.get<User[]>(this.API_URL + 'find/all');
   }
 
   loginUser(user: User): Observable<User> {
-    return this.httpClient.post<User>(this.BASE_URL + 'login', user);
+    return this.httpClient.post<User>(this.API_URL + 'login', user);
   }
 
   addUser(user: User): Observable<User> {
-    return this.httpClient.post<User>(this.BASE_URL + 'add', user);
+    return this.httpClient.post<User>(this.API_URL + 'add', user);
   }
 
   // editUser(user: User): Observable<User> {
@@ -33,51 +34,49 @@ export class UserService {
 
   //replacing all these with a single editUser method
   editUsername(user: User): Observable<User> {
-    return this.httpClient.post<User>(this.BASE_URL + 'edit/username', user);
+    return this.httpClient.post<User>(this.API_URL + 'edit/username', user);
   }
 
   editScreename(user: User): Observable<User> {
-    return this.httpClient.post<User>(this.BASE_URL + 'edit/screenname', user);
+    return this.httpClient.post<User>(this.API_URL + 'edit/screenname', user);
   }
 
   editName(user: User): Observable<User> {
-    return this.httpClient.post<User>(this.BASE_URL + 'edit/name', user);
+    return this.httpClient.post<User>(this.API_URL + 'edit/name', user);
   }
 
   editPassword(user: User): Observable<User> {
-    return this.httpClient.post<User>(this.BASE_URL + 'edit/password', user);
+    return this.httpClient.post<User>(this.API_URL + 'edit/password', user);
   }
 
   setUser(user: User): Observable<User> {
-    return this.httpClient.post<User>(this.BASE_URL + 'add', user);
+    return this.httpClient.post<User>(this.API_URL + 'add', user);
   }
 
   editUser(user: User): Observable<User> {
-    return this.httpClient.put<User>(this.BASE_URL + 'edit/user', user);
+    return this.httpClient.put<User>(this.API_URL + 'edit/user', user);
   }
 
   followUser(user: User, toFollowId: number): Observable<User> {
     return this.httpClient.post<User>(
-      `${this.BASE_URL}follow/${toFollowId}`,
+      `${this.API_URL}follow/${toFollowId}`,
       user
     );
   }
 
   unfollowUser(user: User, toUnfollowId: number): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      `${this.BASE_URL}remove/follow/${user.userId}/${toUnfollowId}`
+      `${this.API_URL}remove/follow/${user.userId}/${toUnfollowId}`
     );
   }
 
   getFollowers(id: number): Observable<any[]> {
-    return this.httpClient.get<any[]>(
-      `${this.BASE_URL}find/all/follower/${id}`
-    );
+    return this.httpClient.get<any[]>(`${this.API_URL}find/all/follower/${id}`);
   }
 
   getFollowing(id: number): Observable<any[]> {
     return this.httpClient.get<any[]>(
-      `${this.BASE_URL}find/all/following/${id}`
+      `${this.API_URL}find/all/following/${id}`
     );
   }
 }
