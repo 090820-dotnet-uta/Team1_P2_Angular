@@ -312,6 +312,11 @@
 <div
   class="row flex-column border-dark-grey py-2 mt-2 hover-border-light-blue"
   *ngFor="let b of blurbsList; index as i"
+  infiniteScroll
+  [infiniteScrollDisabled]="!canFetchMoreBlurbs"
+  [infiniteScrollDistance]="0"
+  [infiniteScrollThrottle]="500"
+  (scrolled)="loadBlurbs(10)"
 >
   <div
     class="col p-0 pointer"

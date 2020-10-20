@@ -56,6 +56,14 @@
         >
           Edit
         </div>
+        <div
+          style="min-width: 89px"
+          class="btn btn-info"
+          *ngIf="currentUser.userId === user.userId"
+          (click)="handleClick()"
+        >
+          Logout
+        </div>
       </div>
     </div>
   </div>
@@ -170,6 +178,11 @@
 <div
   class="row flex-column border-dark-grey py-2 mt-2"
   *ngFor="let b of blurbsByUserArr; index as i"
+  infiniteScroll
+  [infiniteScrollDisabled]="!canFetchMoreBlurbs"
+  [infiniteScrollDistance]="0"
+  [infiniteScrollThrottle]="500"
+  (scrolled)="loadBlurbs(10)"
 >
   <div
     class="col p-0 pointer"

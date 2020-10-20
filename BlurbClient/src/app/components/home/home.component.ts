@@ -32,7 +32,9 @@ export class HomeComponent implements OnInit {
   isAddingNote: boolean = false;
   hasGottenMovie: boolean = false;
   apiMovie;
-  filterSettingsVisible = false;
+  filterSettingsVisible: boolean = false;
+  canFetchMoreBlurbs: boolean = true;
+
   blurbEditForm: FormGroup;
   blurbAddForm: FormGroup;
   blurbsList: Blurb[];
@@ -199,7 +201,6 @@ export class HomeComponent implements OnInit {
         .subscribe((p) => {
           this.blurbsList = p;
           console.log(`blurbs array:`, p);
-          // this.ngOnInit();
         });
       // this.blurbsList.push(newBlurb);
     });
@@ -227,19 +228,21 @@ export class HomeComponent implements OnInit {
   updateSortSetting(setting: number) {
     if (Number.isInteger(setting) && setting >= 0 && setting <= 3) {
       this.sortSettings.sortSetting = setting;
+      this.setSinceId(-1);
+      this.fullQueryObj.updateSettings(this.sortSettings);
+      this.blurbRepo
+        .fullQuery(this.fullQueryObj, this.user.userId)
+        .subscribe((p) => {
+          this.blurbsList = p;
+          console.log(`blurbs array: ${p}`);
+        });
     }
-    this.fullQueryObj.updateSettings(this.sortSettings);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
   }
 
   toggleMovieFilter() {
     this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -251,6 +254,7 @@ export class HomeComponent implements OnInit {
   toggleGamesFilter() {
     this.sortSettings.includeGames = !this.sortSettings.includeGames;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -262,6 +266,7 @@ export class HomeComponent implements OnInit {
   toggleTVFilter() {
     this.sortSettings.includeTV = !this.sortSettings.includeTV;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -273,6 +278,7 @@ export class HomeComponent implements OnInit {
   toggleBooksFilter() {
     this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -284,6 +290,7 @@ export class HomeComponent implements OnInit {
   toggleFollowersFilter() {
     this.sortSettings.includeFollowing = !this.sortSettings.includeFollowing;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -295,6 +302,7 @@ export class HomeComponent implements OnInit {
   toggleSelfFilter() {
     this.sortSettings.includeSelf = !this.sortSettings.includeSelf;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -306,6 +314,7 @@ export class HomeComponent implements OnInit {
   toggleUnfollowedFilter() {
     this.sortSettings.includeUnfollowed = !this.sortSettings.includeUnfollowed;
     this.fullQueryObj.updateSettings(this.sortSettings);
+    this.setSinceId(-1);
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -316,10 +325,7 @@ export class HomeComponent implements OnInit {
   //Sets the sinceId in the full query object to a given since Id
   //Provided that the sinceId exists in the current list of blurbs
   setSinceId(sinceId: number): boolean {
-    if (
-      Number.isInteger(sinceId) &&
-      this.blurbsList.map((a) => a.userId).includes(sinceId)
-    ) {
+    if (Number.isInteger(sinceId)) {
       this.fullQueryObj.sinceId = sinceId;
       return true;
     }
@@ -329,13 +335,24 @@ export class HomeComponent implements OnInit {
   //Adds the next 10 blurbs to the currently loaded list
   loadBlurbs(span: number) {
     var sinceIdOk = this.setSinceId(
-      this.blurbsList[this.blurbsList.length - 1].userId
+      this.blurbsList[this.blurbsList.length - 1].blurbId
     );
-    if (Number.isInteger(span) && span > 0 && sinceIdOk) {
+    console.log(
+      `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
+    );
+    if (
+      Number.isInteger(span) &&
+      span > 0 &&
+      sinceIdOk &&
+      this.canFetchMoreBlurbs
+    ) {
+      this.canFetchMoreBlurbs = false;
       this.blurbRepo
         .fullQuery(this.fullQueryObj, this.user.userId)
         .subscribe((p) => {
+          console.log(p);
           this.blurbsList = this.blurbsList.concat(p);
+          this.canFetchMoreBlurbs = true;
         });
     }
   }

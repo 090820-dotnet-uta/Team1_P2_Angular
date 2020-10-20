@@ -34,6 +34,7 @@ import { Router, RouterModule, Routes } from '@angular/router';
 import { FollowersComponent } from './components/followers/followers.component';
 import { ViewuserComponent } from './components/viewuser/viewuser.component';
 import { MatIconModule } from '@angular/material/icon';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 const config = {
   issuer: 'https://dev-5859084.okta.com',
@@ -72,7 +73,6 @@ const appRoutes: Routes = [
   },
 ];
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -95,6 +95,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     OktaAuthModule,
     MatIconModule,
+    InfiniteScrollModule,
   ],
   providers: [
     UserService,
