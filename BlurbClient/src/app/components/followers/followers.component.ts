@@ -11,58 +11,28 @@ export class FollowersComponent implements OnInit {
   user: User;
   filtering = true;
   displayArr = [];
-  dummyFollowersArr = [
-    {
-      name: 'bob',
-      screenName: 'BobbyBoi',
-      isFollowed: true,
-    } as User,
-    {
-      name: 'jim',
-      screenName: 'JimmyBoi',
-      isFollowed: true,
-    } as User,
-    {
-      name: 'al',
-      screenName: 'AlBoi',
-      isFollowed: true,
-    } as User,
-  ];
-  dummyFollowingArr = [
-    {
-      name: 'bob2',
-      screenName: 'BobbyBoi2',
-      isFollowed: true,
-    } as User,
-    {
-      name: 'jim2',
-      screenName: 'JimmyBoi2',
-      isFollowed: true,
-    } as User,
-    {
-      name: 'al2',
-      screenName: 'AlBoi2',
-      isFollowed: true,
-    } as User,
-  ];
+  followers: User[] = [];
+  following: User[] = [];
 
-  constructor() {
+  constructor(private userRepo: UserRepository) {
     this.user = localStorage.loggedInUser
       ? JSON.parse(localStorage.loggedInUser)
       : {};
     let x = JSON.parse(localStorage.loggedInUser);
-    this.dummyFollowingArr = x.followers;
-    this.dummyFollowersArr = x.following;
+
+    this.userRepo.getFollowers(this.user.userId).subscribe((f) => {
+      this.followers = f;
+    });
+    this.userRepo.getFollowing(this.user.userId).subscribe((f) => {
+      this.following = f;
+      this.displayArr = f;
+    });
   }
 
   toggleFilter() {
     this.filtering = !this.filtering;
-    !this.filtering
-      ? (this.displayArr = this.dummyFollowingArr)
-      : (this.displayArr = this.dummyFollowersArr);
+    this.displayArr = this.filtering ? this.following : this.followers;
   }
 
-  ngOnInit(): void {
-    this.displayArr = this.dummyFollowersArr;
-  }
+  ngOnInit(): void {}
 }

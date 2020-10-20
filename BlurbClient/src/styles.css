@@ -45,3 +45,13 @@ a:hover {
 .border-none {
   border: none;
 }
+
+.a-none {
+  color: white;
+  text-decoration: underline;
+}
+
+.a-none:hover {
+  color: rgb(96 175 243);
+  text-decoration: underline;
+}

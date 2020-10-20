@@ -262,6 +262,7 @@ export class HomeComponent implements OnInit {
           this.blurbsList = p;
           console.log(`blurbs array: ${p}`);
         });
+      this.canGetMoreBlurbs = true;
     }
   }
 
@@ -276,6 +277,7 @@ export class HomeComponent implements OnInit {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleGamesFilter() {
@@ -288,6 +290,7 @@ export class HomeComponent implements OnInit {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleTVFilter() {
@@ -300,6 +303,7 @@ export class HomeComponent implements OnInit {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleBooksFilter() {
@@ -312,6 +316,7 @@ export class HomeComponent implements OnInit {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleFollowersFilter() {
@@ -324,6 +329,7 @@ export class HomeComponent implements OnInit {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleSelfFilter() {
@@ -336,6 +342,7 @@ export class HomeComponent implements OnInit {
         this.blurbsList = p;
         console.log(`blurbs array: ${p}`);
       });
+    this.canGetMoreBlurbs = true;
   }
 
   toggleUnfollowedFilter() {
@@ -347,6 +354,7 @@ export class HomeComponent implements OnInit {
       .subscribe((p) => {
         this.blurbsList = p;
       });
+    this.canGetMoreBlurbs = true;
   }
 
   //Sets the sinceId in the full query object to a given since Id
