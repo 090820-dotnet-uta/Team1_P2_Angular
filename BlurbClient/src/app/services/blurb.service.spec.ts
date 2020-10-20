@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { AppRoutingModule } from '../app-routing.module';
 import { AppComponent } from '../app.component';
 import { FollowersComponent } from '../components/followers/followers.component';
+import { FullQueryObj } from '../components/home/FullQueryObj';
 import { HomeComponent } from '../components/home/home.component';
 import { LandingComponent } from '../components/landing/landing.component';
 import { LoginComponent } from '../components/login/login.component';
@@ -97,4 +98,42 @@ describe('BlurbService', () => {
     expect(service.getBlurb(1))
     .toBe(stubValue, 'service returned stub value');
   });
+
+  // it('Get Blurbs Works', () => {
+  //   let blurb: Observable<Blurb[]>;
+  //   service = TestBed.inject(BlurbService)
+  //   valueServiceSpy = TestBed.inject(BlurbService) as jasmine.SpyObj<BlurbService>;
+  //   const stubValue = blurb;
+  //   valueServiceSpy.getBlurbs.and.returnValues(stubValue);
+
+
+  //   expect(service.getBlurbs())
+  //   .toBe(stubValue, 'service returned stub value');
+  // });
+
+  // it('Get Blurb By User Works', () => {
+  //   let blurb: Observable<Blurb[]>;
+  //   let fullQ: FullQueryObj;
+  //   service = TestBed.inject(BlurbService)
+  //   valueServiceSpy = TestBed.inject(BlurbService) as jasmine.SpyObj<BlurbService>;
+  //   const stubValue = blurb;
+  //   valueServiceSpy.getBlurbsByUser.and.returnValue(stubValue);
+
+
+  //   expect(service.getBlurbsByUser(fullQ,1,1))
+  //   .toBe(stubValue, 'service returned stub value');
+  // });
+
+  // it('Add Blurb Works', () => {
+  //   let blurb: Observable<Blurb>;
+  //   let b: Blurb;
+  //   service = TestBed.inject(BlurbService)
+  //   valueServiceSpy = TestBed.inject(BlurbService) as jasmine.SpyObj<BlurbService>;
+  //   const stubValue = blurb;
+  //   valueServiceSpy.addBlurb.and.returnValue(stubValue);
+
+
+  //   expect(service.addBlurb(b))
+  //   .toBe(stubValue, 'service returned stub value');
+  // });
 });
