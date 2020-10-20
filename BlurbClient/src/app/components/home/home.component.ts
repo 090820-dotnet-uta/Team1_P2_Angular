@@ -18,6 +18,7 @@ import {
   TypeSelectedTxt,
 } from '../../StaticFunctions';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -139,6 +140,7 @@ export class HomeComponent implements OnInit {
 
   onSubmitEdit(blurb: Blurb) {
     this.edit = false;
+
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
       name: this.blurbEditForm.get('name').value,
@@ -182,7 +184,6 @@ export class HomeComponent implements OnInit {
     b.notes = [];
 
     console.log('Edited Blurb ', b);
-
     this.blurbRepo.editBlurb(b);
   }
 
@@ -253,6 +254,7 @@ export class HomeComponent implements OnInit {
     this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
     this.fullQueryObj.updateSettings(this.sortSettings);
     this.setSinceId(-1);
+
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
