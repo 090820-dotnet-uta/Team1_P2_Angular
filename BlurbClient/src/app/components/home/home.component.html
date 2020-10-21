@@ -53,6 +53,19 @@
                         <option>Book</option>
                         <option>TV</option>
                       </select>
+                      <div class="row">
+                        <div style="height: 30px" class="col">
+                          <p
+                            *ngIf="
+                              blurbAddForm.controls.type.invalid &&
+                              (blurbAddForm.dirty || blurbAddForm.touched)
+                            "
+                            class="text-danger m-0"
+                          >
+                            Media type is required
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-4 p-0">
                       <label
@@ -68,6 +81,37 @@
                         maxlength="30"
                         class="form-control"
                       />
+                      <div class="row">
+                        <div style="height: 30px" class="col">
+                          <p
+                            *ngIf="
+                              blurbAddForm.controls.name.invalid &&
+                              (blurbAddForm.dirty || blurbAddForm.touched)
+                            "
+                            class="text-danger m-0"
+                          >
+                            Media name is required
+                          </p>
+                          <p
+                            class="text-success mt-2 mb-0 ml-2 mr-2 d-inline"
+                            *ngIf="hasGottenMovie && hasFoundMovieName"
+                          >
+                            {{ apiMovie.Title }}
+                          </p>
+                          <p
+                            class="text-success mt-2 mb-0 ml-2 mr-2 d-inline"
+                            *ngIf="hasGottenMovie && hasFoundMovieName"
+                          >
+                            {{ apiMovie.Year }}
+                          </p>
+                          <p
+                            class="text-danger mt-2 mb-0 ml-2 mr-2 d-inline"
+                            *ngIf="!hasFoundMovieName"
+                          >
+                            Could not find that movie
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-3 p-0">
                       <label class="my-1 text-white float-left" for="inputScore"
@@ -89,11 +133,24 @@
                         <option>9</option>
                         <option>10</option>
                       </select>
+                      <div class="row">
+                        <div style="height: 30px" class="col">
+                          <p
+                            *ngIf="
+                              blurbAddForm.controls.score.invalid &&
+                              (blurbAddForm.dirty || blurbAddForm.touched)
+                            "
+                            class="text-danger m-0"
+                          >
+                            Score is required
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div style="height: 24px" class="row justify-content-center">
                     <div class="col">
-                      <p
+                      <!-- <p
                         class="text-success mt-2 mb-0 ml-2 mr-2 d-inline"
                         *ngIf="hasGottenMovie && hasFoundMovieName"
                       >
@@ -110,7 +167,7 @@
                         *ngIf="!hasFoundMovieName"
                       >
                         Could not find that movie
-                      </p>
+                      </p> -->
                     </div>
                   </div>
                   <div class="form-group mt-2">
@@ -126,21 +183,19 @@
                       rows="2"
                       maxlength="142"
                     ></textarea>
-                  </div>
-
-                  <div *ngIf="isAddingNote" class="form-group mt-2">
-                    <label
-                      class="text-white float-left m-0"
-                      for="exampleFormControlTextarea1"
-                      >Note</label
-                    >
-                    <textarea
-                      formControlName="note"
-                      class="form-control"
-                      id="exampleFormControlTextarea1"
-                      rows="4"
-                      maxlength="240"
-                    ></textarea>
+                    <div class="row">
+                      <div style="height: 30px" class="col">
+                        <p
+                          *ngIf="
+                            blurbAddForm.controls.message.invalid &&
+                            (blurbAddForm.dirty || blurbAddForm.touched)
+                          "
+                          class="text-danger m-0"
+                        >
+                          Blurb is required
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="form-group row align-items-center mt-2">
@@ -191,23 +246,23 @@
                         >
                       </div>
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
                       <button
+                        *ngIf="blurbAddForm.invalid"
+                        type="button"
+                        class="btn btn-secondary btn-lg"
+                        disabled
+                      >
+                        Create
+                      </button>
+                      <button
+                        *ngIf="!blurbAddForm.invalid"
                         data-dismiss="modal"
                         type="button"
                         class="btn btn-primary btn-lg"
                         (click)="onSubmitAdd()"
                       >
                         Create
-                      </button>
-                    </div>
-                    <div class="col-2">
-                      <button
-                        type="button"
-                        class="btn btn-info btn-lg"
-                        (click)="isAddingNote = !isAddingNote"
-                      >
-                        Note
                       </button>
                     </div>
                   </div>
@@ -482,7 +537,6 @@
                       >
                       <select
                         id="inputType"
-                        required
                         class="form-control"
                         formControlName="type"
                       >
@@ -507,6 +561,9 @@
                           TV
                         </option>
                       </select>
+                      <div class="row">
+                        <div style="height: 30px" class="col"></div>
+                      </div>
                     </div>
                     <div class="col-4 p-0">
                       <label
@@ -522,13 +579,25 @@
                         maxlength="30"
                         class="form-control"
                       />
+                      <div class="row">
+                        <div style="height: 30px" class="col">
+                          <p
+                            *ngIf="
+                              blurbEditForm.controls.name.invalid &&
+                              (blurbEditForm.dirty || blurbEditForm.touched)
+                            "
+                            class="text-danger m-0"
+                          >
+                            Name is required
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-3 p-0">
                       <label class="my-1 text-white float-left" for="inputScore"
                         >Score</label
                       >
                       <select
-                        required
                         id="inputScore"
                         class="form-control"
                         formControlName="score"
@@ -564,6 +633,19 @@
                           10
                         </option>
                       </select>
+                      <div class="row">
+                        <div style="height: 30px" class="col">
+                          <p
+                            *ngIf="
+                              blurbEditForm.controls.score.invalid &&
+                              (blurbEditForm.dirty || blurbEditForm.touched)
+                            "
+                            class="text-danger m-0"
+                          >
+                            Name is required
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group mt-2">
@@ -580,21 +662,19 @@
                       rows="2"
                       maxlength="142"
                     ></textarea>
-                  </div>
-
-                  <div class="form-group mt-2">
-                    <label
-                      class="text-white float-left m-0"
-                      for="exampleFormControlTextarea1"
-                      >Note</label
-                    >
-                    <textarea
-                      formControlName="note"
-                      class="form-control"
-                      id="exampleFormControlTextarea1"
-                      rows="4"
-                      maxlength="240"
-                    ></textarea>
+                    <div class="row">
+                      <div style="height: 30px" class="col">
+                        <p
+                          *ngIf="
+                            blurbEditForm.controls.message.invalid &&
+                            (blurbEditForm.dirty || blurbEditForm.touched)
+                          "
+                          class="text-danger m-0"
+                        >
+                          Name is required
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="form-group row align-items-center mt-2">
@@ -647,12 +727,38 @@
                       </div>
                     </div>
                     <div class="col">
+                      <!-- <button
+                      *ngIf="blurbAddForm.invalid"
+                      type="button"
+                      class="btn btn-secondary btn-lg"
+                      disabled
+                    >
+                      Create
+                    </button>
+                    <button
+                      *ngIf="!blurbAddForm.invalid"
+                      data-dismiss="modal"
+                      type="button"
+                      class="btn btn-primary btn-lg"
+                      (click)="onSubmitAdd()"
+                    >
+                      Create
+                    </button> -->
+                      <button
+                        type="button"
+                        class="btn btn-secondary btn-lg"
+                        *ngIf="b.userId == user.userId && blurbEditForm.invalid"
+                      >
+                        Complete Edit
+                      </button>
                       <button
                         type="button"
                         class="btn btn-primary btn-lg complete-edit"
                         (click)="onSubmitEdit()"
                         data-dismiss="modal"
-                        *ngIf="b.userId == user.userId"
+                        *ngIf="
+                          b.userId == user.userId && !blurbEditForm.invalid
+                        "
                       >
                         Complete Edit
                       </button>

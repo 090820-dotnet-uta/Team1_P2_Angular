@@ -64,7 +64,7 @@ export class ViewuserComponent implements OnInit {
     this.router.params.subscribe((p) => {
       this.userRepo.getUser(p['id']).subscribe((u) => {
         this.user = u;
-        this.avatarLetter = u.screenName[0].toUpperCase();
+        this.avatarLetter = u.username[0].toUpperCase();
         this.userRepo.getFollowers(u.userId).subscribe((f) => {
           this.followers = f;
           console.log(`followers list: `, f);
