@@ -16,6 +16,7 @@ export class SignupComponent implements OnInit {
   screenName: string;
   username: string;
   password: string;
+  usernameIsTaken: boolean = false;
 
   constructor(private userRepo: UserRepository, private router: Router) {}
 
@@ -23,7 +24,7 @@ export class SignupComponent implements OnInit {
     this.user = new FormGroup({
       name: new FormControl(this.name, [
         Validators.required,
-        Validators.minLength(5),
+        Validators.minLength(3),
         Validators.maxLength(30),
       ]),
       screenName: new FormControl(this.screenName, [
@@ -49,7 +50,15 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userRepo.addUser(this.user.value);
-    this.router.navigateByUrl('/login');
+    if (this.user.invalid) return;
+
+    this.userRepo.addUser(this.user.value).subscribe((u) => {
+      if (u.userId == 0) {
+        this.usernameIsTaken = true;
+        return;
+      } else this.router.navigateByUrl('/login');
+    });
+
+    //this.router.navigateByUrl('/login');
   }
 }

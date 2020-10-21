@@ -77,6 +77,9 @@
               >
                 Username is required.
               </p>
+              <p *ngIf="usernameIsTaken" class="text-danger m-0">
+                Username is already taken.
+              </p>
             </div>
           </div>
         </div>
