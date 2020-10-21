@@ -131,10 +131,12 @@ export class ViewuserComponent implements OnInit {
           this.userRepo.getFollowers(this.currentUser.userId).subscribe((f) => {
             console.log(f);
             localStorage.followers = JSON.stringify(f);
+            this.followers = f;
           });
           this.userRepo.getFollowing(this.currentUser.userId).subscribe((f) => {
             console.log(f);
             localStorage.following = JSON.stringify(f);
+            this.following = f;
           });
         });
     }
