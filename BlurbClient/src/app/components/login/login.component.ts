@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
 import { Router } from '@angular/router';
-
 import { UserRepository } from 'src/app/models/user.repository';
 
 @Component({
@@ -63,20 +62,20 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     // Place method to get a user with the same
     // username and password
-    console.log(this.loginForm.invalid);
-    // this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
-    //   if ('userId' in u) {
-    //     this.userRepo.getFollowers(u.userId).subscribe((f) => {
-    //       console.log(f);
-    //       localStorage.followers = JSON.stringify(f);
-    //     });
-    //     this.userRepo.getFollowing(u.userId).subscribe((f) => {
-    //       console.log(f);
-    //       localStorage.following = JSON.stringify(f);
-    //     });
-    //     localStorage.loggedInUser = JSON.stringify(u);
-    //   }
-    //   this.afterSubmit(u);
-    // });
+    if (this.loginForm.invalid) return;
+    this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
+      if ('userId' in u) {
+        this.userRepo.getFollowers(u.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.followers = JSON.stringify(f);
+        });
+        this.userRepo.getFollowing(u.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.following = JSON.stringify(f);
+        });
+        localStorage.loggedInUser = JSON.stringify(u);
+      }
+      this.afterSubmit(u);
+    });
   }
 }

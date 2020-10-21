@@ -69,24 +69,16 @@ export class HomeComponent implements OnInit {
     this.blurbEditForm = new FormGroup({
       type: new FormControl(),
       name: new FormControl('', [Validators.required]),
-      score: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-        Validators.minLength(2),
-      ]),
+      score: new FormControl(null, [Validators.required]),
       message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
 
     this.blurbAddForm = new FormGroup({
-      type: new FormControl(),
+      type: new FormControl(null, [Validators.required]),
       name: new FormControl('', [Validators.required]),
-      score: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-        Validators.minLength(2),
-      ]),
+      score: new FormControl(null, [Validators.required]),
       message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
@@ -161,6 +153,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmitEdit() {
+    if (this.blurbEditForm.invalid) return;
     this.edit = false;
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
@@ -208,6 +201,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmitAdd() {
+    if (this.blurbAddForm.invalid) return;
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
       name: this.blurbAddForm.get('name').value,
@@ -271,11 +265,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  toggleMovieFilter() {
-    this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
-    this.fullQueryObj.updateSettings(this.sortSettings);
+  toggleUtil() {
     this.setSinceId(-1);
-
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -283,83 +274,48 @@ export class HomeComponent implements OnInit {
         console.log(`blurbs array: ${p}`);
       });
     this.canGetMoreBlurbs = true;
+  }
+
+  toggleMovieFilter() {
+    this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.toggleUtil();
   }
 
   toggleGamesFilter() {
     this.sortSettings.includeGames = !this.sortSettings.includeGames;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleTVFilter() {
     this.sortSettings.includeTV = !this.sortSettings.includeTV;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleBooksFilter() {
     this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleFollowersFilter() {
     this.sortSettings.includeFollowing = !this.sortSettings.includeFollowing;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleSelfFilter() {
     this.sortSettings.includeSelf = !this.sortSettings.includeSelf;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleUnfollowedFilter() {
     this.sortSettings.includeUnfollowed = !this.sortSettings.includeUnfollowed;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   //Sets the sinceId in the full query object to a given since Id
@@ -376,34 +332,32 @@ export class HomeComponent implements OnInit {
   loadBlurbs(span: number) {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
       if (!this.canGetMoreBlurbs) return;
-      setTimeout(() => {
-        console.log('at the bottom', this.canGetMoreBlurbs);
-        // you're at the bottom of the page
-        var sinceIdOk = this.setSinceId(
-          this.blurbsList[this.blurbsList.length - 1].blurbId
-        );
-        console.log(
-          `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
-        );
-        if (
-          Number.isInteger(span) &&
-          span > 0 &&
-          sinceIdOk &&
-          this.canFetchMoreBlurbs
-        ) {
-          this.canFetchMoreBlurbs = false;
-          this.blurbRepo
-            .fullQuery(this.fullQueryObj, this.user.userId)
-            .subscribe((p) => {
-              console.log(p);
-              if (p.length === 0) {
-                this.canGetMoreBlurbs = false;
-              }
-              this.blurbsList = this.blurbsList.concat(p);
-              this.canFetchMoreBlurbs = true;
-            });
-        }
-      }, 400);
+      console.log('at the bottom', this.canGetMoreBlurbs);
+      // you're at the bottom of the page
+      var sinceIdOk = this.setSinceId(
+        this.blurbsList[this.blurbsList.length - 1].blurbId
+      );
+      console.log(
+        `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
+      );
+      if (
+        Number.isInteger(span) &&
+        span > 0 &&
+        sinceIdOk &&
+        this.canFetchMoreBlurbs
+      ) {
+        this.canFetchMoreBlurbs = false;
+        this.blurbRepo
+          .fullQuery(this.fullQueryObj, this.user.userId)
+          .subscribe((p) => {
+            console.log(p);
+            if (p.length === 0) {
+              this.canGetMoreBlurbs = false;
+            }
+            this.blurbsList = this.blurbsList.concat(p);
+            this.canFetchMoreBlurbs = true;
+          });
+      }
     }
   }
 }

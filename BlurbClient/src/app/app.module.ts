@@ -10,20 +10,12 @@ import { BlurbService } from './services/blurb.service';
 import { BlurbRepository } from './models/blurb.repository';
 import { MediaService } from './services/media.service';
 import { MediaRepository } from './models/media.repository';
-import { MediaTagService } from './services/mediatag.service';
-import { MediaTagRepository } from './models/mediatag.repository';
-import { TagService } from './services/tag.service';
-import { TagRepository } from './models/tag.repository';
-import { NoteService } from './services/note.service';
-import { NoteRepository } from './models/note.repository';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { HomeComponent } from './components/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LandingComponent } from './components/landing/landing.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { FollowersComponent } from './components/followers/followers.component';
 import { ViewuserComponent } from './components/viewuser/viewuser.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -48,7 +40,6 @@ const appRoutes: Routes = [
     LoginComponent,
     SignupComponent,
     HomeComponent,
-    LandingComponent,
     FollowersComponent,
     ViewuserComponent,
   ],
@@ -60,7 +51,6 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     MatIconModule,
     InfiniteScrollModule,
-    MatProgressSpinnerModule,
   ],
   providers: [
     UserService,
@@ -69,12 +59,6 @@ const appRoutes: Routes = [
     BlurbRepository,
     MediaService,
     MediaRepository,
-    MediaTagService,
-    MediaTagRepository,
-    TagService,
-    TagRepository,
-    NoteService,
-    NoteRepository,
   ],
   bootstrap: [AppComponent],
 })

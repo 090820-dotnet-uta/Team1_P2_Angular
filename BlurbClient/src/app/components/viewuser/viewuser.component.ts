@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Blurb } from 'src/app/models/blurb.model';
 import { BlurbRepository } from 'src/app/models/blurb.repository';
 import { User } from 'src/app/models/user.model';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserRepository } from 'src/app/models/user.repository';
 import { CalcBkgColor, GetTypeIcon, Logout } from '../../StaticFunctions';
-import { Observable } from 'rxjs';
 import { Settings } from '../home/Settings';
 import { FullQueryObj } from '../home/FullQueryObj';
 
@@ -112,10 +110,12 @@ export class ViewuserComponent implements OnInit {
           this.userRepo.getFollowers(this.currentUser.userId).subscribe((f) => {
             console.log(f);
             localStorage.followers = JSON.stringify(f);
+            this.followers = f;
           });
           this.userRepo.getFollowing(this.currentUser.userId).subscribe((f) => {
             console.log(f);
             localStorage.following = JSON.stringify(f);
+            this.following = f;
           });
         });
     }
