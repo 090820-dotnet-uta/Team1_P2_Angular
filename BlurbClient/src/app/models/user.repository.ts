@@ -32,8 +32,8 @@ export class UserRepository implements OnInit {
     return this.rest.loginUser(user);
   }
 
-  addUser(user: User): void {
-    this.rest.addUser(user).subscribe((p) => console.log(p));
+  addUser(user: User): Observable<User> {
+    return this.rest.addUser(user);
   }
 
   // editUser(user: User): void {

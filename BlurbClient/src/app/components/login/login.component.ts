@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     // Place method to get a user with the same
     // username and password
-    console.log(this.loginForm.invalid);
+    if (this.loginForm.invalid) return;
     this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
       if ('userId' in u) {
         this.userRepo.getFollowers(u.userId).subscribe((f) => {
