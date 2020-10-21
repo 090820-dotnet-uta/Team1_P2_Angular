@@ -64,7 +64,7 @@ export class ViewuserComponent implements OnInit {
     this.router.params.subscribe((p) => {
       this.userRepo.getUser(p['id']).subscribe((u) => {
         this.user = u;
-        this.avatarLetter = u.username[0].toUpperCase();
+        this.avatarLetter = u.screenName[0].toUpperCase();
         this.userRepo.getFollowers(u.userId).subscribe((f) => {
           this.followers = f;
           console.log(`followers list: `, f);
@@ -83,7 +83,26 @@ export class ViewuserComponent implements OnInit {
   }
 
   //Initialize the followers and following lists
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.router.params.subscribe((p) => {
+      this.userRepo.getUser(p['id']).subscribe((u) => {
+        this.user = u;
+        this.avatarLetter = u.screenName[0].toUpperCase();
+        this.userRepo.getFollowers(u.userId).subscribe((f) => {
+          this.followers = f;
+          console.log(`followers list: `, f);
+        });
+        this.userRepo
+          .getFollowing(u.userId)
+          .subscribe((f) => (this.following = f));
+        console.log('running');
+        this.blurbRepo
+          .getBlurbsByUser(this.fullQueryObj, p['id'], this.user.userId)
+          .subscribe((b) => (this.blurbsByUserArr = b));
+        console.log(p['id']);
+      });
+    });
+  }
 
   followUtil(f: boolean) {
     console.log(`person to follow ${this.user.username}`);

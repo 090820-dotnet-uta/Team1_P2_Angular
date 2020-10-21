@@ -376,34 +376,32 @@ export class HomeComponent implements OnInit {
   loadBlurbs(span: number) {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
       if (!this.canGetMoreBlurbs) return;
-      setTimeout(() => {
-        console.log('at the bottom', this.canGetMoreBlurbs);
-        // you're at the bottom of the page
-        var sinceIdOk = this.setSinceId(
-          this.blurbsList[this.blurbsList.length - 1].blurbId
-        );
-        console.log(
-          `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
-        );
-        if (
-          Number.isInteger(span) &&
-          span > 0 &&
-          sinceIdOk &&
-          this.canFetchMoreBlurbs
-        ) {
-          this.canFetchMoreBlurbs = false;
-          this.blurbRepo
-            .fullQuery(this.fullQueryObj, this.user.userId)
-            .subscribe((p) => {
-              console.log(p);
-              if (p.length === 0) {
-                this.canGetMoreBlurbs = false;
-              }
-              this.blurbsList = this.blurbsList.concat(p);
-              this.canFetchMoreBlurbs = true;
-            });
-        }
-      }, 400);
+      console.log('at the bottom', this.canGetMoreBlurbs);
+      // you're at the bottom of the page
+      var sinceIdOk = this.setSinceId(
+        this.blurbsList[this.blurbsList.length - 1].blurbId
+      );
+      console.log(
+        `sinceId is: ${this.fullQueryObj.sinceId}, and it is: ${sinceIdOk}`
+      );
+      if (
+        Number.isInteger(span) &&
+        span > 0 &&
+        sinceIdOk &&
+        this.canFetchMoreBlurbs
+      ) {
+        this.canFetchMoreBlurbs = false;
+        this.blurbRepo
+          .fullQuery(this.fullQueryObj, this.user.userId)
+          .subscribe((p) => {
+            console.log(p);
+            if (p.length === 0) {
+              this.canGetMoreBlurbs = false;
+            }
+            this.blurbsList = this.blurbsList.concat(p);
+            this.canFetchMoreBlurbs = true;
+          });
+      }
     }
   }
 }

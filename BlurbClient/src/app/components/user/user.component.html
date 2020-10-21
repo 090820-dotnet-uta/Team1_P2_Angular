@@ -8,39 +8,39 @@
         <div class="col-4">
           <form [formGroup]="userEditForm">
             <br />
-            <p class="m-0 text-white">Username</p>
+            <p class="m-0 text-white">Name</p>
             <input
-              formControlName="username"
-              [(ngModel)]="user.username"
+              formControlName="name"
               class="form-control text-center"
               type="text"
-              name="Name"
-              id="Name"
-              placeholder="{{ user.username }}"
+              name="name"
+              id="name"
+              value="{{ user.name }}"
+              ngModel="{{ user.name }}"
             />
             <br />
             <br />
-            <p class="m-0 text-white">Screen name</p>
+            <p class="m-0 text-white">Screen Name</p>
             <input
               formControlName="screenName"
-              [(ngModel)]="user.screenName"
               class="form-control text-center"
               type="text"
               name="screenName"
               id="screenName"
-              placeholder="{{ user.screenName }}"
+              value="{{ user.screenName }}"
+              ngModel="{{ user.screenName }}"
             />
             <br />
             <br />
             <p class="m-0 text-white">Password</p>
             <input
               formControlName="password"
-              [(ngModel)]="user.password"
               class="form-control text-center"
               type="password"
               name="password"
               id="password"
-              placeholder="{{ user.password }}"
+              value="{{ user.password }}"
+              ngModel="{{ user.password }}"
             />
             <div>
               <br />
@@ -60,5 +60,8 @@
       </div>
     </div>
     <button class="btn btn-info" (click)="logout()">Logout</button>
+    <button class="btn btn-danger" [routerLink]="['/viewuser', user.userId]">
+      Cancel
+    </button>
   </div>
 </div>
