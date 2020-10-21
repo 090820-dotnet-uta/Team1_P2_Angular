@@ -265,11 +265,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  toggleMovieFilter() {
-    this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
-    this.fullQueryObj.updateSettings(this.sortSettings);
+  toggleUtil() {
     this.setSinceId(-1);
-
     this.blurbRepo
       .fullQuery(this.fullQueryObj, this.user.userId)
       .subscribe((p) => {
@@ -277,83 +274,48 @@ export class HomeComponent implements OnInit {
         console.log(`blurbs array: ${p}`);
       });
     this.canGetMoreBlurbs = true;
+  }
+
+  toggleMovieFilter() {
+    this.sortSettings.includeMovies = !this.sortSettings.includeMovies;
+    this.fullQueryObj.updateSettings(this.sortSettings);
+    this.toggleUtil();
   }
 
   toggleGamesFilter() {
     this.sortSettings.includeGames = !this.sortSettings.includeGames;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleTVFilter() {
     this.sortSettings.includeTV = !this.sortSettings.includeTV;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleBooksFilter() {
     this.sortSettings.includeBooks = !this.sortSettings.includeBooks;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleFollowersFilter() {
     this.sortSettings.includeFollowing = !this.sortSettings.includeFollowing;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleSelfFilter() {
     this.sortSettings.includeSelf = !this.sortSettings.includeSelf;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-        console.log(`blurbs array: ${p}`);
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   toggleUnfollowedFilter() {
     this.sortSettings.includeUnfollowed = !this.sortSettings.includeUnfollowed;
     this.fullQueryObj.updateSettings(this.sortSettings);
-    this.setSinceId(-1);
-    this.blurbRepo
-      .fullQuery(this.fullQueryObj, this.user.userId)
-      .subscribe((p) => {
-        this.blurbsList = p;
-      });
-    this.canGetMoreBlurbs = true;
+    this.toggleUtil();
   }
 
   //Sets the sinceId in the full query object to a given since Id

@@ -61,7 +61,5 @@ export class SignupComponent implements OnInit {
         return;
       } else this.router.navigateByUrl('/login');
     });
-
-    //this.router.navigateByUrl('/login');
   }
 }

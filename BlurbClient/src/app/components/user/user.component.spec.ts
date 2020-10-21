@@ -8,20 +8,12 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { AppComponent } from 'src/app/app.component';
 import { BlurbRepository } from 'src/app/models/blurb.repository';
 import { MediaRepository } from 'src/app/models/media.repository';
-import { MediaTagRepository } from 'src/app/models/mediatag.repository';
-import { NoteRepository } from 'src/app/models/note.repository';
-import { TagRepository } from 'src/app/models/tag.repository';
-import { User } from 'src/app/models/user.model';
 import { UserRepository } from 'src/app/models/user.repository';
 import { BlurbService } from 'src/app/services/blurb.service';
 import { MediaService } from 'src/app/services/media.service';
-import { MediaTagService } from 'src/app/services/mediatag.service';
-import { NoteService } from 'src/app/services/note.service';
-import { TagService } from 'src/app/services/tag.service';
 import { UserService } from 'src/app/services/user.service';
 import { FollowersComponent } from '../followers/followers.component';
 import { HomeComponent } from '../home/home.component';
-import { LandingComponent } from '../landing/landing.component';
 import { LoginComponent } from '../login/login.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { SignupComponent } from '../signup/signup.component';
@@ -53,7 +45,6 @@ describe('UserComponent', () => {
         LoginComponent,
         SignupComponent,
         HomeComponent,
-        LandingComponent,
         FollowersComponent,
         ViewuserComponent,
       ],
@@ -72,16 +63,13 @@ describe('UserComponent', () => {
         BlurbRepository,
         MediaService,
         MediaRepository,
-        MediaTagService,
-        MediaTagRepository,
-        TagService,
-        TagRepository,
-        NoteService,
-        NoteRepository,
       ],
-    }).compileComponents().then(() => {
-      fixture = TestBed.createComponent(UserComponent);
-      component = fixture.componentInstance;});
+    })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(UserComponent);
+        component = fixture.componentInstance;
+      });
   });
 
   it('should create', () => {
