@@ -74,9 +74,8 @@ export class ViewuserComponent implements OnInit {
           .subscribe((f) => (this.following = f));
         console.log('running');
         this.blurbRepo
-          .getBlurbsByUser(this.fullQueryObj, p['id'], this.user.userId)
+          .getBlurbsByUser(this.fullQueryObj, this.currentUser.userId, p['id'])
           .subscribe((b) => (this.blurbsByUserArr = b));
-        console.log(p['id']);
       });
     });
     this.checkFollow();
@@ -97,7 +96,7 @@ export class ViewuserComponent implements OnInit {
           .subscribe((f) => (this.following = f));
         console.log('running');
         this.blurbRepo
-          .getBlurbsByUser(this.fullQueryObj, p['id'], this.user.userId)
+          .getBlurbsByUser(this.fullQueryObj, this.currentUser.userId, p['id'])
           .subscribe((b) => (this.blurbsByUserArr = b));
         console.log(p['id']);
       });
