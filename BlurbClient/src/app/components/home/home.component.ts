@@ -69,24 +69,16 @@ export class HomeComponent implements OnInit {
     this.blurbEditForm = new FormGroup({
       type: new FormControl(),
       name: new FormControl('', [Validators.required]),
-      score: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-        Validators.minLength(2),
-      ]),
+      score: new FormControl(null, [Validators.required]),
       message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
     });
 
     this.blurbAddForm = new FormGroup({
-      type: new FormControl(),
+      type: new FormControl(null, [Validators.required]),
       name: new FormControl('', [Validators.required]),
-      score: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-        Validators.minLength(2),
-      ]),
+      score: new FormControl(null, [Validators.required]),
       message: new FormControl('', [Validators.required]),
       note: new FormControl(),
       privacyBlurb: new FormControl(),
@@ -161,6 +153,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmitEdit() {
+    if (this.blurbEditForm.invalid) return;
     this.edit = false;
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
@@ -208,6 +201,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmitAdd() {
+    if (this.blurbAddForm.invalid) return;
     let loggedInUser: User = JSON.parse(localStorage.loggedInUser);
     let m: Media = {
       name: this.blurbAddForm.get('name').value,
