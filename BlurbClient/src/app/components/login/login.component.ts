@@ -64,19 +64,19 @@ export class LoginComponent implements OnInit {
     // Place method to get a user with the same
     // username and password
     console.log(this.loginForm.invalid);
-    // this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
-    //   if ('userId' in u) {
-    //     this.userRepo.getFollowers(u.userId).subscribe((f) => {
-    //       console.log(f);
-    //       localStorage.followers = JSON.stringify(f);
-    //     });
-    //     this.userRepo.getFollowing(u.userId).subscribe((f) => {
-    //       console.log(f);
-    //       localStorage.following = JSON.stringify(f);
-    //     });
-    //     localStorage.loggedInUser = JSON.stringify(u);
-    //   }
-    //   this.afterSubmit(u);
-    // });
+    this.userRepo.loginUser(this.loginForm.value).subscribe((u) => {
+      if ('userId' in u) {
+        this.userRepo.getFollowers(u.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.followers = JSON.stringify(f);
+        });
+        this.userRepo.getFollowing(u.userId).subscribe((f) => {
+          console.log(f);
+          localStorage.following = JSON.stringify(f);
+        });
+        localStorage.loggedInUser = JSON.stringify(u);
+      }
+      this.afterSubmit(u);
+    });
   }
 }
