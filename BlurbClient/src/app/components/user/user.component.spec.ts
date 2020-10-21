@@ -11,6 +11,7 @@ import { MediaRepository } from 'src/app/models/media.repository';
 import { MediaTagRepository } from 'src/app/models/mediatag.repository';
 import { NoteRepository } from 'src/app/models/note.repository';
 import { TagRepository } from 'src/app/models/tag.repository';
+import { User } from 'src/app/models/user.model';
 import { UserRepository } from 'src/app/models/user.repository';
 import { BlurbService } from 'src/app/services/blurb.service';
 import { MediaService } from 'src/app/services/media.service';
